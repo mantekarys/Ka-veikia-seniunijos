@@ -1,0 +1,11 @@
+﻿.header__secondary {
+    font-size: 3.5rem;
+}
+
+.paragraph {
+    font-size: 1.3rem;
+
+    &--grey {
+        color: $color-placeholder;
+    }
+}

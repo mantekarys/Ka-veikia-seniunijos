@@ -34,4 +34,15 @@
         bottom: 1.5rem;
         color: $color-placeholder;
     }
+
+    &__footer {
+        position: absolute;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+
+        &-text-button-wrapper {
+            text-align: center;
+        }
+    }
 }

@@ -3,6 +3,7 @@ import Input from '../Form/Input';
 import Button from '../Button/Button';
 import Popup from '../Popup/Popup';
 import Error from '../Error/Error';
+import FormFooter from '../Form/Footer/FormFooter';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
@@ -67,15 +68,10 @@ export default function Login() {
                     {isFormInvalid && <Error text={errorMessage} />}
                 </form>
 
-                <div className='login__footer'>
-                    <p className='paragraph paragraph--grey'>Neturite paskyros?</p>
-                    <div className='login__text-button-wrapper'>
-                        <Button
-                            text='Sukurti paskyrą'
-                            styling='btn--text btn--text-grey'
-                        />
-                    </div>
-                </div>
+                <FormFooter
+                    paragraphText='Neturite paskyros?'
+                    textButtonMessage='Sukurti paskyrą'
+                />
             </div>
         </Popup>
    );

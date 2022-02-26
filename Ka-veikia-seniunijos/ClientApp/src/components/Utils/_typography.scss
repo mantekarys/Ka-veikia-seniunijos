@@ -1,5 +1,11 @@
-﻿.header__secondary {
-    font-size: 3.5rem;
+﻿.header {
+    &__secondary {
+        font-size: 3.5rem;
+    }
+
+    &__tertiary {
+        font-size: 2.5rem;
+    }
 }
 
 .paragraph {

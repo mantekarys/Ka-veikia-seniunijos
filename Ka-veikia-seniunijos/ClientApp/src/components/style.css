@@ -35,6 +35,8 @@ body {
   z-index: 200;
   border-radius: 1rem;
   height: 70%; }
+  .login__container--signup {
+    height: 80%; }
 
 .login__content {
   width: 80%;
@@ -53,7 +55,11 @@ body {
   margin: 10rem auto 0;
   width: 80%; }
 
-.form__input {
+.signup__content {
+  width: 80%;
+  margin: 2rem auto 0; }
+
+.form__input, .form__dropdown {
   display: block;
   border: none;
   font-size: 2rem;
@@ -63,8 +69,11 @@ body {
   border-bottom: 2px solid #c7c7cd;
   transition: all .2s;
   padding: 1rem 2.2rem; }
-  .form__input:focus {
+  .form__input:focus, .form__dropdown:focus {
     outline: none; }
+
+.form__dropdown--default {
+  color: grey !important; }
 
 .form__icon {
   font-size: 2rem;

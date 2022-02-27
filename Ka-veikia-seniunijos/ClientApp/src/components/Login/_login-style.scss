@@ -3,7 +3,6 @@
 .login {
     &__container {
         @include absCenter;
-
         background-color: $color-white;
         width: 40%;
         padding: 7rem 2rem;
@@ -11,6 +10,10 @@
         z-index: 200;
         border-radius: 1rem;
         height: 70%;
+
+        &--signup {
+            height: 80%;
+        }
     }
 
     &__content {

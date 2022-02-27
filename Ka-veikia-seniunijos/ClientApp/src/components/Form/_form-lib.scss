@@ -1,5 +1,5 @@
 ﻿.form {
-    &__input {
+    &__input, &__dropdown {
         display: block;
         border: none;
         font-size: 2rem;
@@ -12,6 +12,12 @@
 
         &:focus {
             outline: none;
+        }
+    }
+
+    &__dropdown {
+        &--default {
+            color: $color-placeholder-default !important;
         }
     }
 

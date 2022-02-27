@@ -1,0 +1,12 @@
+﻿.header {
+    padding-top: 2rem;
+
+    &__button-wrapper {
+        display: flex;
+        justify-content: space-around;
+        float: right;
+        justify-content: space-evenly;
+        width: 20%;
+        margin-right: 5rem;
+    }
+}

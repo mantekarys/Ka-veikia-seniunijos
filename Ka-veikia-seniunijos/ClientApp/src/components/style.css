@@ -125,6 +125,12 @@ body {
   display: inline-block;
   text-transform: uppercase; }
 
+.btn--header {
+  background-color: #000000;
+  padding: 1rem 1rem;
+  font-size: 1.7rem;
+  width: 15rem; }
+
 .btn--text {
   font-size: 1.3rem; }
   .btn--text, .btn--text:link, .btn--text:visited {
@@ -219,3 +225,16 @@ body {
 #option-1:checked:checked ~ .option-1 span,
 #option-2:checked:checked ~ .option-2 span {
   color: #fff; }
+
+.header {
+  padding-top: 2rem; }
+  .header__button-wrapper {
+    display: flex;
+    justify-content: space-around;
+    float: right;
+    justify-content: space-evenly;
+    width: 20%;
+    margin-right: 5rem; }
+
+body {
+  background-color: #eeeeee; }

@@ -3,6 +3,7 @@
 @import './Utils/mixins';
 @import './Utils/typography';
 @import './Utils/utilities';
+@import './Utils/animations';
 
 @import './Login/login-style';
 @import './Signup/signup-style';
@@ -18,5 +19,7 @@
 @import './Radio/radio';
 
 @import './Header/header-style';
+
+@import './Grid/grid-style';
 
 @import './Pages/Home/home-style';

@@ -56,4 +56,12 @@
             }
         }
     }
+
+    &--animated {
+        animation: moveInBottom 1s ease-out;
+    }
+
+    &--hidden {
+        display: none;
+    }
 }

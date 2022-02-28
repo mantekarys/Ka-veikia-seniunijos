@@ -1,12 +1,30 @@
-﻿.header {
+﻿@import '../Utils/_mixins.scss';
+
+.header {
     padding-top: 2rem;
 
     &__button-wrapper {
         display: flex;
-        justify-content: space-around;
         float: right;
-        justify-content: space-evenly;
-        width: 20%;
         margin-right: 5rem;
+        gap: 2rem;
+
+        @include respond(mobile) {
+            display: none;
+        }
+
+        @include respond(tab-port) {
+            width: 40%;
+            margin-right: 2rem;
+        }
+    }
+
+    &__icon {
+        &-wrapper {
+            display: inline-block;
+            margin-left: 3rem;
+            margin-top: 1.2rem;
+            cursor: pointer;
+        }
     }
 }

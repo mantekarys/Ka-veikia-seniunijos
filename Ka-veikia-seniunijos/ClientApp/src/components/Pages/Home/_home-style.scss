@@ -1,4 +1,6 @@
-﻿body {
+﻿@import '../../Utils/_mixins.scss';
+
+body {
     background-color: $color-background-grey;
 }
 
@@ -6,5 +8,13 @@
     &__content {
         margin: 20rem auto 0;
         width: 80%;
+
+        @include respond(tab-port) {
+            margin-top: 10rem;
+        }
+
+        @include respond(mobile) {
+            margin-top: 0;
+        }
     }
 }

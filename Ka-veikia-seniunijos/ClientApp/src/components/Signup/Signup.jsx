@@ -11,7 +11,7 @@ import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
-export default function Signup({ onClose }) {
+export default function Signup({ onClose, onSignupRedirect }) {
     const [userType, setUserType] = useState('Gyventojas');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -147,6 +147,7 @@ export default function Signup({ onClose }) {
                 <FormFooter
                     paragraphText='Turite paskyrą?'
                     textButtonMessage='Prisijungti'
+                    onClick={onSignupRedirect}
                 />
             </div>
         </Popup>
@@ -154,5 +155,6 @@ export default function Signup({ onClose }) {
 }
 
 Signup.prototype = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onSignupRedirect: PropTypes.func
 }

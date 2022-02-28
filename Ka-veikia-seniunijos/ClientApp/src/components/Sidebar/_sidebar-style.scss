@@ -1,0 +1,14 @@
+﻿@import '../Utils/_animations.scss';
+@import '../Utils/_variables.scss';
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 15%;
+    z-index: 50;
+    background-color: $color-background-grey;
+    box-shadow: 1px 0 7px -2px $color-black;
+    animation: moveInLeft .5s ease-out;
+}

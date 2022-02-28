@@ -3,7 +3,8 @@ import HomeReducer from './HomeReducer';
 
 const initialState = {
     isLoginOpen: false,
-    isSignupOpen: false
+    isSignupOpen: false,
+    isSidebarOpen: false
 }
 
 export const GlobalContext = createContext(initialState);
@@ -19,11 +20,16 @@ export const GlobalProvider = ({ children }) => {
         dispatch({ type: 'TOGGLE_SIGNUP', isOpen: !state.isSignupOpen })
     }
 
+    const toggleSidebar = () => {
+        dispatch({ type: 'TOGGLE_SIDEBAR', isOpen: !state.isSidebarOpen })
+    }
+
     return (
         <GlobalContext.Provider value={{
             state: state,
             toggleLoginPopup,
-            toggleSignupPopup
+            toggleSignupPopup,
+            toggleSidebar
         }}>
             {children}
         </GlobalContext.Provider>

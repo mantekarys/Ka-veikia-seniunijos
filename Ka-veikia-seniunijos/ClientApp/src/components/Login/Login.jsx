@@ -9,7 +9,7 @@ import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
-export default function Login({ onClose }) {
+export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFormInvalid, setIsFormInvalid] = useState(false);
@@ -72,6 +72,7 @@ export default function Login({ onClose }) {
                 <FormFooter
                     paragraphText='Neturite paskyros?'
                     textButtonMessage='Sukurti paskyrą'
+                    onClick={onLoginRedirect}
                 />
             </div>
         </Popup>
@@ -79,5 +80,6 @@ export default function Login({ onClose }) {
 }
 
 Login.prototype = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onLoginRedirect: PropTypes.func
 }

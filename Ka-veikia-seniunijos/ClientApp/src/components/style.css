@@ -27,6 +27,8 @@ body {
     color: #c7c7cd; }
   .paragraph--grid {
     font-size: 1.7rem; }
+  .paragraph--large {
+    font-size: 1.5rem; }
 
 .hr {
   color: #000000; }
@@ -36,6 +38,14 @@ body {
 
 .u-margin-top-medium {
   margin-top: 3rem; }
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40%); }
+  100% {
+    opacity: 1;
+    transform: translateX(0); } }
 
 @keyframes moveInBottom {
   0% {
@@ -258,16 +268,64 @@ body {
   padding-top: 2rem; }
   .header__button-wrapper {
     display: flex;
-    justify-content: space-around;
     float: right;
-    justify-content: space-evenly;
-    width: 20%;
-    margin-right: 5rem; }
+    margin-right: 5rem;
+    gap: 2rem; }
+    @media (max-width: 37.5em) {
+      .header__button-wrapper {
+        display: none; } }
+    @media (max-width: 56.25em) {
+      .header__button-wrapper {
+        width: 40%;
+        margin-right: 2rem; } }
+  .header__icon-wrapper {
+    display: inline-block;
+    margin-left: 3rem;
+    margin-top: 1.2rem;
+    cursor: pointer; }
+
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40%); }
+  100% {
+    opacity: 1;
+    transform: translateX(0); } }
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(40%); }
+  100% {
+    opacity: 1;
+    transform: translateY(0); } }
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 15%;
+  z-index: 50;
+  background-color: #eeeeee;
+  box-shadow: 1px 0 7px -2px #000000;
+  animation: moveInLeft .5s ease-out; }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #c7c7cd;
+  text-align: center;
+  padding: 1rem 0; }
 
 .grid {
   display: grid;
   grid-template-columns: auto auto auto;
   column-gap: 3rem; }
+  @media (max-width: 56.25em) {
+    .grid {
+      grid-template-columns: auto; } }
   .grid__element {
     height: 30rem;
     border-radius: 1rem;
@@ -299,9 +357,35 @@ body {
     display: block;
     margin: auto; }
 
+.bar__icon {
+  position: relative; }
+  @media (max-width: 37.5em) {
+    .bar__icon {
+      position: fixed; } }
+  .bar__icon, .bar__icon::before, .bar__icon::after {
+    width: 3rem;
+    height: 2px;
+    display: inline-block;
+    background-color: #000000; }
+  .bar__icon::before, .bar__icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    transition: all .2s; }
+  .bar__icon::before {
+    top: -.8rem; }
+  .bar__icon::after {
+    top: .8rem; }
+
 body {
   background-color: #eeeeee; }
 
 .home__content {
   margin: 20rem auto 0;
   width: 80%; }
+  @media (max-width: 56.25em) {
+    .home__content {
+      margin-top: 10rem; } }
+  @media (max-width: 37.5em) {
+    .home__content {
+      margin-top: 0; } }

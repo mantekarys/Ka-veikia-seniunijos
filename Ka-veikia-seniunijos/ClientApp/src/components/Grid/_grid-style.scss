@@ -1,7 +1,13 @@
-﻿.grid {
+﻿@import '../Utils/_mixins.scss';
+
+.grid {
     display: grid;
     grid-template-columns: auto auto auto;
     column-gap: 3rem;
+
+    @include respond(tab-port) {
+        grid-template-columns: auto;
+    }
 
     &__element {
         height: 30rem;

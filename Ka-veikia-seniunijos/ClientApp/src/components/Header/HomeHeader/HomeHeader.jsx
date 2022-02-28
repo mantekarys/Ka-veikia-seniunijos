@@ -3,13 +3,31 @@ import Button from '../../Button/Button';
 import Login from '../../Login/Login';
 import Signup from '../../Signup/Signup';
 import { GlobalContext } from '../../Pages/Home/Context/GlobalState';
+import BarIcon from '../../Icons/BarIcon/BarIcon';
 import '../../style.css';
 
 export default function HomeHeader() {
-    const { state, toggleLoginPopup, toggleSignupPopup } = useContext(GlobalContext);
+    const {
+        state,
+        toggleLoginPopup,
+        toggleSignupPopup,
+        toggleSidebar
+    } = useContext(GlobalContext);
+
+    const handleOnLoginRedirect = () => {
+        toggleLoginPopup();
+        toggleSignupPopup();
+    }
+
+    const handleSignupRedirect = () => {
+        toggleSignupPopup();
+        toggleLoginPopup();
+    }
     
     return (
         <header className='header'>
+            <BarIcon wrapperStyling='header__icon-wrapper' onClick={toggleSidebar} />
+
             <div className='header__button-wrapper'>
                 <Button
                     text='Prisijungti'
@@ -24,8 +42,18 @@ export default function HomeHeader() {
                 />
             </div>
 
-            {state.isLoginOpen && <Login onClose={toggleLoginPopup} />}
-            {state.isSignupOpen && <Signup onClose={toggleSignupPopup} />}
+            {state.isLoginOpen &&
+                <Login
+                    onClose={toggleLoginPopup}
+                    onLoginRedirect={handleOnLoginRedirect}
+                />
+            }
+            {state.isSignupOpen &&
+                <Signup
+                    onClose={toggleSignupPopup}
+                    onSignupRedirect={handleSignupRedirect}
+                />
+            }
         </header>
     );
 }

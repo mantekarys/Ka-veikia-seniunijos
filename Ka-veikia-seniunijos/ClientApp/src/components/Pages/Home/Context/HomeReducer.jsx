@@ -10,6 +10,11 @@
                 ...state,
                 isSignupOpen: action.isOpen
             }
+        case 'TOGGLE_SIDEBAR':
+            return {
+                ...state,
+                isSidebarOpen: action.isOpen
+            }
         default:
             return state;
     }

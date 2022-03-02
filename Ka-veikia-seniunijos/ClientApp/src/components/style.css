@@ -7,7 +7,8 @@ html {
   font-size: 62.5%; }
 
 body {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  font-family: 'League Spartan', sans-serif; }
 
 .header__primary {
   font-size: 4.5rem; }
@@ -32,6 +33,9 @@ body {
 
 .hr {
   color: #000000; }
+
+.icon--blue {
+  color: #3761EE; }
 
 .u-text-center {
   text-align: center; }
@@ -181,6 +185,13 @@ body {
 .btn--hidden {
   display: none; }
 
+.btn--sidebar {
+  color: #000000 !important;
+  font-size: 2.2rem;
+  transform: none; }
+  .btn--sidebar, .btn--sidebar:link, .btn--sidebar:visited {
+    text-decoration: none; }
+
 .popup {
   height: 100%;
   width: 100%;
@@ -302,14 +313,28 @@ body {
 
 .sidebar {
   position: absolute;
-  top: 0;
+  top: 1rem;
   left: 0;
-  height: 100%;
-  width: 15%;
+  height: 95%;
+  width: 20%;
   z-index: 50;
-  background-color: #eeeeee;
+  background-color: #ffffff;
   box-shadow: 1px 0 7px -2px #000000;
-  animation: moveInLeft .5s ease-out; }
+  animation: moveInLeft .5s ease-out;
+  border-radius: 1rem; }
+  .sidebar__list {
+    text-align: center;
+    width: 90%;
+    margin: 30% auto 0;
+    list-style: none; }
+    .sidebar__list--item {
+      border-radius: 1rem;
+      padding: 1rem 0;
+      transition: all .2s; }
+      .sidebar__list--item:hover {
+        background-color: #000000; }
+        .sidebar__list--item:hover > .btn--sidebar {
+          color: #ffffff !important; }
 
 .footer {
   position: absolute;

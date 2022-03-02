@@ -35,3 +35,9 @@
 .hr {
     color: $color-black;
 }
+
+.icon {
+    &--blue {
+        color: $color-blue-native;
+    }
+}

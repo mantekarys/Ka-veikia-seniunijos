@@ -64,4 +64,14 @@
     &--hidden {
         display: none;
     }
+
+    &--sidebar {
+        color: $color-black !important;
+        font-size: 2.2rem;
+        transform: none;
+
+        &, &:link, &:visited {
+            text-decoration: none;
+        }
+    }
 }

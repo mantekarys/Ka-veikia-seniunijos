@@ -1,0 +1,52 @@
+﻿@import '../Utils/mixins';
+@import '../Utils/variables';
+
+.user-profile {
+    &__container {
+        @include absCenter;
+        width: 70%;
+        height: 60%;
+        border-radius: 1rem;
+        box-shadow: 0 1rem 2rem rgba($color-black, .2);
+    }
+
+    &__picture {
+        &-container {
+            width: 50%;
+            margin: 10% auto 0;
+
+            & > p {
+
+            }
+        }
+    }
+
+    &__info {
+        &-container {
+            margin-top: 10%;
+        }
+    }
+
+    &__header {
+        height: 10%;
+    }
+
+    &__card {
+        display: flex;
+        flex-direction: row;
+        height: 90%;
+
+        &--left {
+            width: 30%;
+            height: 95%;
+            display: inline-block;
+            border-right: 1px solid $color-placeholder;
+        }
+
+        &--right {
+            width: 70%;
+            height: 95%;
+            display: inline-block;
+        }
+    }
+}

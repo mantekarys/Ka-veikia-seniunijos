@@ -1,4 +1,6 @@
-﻿.header {
+﻿@import 'variables';
+
+.header {
     &__primary {
         font-size: 4.5rem;
     }

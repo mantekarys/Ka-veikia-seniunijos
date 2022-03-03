@@ -6,11 +6,12 @@ import Button from '../Button/Button';
 import SignupUserType from './SignupUserType/SignupUserType';
 import FormFooter from '../Form/Footer/FormFooter';
 import Error from '../Error/Error';
+import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
-export default function Signup() {
+export default function Signup({ onClose, onSignupRedirect }) {
     const [userType, setUserType] = useState('Gyventojas');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
@@ -65,7 +66,7 @@ export default function Signup() {
     return (
         <Popup>
             <div className='login__container login__container--signup'>
-                <FontAwesomeIcon className='form__icon' icon={faXmark} />
+                <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
                 <h2 className='header__secondary u-text-center'>Registracija</h2>
                 {!isUserTypeSelected &&
                     <SignupUserType onTypeChange={handleOnTypeChange} onClick={handleOnNextClick} />
@@ -146,10 +147,14 @@ export default function Signup() {
                 <FormFooter
                     paragraphText='Turite paskyrą?'
                     textButtonMessage='Prisijungti'
+                    onClick={onSignupRedirect}
                 />
             </div>
         </Popup>
     );
 }
 
-
+Signup.prototype = {
+    onClose: PropTypes.func,
+    onSignupRedirect: PropTypes.func
+}

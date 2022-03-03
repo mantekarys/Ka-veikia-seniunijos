@@ -4,11 +4,12 @@ import Button from '../Button/Button';
 import Popup from '../Popup/Popup';
 import Error from '../Error/Error';
 import FormFooter from '../Form/Footer/FormFooter';
+import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
-export default function Login() {
+export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isFormInvalid, setIsFormInvalid] = useState(false);
@@ -26,7 +27,7 @@ export default function Login() {
     return (
         <Popup>
             <div className='login__container'>
-                <FontAwesomeIcon className='form__icon' icon={faXmark} />
+                <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
                 <h2 className='header__secondary u-text-center'>Prisijungimas</h2>
 
                 <form className='login__content'>
@@ -71,8 +72,14 @@ export default function Login() {
                 <FormFooter
                     paragraphText='Neturite paskyros?'
                     textButtonMessage='Sukurti paskyrą'
+                    onClick={onLoginRedirect}
                 />
             </div>
         </Popup>
    );
+}
+
+Login.prototype = {
+    onClose: PropTypes.func,
+    onLoginRedirect: PropTypes.func
 }

@@ -31,6 +31,13 @@
         text-transform: uppercase;
     }
 
+    &--header {
+        background-color: $color-black;
+        padding: 1rem 1rem;
+        font-size: 1.7rem;
+        width: 15rem;
+    }
+
     &--text {
         font-size: 1.3rem;
 
@@ -47,6 +54,24 @@
             &:hover {
                 color: $color-black !important;
             }
+        }
+    }
+
+    &--animated {
+        animation: moveInBottom 1s ease-out;
+    }
+
+    &--hidden {
+        display: none;
+    }
+
+    &--sidebar {
+        color: $color-black !important;
+        font-size: 2.2rem;
+        transform: none;
+
+        &, &:link, &:visited {
+            text-decoration: none;
         }
     }
 }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../../Button/Button';
 import '../../style.css';
 
-export default function FormFooter({ paragraphText, textButtonMessage }) {
+export default function FormFooter({ paragraphText, textButtonMessage, onClick }) {
     return (
         <div className='form__footer'>
             <p className='paragraph paragraph--grey'>{paragraphText}</p>
@@ -11,6 +11,7 @@ export default function FormFooter({ paragraphText, textButtonMessage }) {
                 <Button
                     text={textButtonMessage}
                     styling='btn--text btn--text-grey'
+                    onClick={onClick}
                 />
             </div>
         </div>
@@ -19,6 +20,7 @@ export default function FormFooter({ paragraphText, textButtonMessage }) {
 
 FormFooter.propTypes = {
     paragraphText: PropTypes.string,
-    textButtonMessage: PropTypes.string
+    textButtonMessage: PropTypes.string,
+    onClick: PropTypes.func
 }
 

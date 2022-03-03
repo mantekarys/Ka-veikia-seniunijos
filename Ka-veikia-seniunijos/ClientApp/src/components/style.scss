@@ -1,9 +1,9 @@
 ﻿@import './Utils/variables';
-
 @import './Utils/base';
 @import './Utils/mixins';
 @import './Utils/typography';
 @import './Utils/utilities';
+@import './Utils/animations';
 
 @import './Login/login-style';
 @import './Signup/signup-style';
@@ -17,3 +17,15 @@
 @import './Error/error';
 
 @import './Radio/radio';
+
+@import './Header/header-style';
+
+@import './Sidebar/sidebar-style';
+
+@import './Footer/footer-style';
+
+@import './Grid/grid-style';
+
+@import './Icons/BarIcon/bar-icon-style';
+
+@import './Pages/Home/home-style';

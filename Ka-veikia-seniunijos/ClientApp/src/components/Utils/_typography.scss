@@ -1,10 +1,18 @@
 ﻿.header {
+    &__primary {
+        font-size: 4.5rem;
+    }
+
     &__secondary {
         font-size: 3.5rem;
     }
 
     &__tertiary {
         font-size: 2.5rem;
+    }
+
+    &--hidden {
+        display: none;
     }
 }
 
@@ -13,5 +21,23 @@
 
     &--grey {
         color: $color-placeholder;
+    }
+
+    &--grid {
+        font-size: 1.7rem;
+    }
+
+    &--large {
+        font-size: 1.5rem;
+    }
+}
+
+.hr {
+    color: $color-black;
+}
+
+.icon {
+    &--blue {
+        color: $color-blue-native;
     }
 }

@@ -1,0 +1,35 @@
+﻿@import '../Utils/_animations.scss';
+@import '../Utils/_variables.scss';
+
+.sidebar {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    height: 95%;
+    width: 20%;
+    z-index: 50;
+    background-color: $color-white;
+    box-shadow: 1px 0 7px -2px $color-black;
+    animation: moveInLeft .5s ease-out;
+    border-radius: 1rem;
+
+    &__list {
+        text-align: center;
+        width: 90%;
+        margin: 30% auto 0;
+        list-style: none;
+
+        &--item {
+            border-radius: 1rem;
+            padding: 1rem 0;
+            transition: all .2s;
+
+            &:hover {
+                & > .btn--sidebar {
+                    color: $color-white !important;
+                }
+                background-color: $color-black;
+            }
+        }
+    }
+}

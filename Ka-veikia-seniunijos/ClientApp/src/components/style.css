@@ -46,6 +46,9 @@ body {
 .u-padding-medium {
   padding: 2rem 0; }
 
+.u-hidden {
+  display: none; }
+
 @keyframes moveInLeft {
   0% {
     opacity: 0;
@@ -61,6 +64,19 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0); } }
+
+@keyframes fadeIn {
+  0% {
+    transform: scale(0);
+    opacity: 0.0; }
+  60% {
+    transform: scale(1.05); }
+  80% {
+    transform: scale(0.95);
+    opacity: 1; }
+  100% {
+    transform: scale(1);
+    opacity: 1; } }
 
 .login__container {
   position: absolute;
@@ -200,6 +216,12 @@ body {
   .btn--sidebar, .btn--sidebar:link, .btn--sidebar:visited {
     text-decoration: none; }
 
+.btn--user-profile {
+  background-color: #000000;
+  padding: 1.4rem 2.5rem;
+  font-size: 2rem;
+  animation: fadeIn 1s ease-in; }
+
 .popup {
   height: 100%;
   width: 100%;
@@ -318,6 +340,19 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0); } }
+
+@keyframes fadeIn {
+  0% {
+    transform: scale(0);
+    opacity: 0.0; }
+  60% {
+    transform: scale(1.05); }
+  80% {
+    transform: scale(0.95);
+    opacity: 1; }
+  100% {
+    transform: scale(1);
+    opacity: 1; } }
 
 .sidebar {
   position: absolute;
@@ -455,4 +490,40 @@ body {
   .user-profile__card--right {
     width: 70%;
     height: 95%;
-    display: inline-block; }
+    display: inline-block;
+    position: relative; }
+
+.user-profile__input {
+  background-color: inherit;
+  padding: 0;
+  cursor: default;
+  pointer-events: none; }
+  .user-profile__input--edit {
+    border-color: #000000;
+    color: #000000;
+    pointer-events: initial; }
+  .user-profile__input-container {
+    width: 50%;
+    position: relative;
+    margin: 0 auto; }
+    .user-profile__input-container:not(:first-child) {
+      margin-top: 3rem; }
+
+.user-profile__icon {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: #c7c7cd;
+  transition: all .2s; }
+  .user-profile__icon--black {
+    color: #000000; }
+  .user-profile__icon:hover {
+    color: #000000; }
+
+.user-profile__button-wrapper {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%); }

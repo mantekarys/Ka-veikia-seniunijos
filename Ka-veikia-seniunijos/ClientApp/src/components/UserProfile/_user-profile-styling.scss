@@ -14,10 +14,6 @@
         &-container {
             width: 50%;
             margin: 10% auto 0;
-
-            & > p {
-
-            }
         }
     }
 
@@ -47,6 +43,58 @@
             width: 70%;
             height: 95%;
             display: inline-block;
+            position: relative;
+        }
+    }
+
+    &__input {
+        background-color: inherit;
+        padding: 0;
+        cursor: default;
+        pointer-events: none;
+
+        &--edit {
+            border-color: $color-black;
+            color: $color-black;
+            pointer-events: initial;
+        }
+
+        &-container {
+            width: 50%;
+            position: relative;
+            margin: 0 auto;
+
+            &:not(:first-child) {
+                margin-top: 3rem;
+            }
+        }
+    }
+
+    &__icon {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        font-size: 1.4rem;
+        color: $color-placeholder;
+        transition: all .2s;
+
+        &--black {
+            color: $color-black;
+        }
+
+        &:hover {
+            color: $color-black;
+        }
+    }
+
+    &__button {
+
+        &-wrapper {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
         }
     }
 }

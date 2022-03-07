@@ -74,4 +74,11 @@
             text-decoration: none;
         }
     }
+
+    &--user-profile {
+        background-color: $color-black;
+        padding: 1.4rem 2.5rem;
+        font-size: 2rem;
+        animation: fadeIn 1s ease-in;
+    }
 }

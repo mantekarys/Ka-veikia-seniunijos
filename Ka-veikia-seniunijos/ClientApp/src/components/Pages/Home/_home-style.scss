@@ -1,7 +1,6 @@
 ﻿@import '../../Utils/_mixins.scss';
 
 body {
-    background-color: $color-background-grey;
 }
 
 .home {
@@ -16,5 +15,11 @@ body {
         @include respond(mobile) {
             margin-top: 0;
         }
+    }
+
+    &__slider-section {
+        height: 65rem;
+        width: 100%;
+        margin-bottom: 10rem;
     }
 }

@@ -43,3 +43,31 @@
         color: $color-blue-native;
     }
 }
+
+.highlight-text {
+    position: relative;
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+    font-size: 5rem;
+    color: $color-white;
+
+    &--follow {
+        font-size: 3rem;
+        float: right;
+        padding-top: 1rem;
+    }
+}
+
+
+.highlight::after {
+    display: block;
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    transform: scale(1.6, 1.05) skewX(20deg);
+    background-color: $color-black;
+}

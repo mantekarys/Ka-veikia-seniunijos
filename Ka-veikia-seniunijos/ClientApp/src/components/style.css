@@ -37,6 +37,29 @@ body {
 .icon--blue {
   color: #3761EE; }
 
+.highlight-text {
+  position: relative;
+  margin-bottom: 2rem;
+  margin-right: 1rem;
+  font-size: 5rem;
+  color: #ffffff; }
+  .highlight-text--follow {
+    font-size: 3rem;
+    float: right;
+    padding-top: 1rem; }
+
+.highlight::after {
+  display: block;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  transform: scale(1.6, 1.05) skewX(20deg);
+  background-color: #000000; }
+
 .u-text-center {
   text-align: center; }
 
@@ -113,6 +136,45 @@ body {
 .signup__content {
   width: 80%;
   margin: 2rem auto 0; }
+
+.slider {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: all 1s;
+  border-radius: .5rem; }
+
+.slide {
+  height: inherit; }
+  .slide__content {
+    height: inherit;
+    background-size: cover; }
+    .slide__content-text {
+      position: absolute;
+      top: 30%;
+      left: 20%;
+      transform: translate(-30%, -20%);
+      text-transform: uppercase;
+      height: 12rem; }
+
+.dots-container {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%); }
+
+.dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: #ffffff; }
+  .dot:not(:last-child) {
+    margin-right: 1.5rem; }
+  .dot--active {
+    background-color: #000000; }
 
 .form__input, .form__dropdown {
   display: block;
@@ -445,9 +507,6 @@ body {
   .bar__icon::after {
     top: .8rem; }
 
-body {
-  background-color: #eeeeee; }
-
 .home__content {
   margin: 20rem auto 0;
   width: 80%; }
@@ -457,6 +516,11 @@ body {
   @media (max-width: 37.5em) {
     .home__content {
       margin-top: 0; } }
+
+.home__slider-section {
+  height: 65rem;
+  width: 100%;
+  margin-bottom: 10rem; }
 
 .user-profile__container {
   position: absolute;

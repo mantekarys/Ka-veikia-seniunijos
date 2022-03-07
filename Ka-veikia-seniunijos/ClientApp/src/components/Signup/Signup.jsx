@@ -75,7 +75,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
                 {isUserTypeSelected && <form className='signup__content'>
                     <div className="login__input-wrapper">
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='text'
                             placeholder='Vardas'
                             value={name}
@@ -85,7 +85,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
 
                     <div className="login__input-wrapper">
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='text'
                             placeholder='Pavardė'
                             value={surname}
@@ -95,7 +95,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
 
                     <div className="login__input-wrapper">
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='email'
                             placeholder='El. paštas'
                             value={email}
@@ -114,7 +114,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
 
                     <div className="login__input-wrapper">
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='password'
                             placeholder='Slaptažodis'
                             value={password}
@@ -124,7 +124,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
 
                     <div className="login__input-wrapper">
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='password'
                             placeholder='Pakartokite slaptažodį'
                             value={passwordRepeat}

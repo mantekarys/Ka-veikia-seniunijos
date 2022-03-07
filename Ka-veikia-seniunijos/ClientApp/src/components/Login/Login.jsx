@@ -36,7 +36,7 @@ export default function Login({ onClose, onLoginRedirect }) {
                             <FontAwesomeIcon className='form__placeholder-icon' icon={faEnvelope} />
                         </span>
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='text'
                             placeholder='El. paštas'
                             value={email}
@@ -49,7 +49,7 @@ export default function Login({ onClose, onLoginRedirect }) {
                             <FontAwesomeIcon className='form__placeholder-icon' icon={faLock} />
                         </span>
                         <Input
-                            className='login__input'
+                            styling='form__input'
                             type='password'
                             placeholder='Slaptažodis'
                             value={password}

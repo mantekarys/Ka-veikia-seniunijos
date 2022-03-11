@@ -4,6 +4,10 @@ import '../style.css';
 
 export default function Button({ href, styling, text, type, onClick }) {
     const handleOnClick = (e) => {
+        if (href) {
+            window.location.href = href;
+        }
+
         e.preventDefault();
         if (onClick) onClick();
     }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 export default function Grid({ areas }) {
     return (
-        <div className='grid u-margin-top-medium'>
+        <div className='grid u-margin-top-medium' id='grid'>
             {areas.map((text, key) => {
                 return <GridElement text={text} key={key} />
             })}

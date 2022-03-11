@@ -1,0 +1,29 @@
+﻿@import '../../Utils/_variables.scss';
+
+.arrow-icon {
+    font-size: 2.7rem;
+    color: $color-white;
+    padding: 1rem 1.2rem;
+
+    &__container {
+        position: absolute;
+        background-color: rgba($color-black, .5);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all .2s;
+        cursor: pointer;
+
+        &:hover {
+            transform: translateY(-60%);
+        }
+
+        &--right {
+            right: 3%;
+        }
+
+        &--left {
+            left: 3%;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 ﻿@import 'variables';
+@import '_mixins.scss';
 
 .header {
     &__primary {
@@ -51,10 +52,26 @@
     font-size: 5rem;
     color: $color-white;
 
+    @include respond(tab-land) {
+        font-size: 4rem;
+    }
+
+    @include respond(mobile) {
+        font-size: 2.6rem;
+    }
+
     &--follow {
         font-size: 3rem;
         float: right;
         padding-top: 1rem;
+
+        @include respond(tab-land) {
+            font-size: 2rem;
+        }
+
+        @include respond(mobile) {
+            font-size: 1.5rem;
+        }
     }
 }
 
@@ -68,6 +85,14 @@
     height: 100%;
     width: 100%;
     z-index: -1;
-    transform: scale(1.6, 1.05) skewX(20deg);
+    transform: scale(1.4, 1.05) skewX(20deg);
     background-color: $color-black;
+
+    @include respond(tab-land) {
+        transform: scale(1.2, 1.05) skewX(20deg);
+    }
+
+    @include respond(tab-port) {
+        transform: scale(1.1, 1.05) skewX(20deg);
+    }
 }

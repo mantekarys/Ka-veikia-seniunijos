@@ -526,8 +526,6 @@ body {
           color: #ffffff !important; }
 
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   border-top: 1px solid #c7c7cd;
   text-align: center;
@@ -617,11 +615,8 @@ body {
       left: 3%; }
 
 .home__content {
-  margin: 15rem auto 5rem;
+  margin: 10rem auto 5rem;
   width: 80%; }
-  @media (max-width: 56.25em) {
-    .home__content {
-      margin-top: 10rem; } }
   @media (max-width: 37.5em) {
     .home__content {
       margin-top: 0; } }

@@ -9,6 +9,7 @@ function Home() {
         < GlobalProvider >
             <HomeHeader />
             <HomeContent />
+            <Footer />
         </GlobalProvider > 
     );
 }

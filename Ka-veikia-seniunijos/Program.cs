@@ -13,6 +13,7 @@ namespace Ka_veikia_seniunijos
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("Hello world");
             CreateHostBuilder(args).Build().Run();
         }
 

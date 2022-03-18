@@ -120,6 +120,12 @@ body {
     transform: scale(1);
     opacity: 1; } }
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
 .login__container {
   position: absolute;
   top: 50%;
@@ -265,6 +271,15 @@ body {
   height: 100%;
   object-fit: cover; }
 
+.text-area {
+  outline: none;
+  font-size: 1.5rem;
+  max-width: 100%;
+  padding: 1rem;
+  border: 1px solid grey;
+  border-radius: 1rem;
+  resize: none; }
+
 .btn, .btn:link, .btn:visited {
   text-decoration: none;
   transition: all .2s;
@@ -296,6 +311,10 @@ body {
   padding: 1rem 1rem;
   font-size: 1.7rem;
   width: 15rem; }
+  .btn--header-small {
+    font-size: 1.4rem !important;
+    width: 13rem !important;
+    border-radius: 1rem; }
 
 .btn--text {
   font-size: 1.3rem; }
@@ -348,6 +367,11 @@ body {
       font-size: 1.5rem; } }
   .btn--slide, .btn--slide:link, .btn--slide:visited {
     text-decoration: none; }
+
+.btn--icon {
+  background-color: #000000;
+  font-size: 1.7rem;
+  padding: 1rem 1.4   rem; }
 
 .popup {
   height: 100%;
@@ -490,6 +514,12 @@ body {
   100% {
     transform: scale(1);
     opacity: 1; } }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
 
 .sidebar {
   position: fixed;

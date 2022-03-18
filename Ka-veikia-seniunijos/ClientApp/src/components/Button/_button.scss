@@ -39,6 +39,12 @@
         padding: 1rem 1rem;
         font-size: 1.7rem;
         width: 15rem;
+
+        &-small {
+            font-size: 1.4rem !important;
+            width: 13rem !important;
+            border-radius: 1rem;
+        }
     }
 
     &--text {
@@ -109,5 +115,11 @@
         &, &:link, &:visited {
             text-decoration: none;
         }
+    }
+
+    &--icon {
+        background-color: $color-black;
+        font-size: 1.7rem;
+        padding: 1rem 1.4   rem;
     }
 }

@@ -58,3 +58,13 @@
     height: 100%;
     object-fit:cover;
 }
+
+.text-area {
+    outline: none;
+    font-size: 1.5rem;
+    max-width: 100%;
+    padding: 1rem;
+    border: 1px solid $color-placeholder-default;
+    border-radius: $default-form-border-radius;
+    resize: none;
+}

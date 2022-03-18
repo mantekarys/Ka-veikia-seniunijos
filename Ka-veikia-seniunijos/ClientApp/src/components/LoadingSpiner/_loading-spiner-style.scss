@@ -1,0 +1,17 @@
+﻿@import '../Utils/variables';
+@import '../Utils/animations';
+@import '../Utils/mixins';
+
+.loading-spinner {
+    border: 1.6rem solid $color-black;
+    border-radius: 50%;
+    border-top: 1.6rem solid $color-white;
+    width: 12rem;
+    height: 12rem;
+    z-index: 102;
+    position: absolute;
+    top: 48%;
+    left: 48%;
+    animation: spin 2s linear infinite;
+    z-index: 200;
+}

@@ -1,0 +1,41 @@
+﻿@import '../../Utils/variables';
+
+.eldership {
+    &__content {
+        width: 80%;
+        height: 200rem;
+        margin: 15rem auto;
+        border-radius: 1rem;
+        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+    }
+
+    &__photo {
+        background-size: cover;
+        max-width: 100%;
+        margin-top: -6.5rem;
+        z-index: 10;
+
+        &-container {
+            width: 13rem;
+            height: 13rem;
+            margin: 0 auto;
+        }
+    }
+
+    &__header {
+        font-weight: bold;
+        display: inline-block;
+
+        &--content {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        &--buttons {
+            display: flex;
+            align-items: center;
+            justify-content: start;
+            gap: 2rem;
+        }
+    }
+}

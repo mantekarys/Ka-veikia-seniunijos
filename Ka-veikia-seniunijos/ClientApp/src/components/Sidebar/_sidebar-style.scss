@@ -1,0 +1,50 @@
+﻿@import '../Utils/animations';
+@import '../Utils/variables';
+@import '../Utils/mixins';
+
+
+.sidebar {
+    position: fixed;
+    top: 2rem;
+    left: 0;
+    height: 85%;
+    width: 20%;
+    z-index: 10;
+    background-color: $color-white;
+    box-shadow: 1px 0 7px -2px $color-black;
+    animation: moveInLeft .5s ease-out;
+    border-radius: 1rem;
+
+    @include respond(tab-land) {
+        width: 25%;
+    }
+
+    @include respond(tab-port) {
+        width: 30%;
+    }
+
+    @include respond(mobile) {
+        width: 40%;
+    }
+
+    &__list {
+        text-align: center;
+        width: 90%;
+        margin: 30% auto 0;
+        list-style: none;
+
+        &--item {
+            border-radius: 1rem;
+            padding: 1rem 0;
+            transition: all .2s;
+
+            &:hover {
+                & > .btn--sidebar {
+                    color: $color-white !important;
+                }
+
+                background-color: $color-black;
+            }
+        }
+    }
+}

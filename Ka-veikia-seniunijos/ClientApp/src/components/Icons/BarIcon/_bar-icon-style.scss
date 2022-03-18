@@ -1,0 +1,32 @@
+﻿@import '../../Utils/_variables.scss';
+@import '../../Utils/_mixins.scss';
+
+.bar__icon {
+    position: relative;
+
+    @include respond(mobile) {
+        margin-top: 2.2rem;
+    }
+
+    &, &::before, &::after {
+        width: 3rem;
+        height: 2px;
+        display: inline-block;
+        background-color: $color-black;
+    }
+
+    &::before, &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        transition: all .2s;
+    }
+
+    &::before {
+        top: -.8rem;
+    }
+
+    &::after {
+       top: .8rem;
+    }
+}

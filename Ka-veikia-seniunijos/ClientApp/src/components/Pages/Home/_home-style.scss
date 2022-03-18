@@ -1,0 +1,21 @@
+﻿@import '../../Utils/_mixins.scss';
+
+body {
+}
+
+.home {
+    &__content {
+        margin: 10rem auto 5rem;
+        width: 80%;
+
+        @include respond(mobile) {
+            margin-top: 0;
+        }
+    }
+
+    &__slider-section {
+        height: 65rem;
+        width: 100%;
+        margin-bottom: 10rem;
+    }
+}

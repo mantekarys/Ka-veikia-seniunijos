@@ -1,0 +1,113 @@
+﻿@import '../Utils/mixins';
+@import '../Utils/variables';
+
+.btn {
+    &, &:link, &:visited {
+        text-decoration: none;
+        transition: all .2s;
+        border: none;
+        cursor: pointer;
+        color: $color-white;
+    }
+
+    &:hover {
+        transform: translateY(-5%);
+        box-shadow: 0 1rem 2rem rgba($color-black, .2);
+
+        &::after {
+            transform: scaleX(1.5) scaleY(1.8);
+            opacity: 0;
+        }
+    }
+
+    &--primary {
+        background-color: $color-green;
+    }
+
+    &--login {
+        background-color: $color-black;
+        width: 100%;
+        border-radius: 1rem;
+        font-size: 1.5rem;
+        padding: 1.5rem 4rem;
+        display: inline-block;
+        text-transform: uppercase;
+    }
+
+    &--header {
+        background-color: $color-black;
+        padding: 1rem 1rem;
+        font-size: 1.7rem;
+        width: 15rem;
+    }
+
+    &--text {
+        font-size: 1.3rem;
+
+        &, &:link, &:visited {
+            text-decoration: none;
+            transition: all .2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        &-grey {
+            color: $color-placeholder !important;
+
+            &:hover {
+                color: $color-black !important;
+            }
+        }
+    }
+
+    &--animated {
+        animation: moveInBottom 1s ease-out;
+    }
+
+    &--hidden {
+        display: none;
+    }
+
+    &--sidebar {
+        color: $color-black !important;
+        font-size: 2.2rem;
+        transform: none;
+
+        &, &:link, &:visited {
+            text-decoration: none;
+        }
+    }
+
+    &--user-profile {
+        background-color: $color-black;
+        padding: 1.4rem 2.5rem;
+        font-size: 2rem;
+        animation: fadeIn 1s ease-in;
+    }
+
+    &--slide {
+        color: $color-black !important;
+        font-size: 2.2rem;
+        text-transform: initial;
+        position: absolute;
+        top: 50%;
+        left: 20%;
+        transform: translate(-50%, -20%);
+        border-bottom: 1px solid $color-black;
+
+        @include respond(tab-land) {
+            font-size: 1.8rem;
+        }
+
+        @include respond(mobile) {
+            top: 40%;
+            left: 30%;
+            transform: translate(-40%, -30%);
+            font-size: 1.5rem;
+        }
+
+        &, &:link, &:visited {
+            text-decoration: none;
+        }
+    }
+}

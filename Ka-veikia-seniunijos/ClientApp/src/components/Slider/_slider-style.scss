@@ -1,0 +1,77 @@
+﻿@import '../Utils/variables';
+
+
+.slider {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: .5rem;
+
+    &__container-box {
+        height: inherit;
+        width: inherit;
+        background-size: cover;
+        transition: all 1s;
+    }
+}
+
+.slide {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    transition: all 1s;
+
+    &__content {
+        height: inherit;
+        background-size: cover;
+
+        &-text {
+            position: absolute;
+            top: 30%;
+            left: 20%;
+            transform: translate(-30%, -20%);
+            text-transform: uppercase;
+            height: 12rem;
+        }
+    }
+
+    &--0 {
+        transform: translate(0%);
+    }
+
+    &--1 {
+        transform: translate(100%);
+    }
+
+    &--2 {
+        transform: translate(200%);
+    }
+}
+
+.dots-container {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.dot {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: $color-white;
+
+    &:not(:last-child) {
+        margin-right: 1.5rem;
+    }
+
+    &--active {
+        background-color: $color-black;
+    }
+}

@@ -220,6 +220,12 @@ body {
   .dot--active {
     background-color: #000000; }
 
+.map {
+  height: 180px; }
+
+.leaflet-container {
+  height: 200px; }
+
 .form__input, .form__dropdown {
   display: block;
   border: none;

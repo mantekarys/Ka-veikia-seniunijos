@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import Button from '../../Button/Button';
+import NavigationList from '../../NavigationList/NavigationList';
 import LoadingSpiner from '../../LoadingSpiner/LoadingSpinner';
 import UserPicture from '../../../images/user-profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +9,12 @@ import '../../style.css';
 
 export default function UserHeader() {
     const [isLoaderVisible, setIsLoaderVisible] = useState(false);
+    const [isNavListVisible, setIsNavListVisible] = useState(false);
+
+    const handleOnArrowClick = () => {
+        setIsNavListVisible(!isNavListVisible);
+    }
+
     const handleLogOut = () => {
         setIsLoaderVisible(true);
 
@@ -21,8 +28,13 @@ export default function UserHeader() {
             {isLoaderVisible && <LoadingSpiner />}
 
             <div className='header__user-info'>
-                <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} />
-                <h4 className='header__user-name'>Patrikas</h4>
+                <div className='header__user-info-wrapper'>
+                    <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={handleOnArrowClick} />
+                    <h4 className='header__user-name'>Patrikas</h4>
+
+                    {isNavListVisible && <NavigationList /> }
+                </div>
+
                 <img src={UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
             </div>
         </header>

@@ -498,9 +498,15 @@ body {
     width: 80%;
     margin: 0 auto;
     padding-top: 3rem; }
+    @media (max-width: 37.5em) {
+      .header__user {
+        display: none; } }
     .header__user-info {
       display: flex;
       align-items: center; }
+      .header__user-info-wrapper {
+        display: flex;
+        position: relative; }
     .header__user-icon {
       font-weight: bold;
       font-size: 2rem; }

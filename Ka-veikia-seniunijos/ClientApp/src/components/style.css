@@ -265,6 +265,14 @@ body {
   height: 100%;
   object-fit: cover; }
 
+.leaflet-container {
+  height: 400px;
+  width: 60%;
+  margin: 0 auto; }
+
+.pad {
+  padding-bottom: 20px; }
+
 .btn, .btn:link, .btn:visited {
   text-decoration: none;
   transition: all .2s;

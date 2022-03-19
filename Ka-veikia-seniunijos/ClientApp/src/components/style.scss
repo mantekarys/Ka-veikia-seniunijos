@@ -1,36 +1,37 @@
-﻿@import './Utils/variables';
-@import './Utils/base';
-@import './Utils/mixins';
-@import './Utils/typography';
-@import './Utils/utilities';
-@import './Utils/animations';
+﻿@import "./Utils/variables";
+@import "./Utils/base";
+@import "./Utils/mixins";
+@import "./Utils/typography";
+@import "./Utils/utilities";
+@import "./Utils/animations";
 
-@import './Login/login-style';
-@import './Signup/signup-style';
+@import "./Login/login-style";
+@import "./Signup/signup-style";
 
-@import './Slider/slider-style';
+@import "./Slider/slider-style";
 
-@import './Form/form-lib';
+@import "./Form/form-lib";
+@import "./Map/map-style";
 
-@import './Button/button';
+@import "./Button/button";
 
-@import './Popup/popup';
+@import "./Popup/popup";
 
-@import './Error/error';
+@import "./Error/error";
 
-@import './Radio/radio';
+@import "./Radio/radio";
 
-@import './Header/header-style';
+@import "./Header/header-style";
 
-@import './Sidebar/sidebar-style';
+@import "./Sidebar/sidebar-style";
 
-@import './Footer/footer-style';
+@import "./Footer/footer-style";
 
-@import './Grid/grid-style';
+@import "./Grid/grid-style";
 
-@import './Icons/BarIcon/bar-icon-style';
-@import './Icons/ArrowIcon/arrow-icon-style';
+@import "./Icons/BarIcon/bar-icon-style";
+@import "./Icons/ArrowIcon/arrow-icon-style";
 
-@import './Pages/Home/home-style';
+@import "./Pages/Home/home-style";
 
-@import './UserProfile/user-profile-styling';
+@import "./UserProfile/user-profile-styling";

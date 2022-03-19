@@ -1,0 +1,69 @@
+﻿@import '../Utils/variables';
+@import '../Utils/mixins';
+
+.post {
+    &__container {
+        width: 60%;
+        padding: 4rem 4rem;
+        margin: 0 auto;
+        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+        border-radius: $default-form-border-radius;
+        margin-top: 10rem;
+
+        @include respond(tab-land) {
+            width: 80%;
+        }
+
+        @include respond(mobile) {
+            margin-top: 5rem;
+            padding: 2rem 2rem;
+        }
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &-picture {
+            height: 3rem;
+            width: 3rem;
+            border-radius: 50%;
+            background-size: cover;
+            border: 1px solid $color-black;
+        }
+
+        &-owner {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        &-name, &-date {
+            font-weight: bold;
+        }
+
+        &-name, &-icon {
+            font-size: 2rem;
+        }
+
+        &-date {
+            color: $color-placeholder;
+            font-size: 1.2rem;
+        }
+
+        &-icon {
+            color: $color-placeholder;
+            transition: all .4s;
+
+            &:hover {
+                color: $color-black;
+            }
+        }
+    }
+
+    &__content {
+        margin-top: 2rem;
+    }
+}

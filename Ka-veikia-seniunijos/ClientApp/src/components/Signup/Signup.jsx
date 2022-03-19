@@ -9,7 +9,7 @@ import Error from '../Error/Error';
 import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function Signup({ onClose, onSignupRedirect }) {
     const [userType, setUserType] = useState('Gyventojas');

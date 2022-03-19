@@ -1,0 +1,28 @@
+﻿@import '../Utils/variables';
+
+.navigation-list {
+    &__container {
+        position: absolute;
+        background-color: $color-white;
+        border: 1px solid $color-placeholder-default;
+        padding: .5rem 1rem;
+        list-style: none;
+        top: 120%;
+        left: -10%;
+        width: 120%;
+        line-height: 4rem;
+    }
+
+    &__item {
+        font-size: 1.5rem;
+        transition: all .3s;
+
+        & > svg {
+            padding-right: .5rem;
+        }
+
+        &:hover {
+            font-weight: bold;
+        }
+    }
+}

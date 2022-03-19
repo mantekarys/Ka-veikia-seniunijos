@@ -1,4 +1,5 @@
-﻿@import '../Utils/_mixins.scss';
+﻿@import '../Utils/mixins';
+@import '../Utils/variables';
 
 .header {
     padding-top: 2rem;
@@ -36,6 +37,41 @@
                 box-shadow: 0 1rem 2rem rgba($color-black, .2);
                 background-color: $color-white;
             }
+        }
+    }
+
+    &__user {
+        display: flex;
+        justify-content: end;
+        width: 80%;
+        margin: 0 auto;
+        padding-top: 3rem;
+
+        &-info {
+            display: flex;
+            align-items: center;
+        }
+
+        &-icon {
+            font-weight: bold;
+            font-size: 2rem;
+
+            &:hover {
+                color: $color-placeholder-default;
+            }
+        }
+
+        &-name {
+            font-weight: bold;
+            font-size: 1.8rem;
+            margin: 0 1.2rem;
+        }
+
+        &-picture {
+            height: 4rem;
+            width: 4rem;
+            border-radius: 50%;
+            object-fit: cover;
         }
     }
 }

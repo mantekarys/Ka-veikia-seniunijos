@@ -3,6 +3,9 @@
   padding: 0;
   box-sizing: inherit; }
 
+p, h1, h2, h3, h4, h5 {
+  margin: 0; }
+
 html {
   font-size: 62.5%;
   scroll-behavior: smooth; }
@@ -20,6 +23,9 @@ body {
 .header__tertiary {
   font-size: 2.5rem; }
 
+.header__fourth {
+  font-size: 1.5rem; }
+
 .header--hidden {
   display: none; }
 
@@ -31,6 +37,8 @@ body {
     font-size: 1.7rem; }
   .paragraph--large {
     font-size: 1.5rem; }
+  .paragraph--post {
+    font-size: 2.2rem; }
 
 .hr {
   color: #000000; }
@@ -212,7 +220,6 @@ body {
   position: absolute;
   bottom: 5%;
   left: 50%;
-  -webkit-transform: translateX(-50%);
   transform: translateX(-50%); }
 
 .dot {
@@ -371,7 +378,7 @@ body {
 .btn--icon {
   background-color: #000000;
   font-size: 1.7rem;
-  padding: 1rem 1.4   rem; }
+  padding: 1rem 1.4rem; }
 
 .popup {
   height: 100%;
@@ -485,6 +492,29 @@ body {
         border-radius: 50%;
         box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
         background-color: #ffffff; } }
+  .header__user {
+    display: flex;
+    justify-content: end;
+    width: 80%;
+    margin: 0 auto;
+    padding-top: 3rem; }
+    .header__user-info {
+      display: flex;
+      align-items: center; }
+    .header__user-icon {
+      font-weight: bold;
+      font-size: 2rem; }
+      .header__user-icon:hover {
+        color: grey; }
+    .header__user-name {
+      font-weight: bold;
+      font-size: 1.8rem;
+      margin: 0 1.2rem; }
+    .header__user-picture {
+      height: 4rem;
+      width: 4rem;
+      border-radius: 50%;
+      object-fit: cover; }
 
 @keyframes moveInLeft {
   0% {

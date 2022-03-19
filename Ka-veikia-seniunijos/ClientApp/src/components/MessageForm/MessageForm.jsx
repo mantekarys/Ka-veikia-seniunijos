@@ -8,10 +8,12 @@ import '../Utils/_base.scss';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from 'prop-types';
 
 // TODO: add verification if user wants to send mssg without topic
+// TODO: add success message or banner after message was sent
 
-export default function MessageForm() {
+export default function MessageForm({ onClose }) {
     const [messageTopic, setMessageTopic] = useState('');
     const [message, setMessage] = useState('');
     const [isFormInvalid, setIsFormInvalid] = useState(false);
@@ -26,7 +28,7 @@ export default function MessageForm() {
 
     return (
         <div className='message-form__container'>
-            <FontAwesomeIcon className='form__icon' icon={faXmark} />
+            <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
             <h2 className='header__secondary u-text-center u-margin-top-medium'>Nauja žinutė</h2>
 
             <form className='message-form__content' onSubmit={handleOnSubmit}>
@@ -59,4 +61,8 @@ export default function MessageForm() {
             </form>
         </div>
     );
+}
+
+MessageForm.prototype = {
+    onClose: PropTypes.func
 }

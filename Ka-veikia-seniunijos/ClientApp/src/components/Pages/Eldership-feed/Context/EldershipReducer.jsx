@@ -6,6 +6,12 @@
                 isSpinerVisible: action.isSpinerVisible
             }
 
+        case 'TOGGLE_MESSAGE':
+            return {
+                ...state,
+                isMessageFormOpen: action.isMessageFormOpen
+            }
+
         default:
             return state;
     }

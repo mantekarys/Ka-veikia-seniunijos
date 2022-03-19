@@ -1,6 +1,9 @@
 ﻿import React, { useState } from 'react';
 import Button from '../../Button/Button';
 import LoadingSpiner from '../../LoadingSpiner/LoadingSpinner';
+import UserPicture from '../../../images/user-profile.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import '../../style.css';
 
 export default function UserHeader() {
@@ -14,25 +17,13 @@ export default function UserHeader() {
     }
 
     return (
-        <header className='header'>
+        <header className='header__user'>
             {isLoaderVisible && <LoadingSpiner />}
 
-            <div className='header__button-wrapper'>
-                <Button
-                    text='Žempėlapis'
-                    styling='btn btn--header'
-                />
-
-                <Button
-                    text='Profilis'
-                    styling='btn btn--header'
-                />
-
-                <Button
-                    text='Atsijungti'
-                    styling='btn btn--header'
-                    onClick={handleLogOut}
-                />
+            <div className='header__user-info'>
+                <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} />
+                <h4 className='header__user-name'>Patrikas</h4>
+                <img src={UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
             </div>
         </header>
     );

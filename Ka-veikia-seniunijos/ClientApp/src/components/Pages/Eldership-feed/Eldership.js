@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import UserHeader from '../../Header/UserHeader/UserHeader';
 import EldershipFeedContent from './EldershipFeedContent';
+import Footer from '../../Footer/Footer';
 import { GlobalProvider } from "./Context/GlobalState";
 
 function Eldership() {
@@ -8,6 +9,7 @@ function Eldership() {
         <GlobalProvider>
             <UserHeader />
             <EldershipFeedContent />
+            <Footer />
         </GlobalProvider > 
     );
 }

@@ -14,4 +14,11 @@
     left: 48%;
     animation: spin 2s linear infinite;
     z-index: 200;
+
+    @include respond(mobile) {
+        width: 8rem;
+        height: 8rem;
+        border: 1rem solid $color-black;
+        border-top: 1rem solid $color-white;
+    }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+//import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 
 
 export default function Map() {
@@ -16,7 +16,7 @@ export default function Map() {
     }
     return (
         <div class="pad">
-            <MapContainer center={[51.505, -0.09]} zoom={13}>
+            {/* <MapContainer center={[51.505, -0.09]} zoom={13}>
             <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -32,7 +32,7 @@ export default function Map() {
                 Here lives sadness
             </Popup>
             </Marker>
-            </MapContainer>
+            </MapContainer> */}
         </div>
     );
 }

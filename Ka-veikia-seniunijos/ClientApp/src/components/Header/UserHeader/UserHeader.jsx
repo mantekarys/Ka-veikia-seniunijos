@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import Button from '../../Button/Button';
+import BarIcon from '../../Icons/BarIcon/BarIcon';
 import NavigationList from '../../NavigationList/NavigationList';
 import LoadingSpiner from '../../LoadingSpiner/LoadingSpinner';
 import UserPicture from '../../../images/user-profile.png';

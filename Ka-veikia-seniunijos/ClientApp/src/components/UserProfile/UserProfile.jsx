@@ -1,19 +1,24 @@
 ﻿import React, { useState } from 'react';
 import Input from '../Form/Input';
+import Dropdown from '../Form/Dropdown';
 import Button from '../Button/Button';
+
 import './_user-profile-styling.scss';
 import '../Utils/_utilities.scss';
 import '../Utils/_typography.scss';
 import userProfile from '../../images/user-profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from 'prop-types';
 
-// If user type is resident - display dropdown
+// Add change photo funcionality
+// Add error message
 
-export default function UserProfile() {
+export default function UserProfile({ onUpdate }) {
     const [name, setName] = useState('Vardas');
     const [surname, setSurname] = useState('Pavardė');
     const [email, setEmail] = useState('Paštas');
+    const [eldership, setEldership] = useState('Savivaldybė');
     const [isEditEnabled, setIsEditEnabled] = useState(false);
 
     const hadleIconClick = (e) => {
@@ -24,8 +29,14 @@ export default function UserProfile() {
         setIsEditEnabled(true);
     }
 
+    const handleOnDropdownChange = (e) => {
+        setEldership(e.target.value);
+        setIsEditEnabled(true);
+    }
+
     const handleOnSubmit = () => {
-        
+
+        if (onUpdate) onUpdate();
     }
 
     return (
@@ -83,6 +94,15 @@ export default function UserProfile() {
                                 <FontAwesomeIcon icon={faPen} className='user-profile__icon' onClick={hadleIconClick} />
                             </span>
                         </div>
+
+                        <div className='user-profile__input-container'>
+                            <Dropdown
+                                styling='form__dropdown user-profile__dropdown'
+                                placeholder={eldership}
+                                values={['Vilnius', 'Kaunas']}
+                                onChange={handleOnDropdownChange}
+                             />
+                        </div>
                     </div>
 
                     {isEditEnabled &&
@@ -91,11 +111,17 @@ export default function UserProfile() {
                             text='Išsaugoti'
                             styling='btn btn--user-profile'
                             type='submit'
+                            onClick={handleOnSubmit}
                         />
                     </div>
                  }
                 </div>
-            </div>
+            </div> 
+
         </div>
     );
+}
+
+UserProfile.prototype = {
+    onUpdate: PropTypes.func
 }

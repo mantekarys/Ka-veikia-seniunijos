@@ -31,8 +31,10 @@
             text-align: center;
 
             @include respond(mobile) {
-                z-index: 10;
                 position: fixed;
+                left: 2%;
+                top: 2%;
+                z-index: 10;
                 border-radius: 50%;
                 box-shadow: 0 1rem 2rem rgba($color-black, .2);
                 background-color: $color-white;
@@ -46,10 +48,6 @@
         width: 80%;
         margin: 0 auto;
         padding-top: 3rem;
-
-        @include respond(mobile) {
-            display: none;
-        }
 
         &-info {
             display: flex;

@@ -8,12 +8,21 @@
         height: 60%;
         border-radius: 1rem;
         box-shadow: 0 1rem 2rem rgba($color-black, .2);
+
+        @include respond(mobile) {
+            width: 95%;
+            height: 70%;
+        }
     }
 
     &__picture {
         &-container {
             width: 50%;
             margin: 10% auto 0;
+
+            @include respond(mobile) {
+                height: 100%;
+            }
         }
     }
 
@@ -25,6 +34,12 @@
 
     &__header {
         height: 10%;
+
+        & > h2 {
+            @include respond(mobile) {
+                font-size: 3rem;
+            }
+        }
     }
 
     &__card {
@@ -32,11 +47,21 @@
         flex-direction: row;
         height: 90%;
 
+        @include respond(mobile) {
+            display: block;
+        }
+
         &--left {
             width: 30%;
             height: 95%;
             display: inline-block;
             border-right: 1px solid $color-placeholder;
+
+            @include respond(mobile) {
+                display: block;
+                width: 100%;
+                height: 10%;
+            }
         }
 
         &--right {
@@ -44,6 +69,11 @@
             height: 95%;
             display: inline-block;
             position: relative;
+
+            @include respond(mobile) {
+                width: 100%;
+                height: 80%;
+            }
         }
     }
 
@@ -89,12 +119,15 @@
     }
 
     &__button {
-
         &-wrapper {
             position: absolute;
             bottom: 5%;
             left: 50%;
             transform: translateX(-50%);
         }
+    }
+
+    &__dropdown {
+        padding: 0;
     }
 }

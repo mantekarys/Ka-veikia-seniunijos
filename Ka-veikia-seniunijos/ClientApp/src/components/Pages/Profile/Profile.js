@@ -1,6 +1,7 @@
 ﻿import React, { useState } from 'react';
 import UserHeader from '../../Header/UserHeader/UserHeader';
 import UserProfile from '../../UserProfile/UserProfile';
+import Footer from '../../Footer/Footer';
 import LoadingSpinner from '../../LoadingSpiner/LoadingSpinner';
 
 function Profile() {

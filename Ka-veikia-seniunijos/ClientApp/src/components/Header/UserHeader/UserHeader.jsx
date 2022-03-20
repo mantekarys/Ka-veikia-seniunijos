@@ -1,43 +1,41 @@
-﻿import React, { useState } from 'react';
-import Button from '../../Button/Button';
+﻿import React, { useState, useLayoutEffect } from 'react';
 import BarIcon from '../../Icons/BarIcon/BarIcon';
 import NavigationList from '../../NavigationList/NavigationList';
-import LoadingSpiner from '../../LoadingSpiner/LoadingSpinner';
+import Sidebar from '../../Sidebar/Sidebar';
 import UserPicture from '../../../images/user-profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import '../../style.css';
 
 export default function UserHeader() {
-    const [isLoaderVisible, setIsLoaderVisible] = useState(false);
     const [isNavListVisible, setIsNavListVisible] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const handleOnArrowClick = () => {
-        setIsNavListVisible(!isNavListVisible);
-    }
-
-    const handleLogOut = () => {
-        setIsLoaderVisible(true);
-
-        const timer = setTimeout(() => {
-            setIsLoaderVisible(false);
-        }, 1500);
-    }
+    useLayoutEffect(() => {
+        const updateSize = () => {
+            window.innerWidth <= 600 ? setIsMobile(true) : setIsMobile(false);
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
 
     return (
         <header className='header__user'>
-            {isLoaderVisible && <LoadingSpiner />}
+            {isMobile && !isSidebarOpen && <BarIcon wrapperStyling='header__icon-wrapper' onClick={() => setIsSidebarOpen(true)} />}
+            {isSidebarOpen && <Sidebar onClose={() => setIsSidebarOpen(false)} /> }
+            {!isMobile &&
+                <div className='header__user-info'>
+                    <div className='header__user-info-wrapper'>
+                    <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={() => setIsNavListVisible(!isNavListVisible)} />
+                        <h4 className='header__user-name'>Patrikas</h4>
 
-            <div className='header__user-info'>
-                <div className='header__user-info-wrapper'>
-                    <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={handleOnArrowClick} />
-                    <h4 className='header__user-name'>Patrikas</h4>
+                        {isNavListVisible && <NavigationList />}
+                    </div>
 
-                    {isNavListVisible && <NavigationList /> }
+                    <img src={UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
                 </div>
-
-                <img src={UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
-            </div>
+            }
         </header>
     );
 }

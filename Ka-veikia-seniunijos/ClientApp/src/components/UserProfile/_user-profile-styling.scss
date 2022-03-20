@@ -8,6 +8,11 @@
         height: 60%;
         border-radius: 1rem;
         box-shadow: 0 1rem 2rem rgba($color-black, .2);
+
+        @include respond(mobile) {
+            width: 95%;
+            height: 70%;
+        }
     }
 
     &__picture {

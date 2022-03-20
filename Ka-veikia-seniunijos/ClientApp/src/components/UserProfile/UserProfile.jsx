@@ -2,7 +2,6 @@
 import Input from '../Form/Input';
 import Dropdown from '../Form/Dropdown';
 import Button from '../Button/Button';
-
 import './_user-profile-styling.scss';
 import '../Utils/_utilities.scss';
 import '../Utils/_typography.scss';
@@ -31,6 +30,7 @@ export default function UserProfile({ onUpdate }) {
 
     const handleOnDropdownChange = (e) => {
         setEldership(e.target.value);
+        e.target.classList.add('user-profile__input--edit');
         setIsEditEnabled(true);
     }
 

@@ -499,8 +499,10 @@ body {
     text-align: center; }
     @media (max-width: 37.5em) {
       .header__icon-wrapper {
-        z-index: 10;
         position: fixed;
+        left: 2%;
+        top: 2%;
+        z-index: 10;
         border-radius: 50%;
         box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
         background-color: #ffffff; } }
@@ -510,9 +512,6 @@ body {
     width: 80%;
     margin: 0 auto;
     padding-top: 3rem; }
-    @media (max-width: 37.5em) {
-      .header__user {
-        display: none; } }
     .header__user-info {
       display: flex;
       align-items: center; }
@@ -588,7 +587,9 @@ body {
       width: 30%; } }
   @media (max-width: 37.5em) {
     .sidebar {
-      width: 40%; } }
+      width: 100%;
+      height: 100%;
+      top: 0; } }
   .sidebar__list {
     text-align: center;
     width: 90%;
@@ -657,6 +658,9 @@ body {
     height: 2px;
     display: inline-block;
     background-color: #000000; }
+    @media (max-width: 37.5em) {
+      .bar__icon, .bar__icon::before, .bar__icon::after {
+        width: 2rem; } }
   .bar__icon::before, .bar__icon::after {
     content: "";
     position: absolute;
@@ -713,6 +717,10 @@ body {
   height: 60%;
   border-radius: 1rem;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2); }
+  @media (max-width: 37.5em) {
+    .user-profile__container {
+      width: 95%;
+      height: 70%; } }
 
 .user-profile__picture-container {
   width: 50%;

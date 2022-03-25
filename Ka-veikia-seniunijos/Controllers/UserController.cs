@@ -5,7 +5,9 @@ using System;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using System.Configuration;
 using Ka_veikia_seniunijos.Models;
+using MySqlConnector;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -26,21 +28,47 @@ namespace Ka_veikia_seniunijos.Controllers
             string query = @"
                     select * from BSJ0CVGChE.User";
             DataTable table = new DataTable();
-            string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
-            SqlDataReader myReader;
-            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            using var connection = new MySqlConnection("Server=remotemysql.com;Database=BSJ0CVGChE;User ID= BSJ0CVGChE; password = wElEvnn5cl;");
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            MySqlTransaction myTrans;
+
+            // Start a local transaction
+            myTrans = connection.BeginTransaction();
+            // Must assign both transaction object and connection
+            // to Command object for a pending local transaction
+            myCommand.Connection = connection;
+            myCommand.Transaction = myTrans;
+            myCommand.CommandText = "select * from User";
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            while (rdr.Read())
             {
-                myCon.Open();
-                using (SqlCommand myCommand = new SqlCommand(query, myCon))
-                {
-                    myReader = myCommand.ExecuteReader();
-                    table.Load(myReader); ;
-
-                    myReader.Close();
-                    myCon.Close();
-                }
+                Console.WriteLine(rdr[0] + " -- " + rdr[1]);
             }
+            rdr.Close();
+            // myCommand.CommandText = "insert into User (userName,firstName,lastName,passwordHash) VALUES ('e','e','e','e')";
+            // myCommand.ExecuteNonQuery();
+            myTrans.Commit();
+            Console.WriteLine("Both records are written to database.");
+            //string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
+            //SqlDataReader myReader;
+            //using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            //{
+            //     using (SqlCommand myCommand = new SqlCommand((query, connection))
+            //    {
+            //        myReader = myCommand.ExecuteReader();
+            //        table.Load(myReader); ;
 
+            //        myReader.Close();
+            //        myCon.Close();
+            //    }
+            //}
+            //Get connection string from web.config file  
+            // string strcon = "Server=remotemysql.com,3306;Initial Catalog=BSJ0CVGChE; UserId=BSJ0CVGChE;password=wElEvnn5cl;SslMode=none;convert zero datetime=True";//ConfigurationManager.ConnectionStrings["MysqlConnection"].ConnectionString;
+            // //create new sqlconnection and connection to database by using connection string from web.config file  
+            // SqlConnection con = new SqlConnection(strcon);
+            // con.Open();
+            Console.WriteLine("Success?");
             return new JsonResult(table);
         }
 
@@ -114,7 +142,7 @@ namespace Ka_veikia_seniunijos.Controllers
         {
             string query = @"
                     insert into BSJ0CVGChE.User values 
-                    ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name +  @"')
+                    ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name + @"')
                     ";
             DataTable table = new DataTable();
             string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");

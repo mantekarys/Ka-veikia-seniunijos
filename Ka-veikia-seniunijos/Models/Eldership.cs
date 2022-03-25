@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ka_veikia_seniunijos.Models
 {
-    public class Edership
+    public class Eldership
     {
         public string Name { get; set; }
         public string LastName { get; set; }

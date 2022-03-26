@@ -29,7 +29,7 @@ namespace Ka_veikia_seniunijos.Controllers
         //            ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name + @"')
         //            ";
         //    DataTable table = new DataTable();
-        //    string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
+        //    string sqlDataSource = _configuration.GetConnectionString("AppCon");
         //    SqlDataReader myReader;
         //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
         //    {

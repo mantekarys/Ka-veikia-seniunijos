@@ -27,7 +27,7 @@ namespace Ka_veikia_seniunijos.Controllers
         public JsonResult Get(int id)//could be changed that users would be found not by id but by email
         {
             string query = @"select * from BSJ0CVGChE.User where id = "+id;
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("EmployeeAppCon"));
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
             myCommand.CommandText = query;
@@ -61,7 +61,7 @@ namespace Ka_veikia_seniunijos.Controllers
                     passwordHashed = '" + passwordHashed + @"'
                     where Id = " + user.Id + @" 
                     ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("EmployeeAppCon"));
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
             myCommand.CommandText = query;
@@ -86,7 +86,7 @@ namespace Ka_veikia_seniunijos.Controllers
                     delete from  BSJ0CVGChE.User
                     where id = " + id + @" 
                     ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("EmployeeAppCon"));
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
             myCommand.CommandText = query;
@@ -96,38 +96,38 @@ namespace Ka_veikia_seniunijos.Controllers
             return new JsonResult("Deleted Successfully");
         }
 
-    //    [HttpPost]//make password hashed in database
-    //    public JsonResult Post(User user)
-    //    {
-    //        string query = @"
-    //                insert into BSJ0CVGChE.User values 
-    //                ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name + @"')
-    //                ";
-    //        DataTable table = new DataTable();
-    //        string sqlDataSource = _configuration.GetConnectionString("EmployeeAppCon");
-    //        SqlDataReader myReader;
-    //        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-    //        {
-    //            myCon.Open();
-    //            using (SqlCommand myCommand = new SqlCommand(query, myCon))
-    //            {
-    //                try
-    //                {
-    //                    myReader = myCommand.ExecuteReader();
-    //                    table.Load(myReader); ;
+        //    [HttpPost]//make password hashed in database
+        //    public JsonResult Post(User user)
+        //    {
+        //        string query = @"
+        //                insert into BSJ0CVGChE.User values 
+        //                ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name + @"')
+        //                ";
+        //        DataTable table = new DataTable();
+        //        string sqlDataSource = _configuration.GetConnectionString("AppCon");
+        //        SqlDataReader myReader;
+        //        using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+        //        {
+        //            myCon.Open();
+        //            using (SqlCommand myCommand = new SqlCommand(query, myCon))
+        //            {
+        //                try
+        //                {
+        //                    myReader = myCommand.ExecuteReader();
+        //                    table.Load(myReader); ;
 
-    //                }
-    //                catch (Exception)
-    //                {
-    //                    //paziurek kame problema
-    //                    throw;
-    //                }
-    //                myReader.Close();
-    //                myCon.Close();
-    //            }
-    //        }
+        //                }
+        //                catch (Exception)
+        //                {
+        //                    //paziurek kame problema
+        //                    throw;
+        //                }
+        //                myReader.Close();
+        //                myCon.Close();
+        //            }
+        //        }
 
-    //        return new JsonResult("1");//arba Added Successfully
-    //    }
+        //        return new JsonResult("1");//arba Added Successfully
+        //    }
     }
 }

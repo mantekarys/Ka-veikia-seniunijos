@@ -16,6 +16,7 @@ export default function GridElement({ text }) {
         setIsParagraphVisible(true);
     }
 
+
     return (
         <div className='grid__element' onMouseEnter={handleOnHover} onMouseLeave={ handleOnLeave }>
             <div className='grid__element--header'>
@@ -30,6 +31,7 @@ export default function GridElement({ text }) {
                     <Button
                         text='Daugiau'
                         styling={`btn btn--header btn--animated ${isButtonVisible ? '' : 'btn--hidden'}`}
+                        onClick={() => window.location.href = `http://localhost:3000/eldership?eldership=${text}`}
                     />
                 </div>
             </div>

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using Newtonsoft.Json.Serialization;
 namespace Ka_veikia_seniunijos
 {
     public class Startup
@@ -20,8 +21,22 @@ namespace Ka_veikia_seniunijos
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Mantas
+            //Enable CORS
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod()
+                 .AllowAnyHeader());
+            });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+                .Json.ReferenceLoopHandling.Ignore)
+                .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
+                = new DefaultContractResolver()); ;
+
+            services.AddControllers();
+            //Mantas
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

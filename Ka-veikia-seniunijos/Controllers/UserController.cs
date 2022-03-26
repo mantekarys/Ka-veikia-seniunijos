@@ -24,7 +24,7 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
         [HttpGet("{id}")]
-        public JsonResult Get(int id)//could be changed that users would be found not by id but by email
+        public JsonResult Get(int id)
         {
             string query = @"select * from BSJ0CVGChE.User where id = " + id;
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
@@ -39,8 +39,8 @@ namespace Ka_veikia_seniunijos.Controllers
             return new JsonResult(table);
         }
 
-        [HttpPut]//check municipality
-        public JsonResult Put(User user)
+        [HttpPut]
+        public int Put(User user)
         {
             //password hashing
             byte[] salt;
@@ -69,18 +69,17 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 myCommand.ExecuteNonQuery();
             }
-            catch (Exception e)
+            catch
             {
-                Console.WriteLine(e);
                 connection.Close();
-                return new JsonResult("-1");//could be changed to a clear message and not a code
+                return 1062;//error
             }
             connection.Close();
-            return new JsonResult("Updated Successfully");
+            return 200;//good
         }
 
         [HttpDelete("{id}")]
-        public JsonResult Delete(int id)//could be changed that users would be found not by id but by email
+        public int Delete(int id)
         {
             string query = @"
                     delete from  BSJ0CVGChE.User
@@ -92,12 +91,11 @@ namespace Ka_veikia_seniunijos.Controllers
             myCommand.CommandText = query;
             myCommand.ExecuteNonQuery();
             connection.Close();
-
-            return new JsonResult("Deleted Successfully");
+            return 200;//good
         }
 
         [HttpPost]
-        public JsonResult Post(User user)
+        public int Post(User user)
         {
             //password hashing
             byte[] salt;
@@ -109,44 +107,26 @@ namespace Ka_veikia_seniunijos.Controllers
             Array.Copy(hash, 0, hashBytes, 16, 20);
             string passwordHashed = Convert.ToBase64String(hashBytes);
             //
-            string query = @"select * from BSJ0CVGChE.User where municipality = '" + user.Municipality + "' and isElder = 1";
-
-            string query2 = @"
-                        insert into BSJ0CVGChE.User (firstName, lastName, email, municipality, passwordHashed, isElder) values 
-                        ('" + user.FirstName + "','" + user.LastName + "','" + user.Email + "','" + user.Municipality + "','" + passwordHashed + "','" + (user.IsElder ? 1 : 0) + @"')
-                        ";
+            string query = @"
+                        insert into BSJ0CVGChE.User (firstName, lastName, email, municipality, passwordHashed) values 
+                        ('" + user.FirstName + "','" + user.LastName + "','" + user.Email + "','" + user.Municipality + "','" + passwordHashed + "')";
 
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
          
-            if (user.IsElder){
-                myCommand.CommandText = query;
-                MySqlDataReader rdr = myCommand.ExecuteReader();
-                int howMany = 0;
-                while (rdr.Read())
-                {
-                    howMany++;
-                }
-                rdr.Close();
-                if (howMany != 0)
-                {
-                    return new JsonResult("-2");//could be changed to a clear message and not a code
-                }
-            }
-            myCommand.CommandText = query2;
+            myCommand.CommandText = query;
             try
             {
                 myCommand.ExecuteNonQuery();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 connection.Close();
-                return new JsonResult("-1");//could be changed to a clear message and not a code
+                return 1062;//error
             }
             connection.Close();
-            return new JsonResult("Added Successfully");
+            return 200;//good
 
         }
     }

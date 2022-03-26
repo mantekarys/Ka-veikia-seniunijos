@@ -15,7 +15,5 @@ namespace Ka_veikia_seniunijos.Models
         public string Password { get; set; }
 
         public string Id { get; set; }
-        public bool IsElder { get; set; }
-
     }
 }

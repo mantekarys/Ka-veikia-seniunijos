@@ -1,15 +1,19 @@
 ﻿using Ka_veikia_seniunijos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class EldershipController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -19,42 +23,125 @@ namespace Ka_veikia_seniunijos.Controllers
             _configuration = configuration;
         }
 
-        //[HttpPost]//make password hashed in database
-        //public JsonResult Post(User user)
-        //{
-        //    string query = @"select * from BSJ0CVGChE.User where Municipality='" + user.Municipality + "'";
+        [HttpGet("{id}")]
+        public JsonResult Get(int id)
+        {
+            string query = @"select * from BSJ0CVGChE.Eldership where id = " + id;
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            DataTable table = new DataTable();
+            table.Load(rdr);
+            rdr.Close();
+            connection.Close();
+            return new JsonResult(table);
+        }
 
-        //    string query2 = @"
-        //            insert into BSJ0CVGChE.User values 
-        //            ('" + user.Name + "," + user.LastName + "," + user.Email + "," + user.Municipality + "," + user.Password + "," + user.Name + @"')
-        //            ";
-        //    DataTable table = new DataTable();
-        //    string sqlDataSource = _configuration.GetConnectionString("AppCon");
-        //    SqlDataReader myReader;
-        //    using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-        //    {
-        //        myCon.Open();
-        //        using (SqlCommand myCommand = new SqlCommand(query, myCon))
-        //        {
-        //            myReader = myCommand.ExecuteReader();
-        //            table.Load(myReader);//check this somehow
-        //            //if kaskkas myReader.Close();myCon.Close(); return new JsonResult("-2")
+        [HttpPut]
+        public int Put(Eldership Eldership)
+        {
+            //password hashing
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(Eldership.Password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string passwordHashed = Convert.ToBase64String(hashBytes);
+            //
+            string query = @"
+                    update BSJ0CVGChE.Eldership set 
+                    email = '" + Eldership.Email + @"',
+                    municipality = '" + Eldership.Municipality + @"',
+                    passwordHashed = '" + passwordHashed + @"'
+                    where id = " + Eldership.Id + @" 
+                    ";
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                connection.Close();
+                return 1062;//error
+            }
+            connection.Close();
+            return 200;//good
+        }
 
-        //            //myReader.Close();
-        //            //myCon.Close();
-        //        }
+        [HttpDelete("{id}")]
+        public int Delete(int id)
+        {
+            string query = @"
+                    delete from  BSJ0CVGChE.Eldership
+                    where id = " + id + @" 
+                    ";
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            myCommand.ExecuteNonQuery();
+            connection.Close();
+            return 200;//good
+        }
 
-        //        using (SqlCommand myCommand = new SqlCommand(query2, myCon))
-        //        {
-        //            myReader = myCommand.ExecuteReader();
-        //            table.Load(myReader);
+        [HttpPost]
+        public int Post(Eldership Eldership)
+        {
+            //password hashing
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(Eldership.Password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string passwordHashed = Convert.ToBase64String(hashBytes);
+            //
+            string query = @"select * from BSJ0CVGChE.Eldership where municipality = '" + Eldership.Municipality +"'";
 
-        //            myReader.Close();
-        //            myCon.Close();
-        //        }
-        //    }
+            string query2 = @"
+                        insert into BSJ0CVGChE.Eldership (email, municipality, passwordHashed) values 
+                        ('" + Eldership.Email + "','" + Eldership.Municipality + "','" + passwordHashed + "')";
 
-        //    return new JsonResult("1");//arba Added Successfully
-        //}
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+
+            myCommand.CommandText = query;
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            int howMany = 0;
+            while (rdr.Read())
+            {
+                howMany++;
+            }
+            rdr.Close();
+            if (howMany != 0)
+            {
+                return -1;//error
+            }
+
+
+            myCommand.CommandText = query2;
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                connection.Close();
+                return 1062;//error
+            }
+            connection.Close();
+            return 200;//good
+
+        }
     }
 }

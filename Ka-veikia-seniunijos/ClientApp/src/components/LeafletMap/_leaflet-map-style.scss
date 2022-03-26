@@ -1,0 +1,15 @@
+@import '../Utils/_mixins.scss';
+
+.map {
+    &__container {
+        @include absCenter;
+        width: 95%;
+        height: 80vh;
+        margin-top: 3rem;
+    }
+}
+
+.leaflet-container {
+    width: 100%;
+    height: 100%;
+}

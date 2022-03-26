@@ -1,15 +1,29 @@
-@import '../Utils/_mixins.scss';
+@import '../Utils/mixins';
+@import '../Utils/variables';
+@import '~@djthoms/pretty-checkbox/src/pretty-checkbox.scss';
 
 .map {
     &__container {
         @include absCenter;
         width: 95%;
-        height: 80vh;
+        height: 90vh;
         margin-top: 3rem;
+        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+        border-radius: $default-form-border-radius;
+        margin-bottom: 5rem;
+    }
+
+    &__header {
+        line-height: 5rem;
+        padding: 4rem 2rem;
+        height: 20%;
+        border-bottom: 1px solid $color-black;
+
     }
 }
 
 .leaflet-container {
     width: 100%;
-    height: 100%;
+    height: 80%;
+    margin-top: 5rem;
 }

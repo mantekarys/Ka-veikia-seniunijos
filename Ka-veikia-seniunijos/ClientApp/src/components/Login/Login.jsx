@@ -15,13 +15,35 @@ export default function Login({ onClose, onLoginRedirect }) {
     const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-
     const handleOnSubmit = () => {
-        if (!email || !password) {
-            setIsFormInvalid(true);
-            setErrorMessage('* Visi laukai yra būtini');
-            return;
+        if (fieldsAreEmpty()) return;
+
+        const sessionCookie = {
+            id: '1',
+            name: 'Patrikas',
+            surname: 'Voicechovski',
+            eldership: 'Vilnius',
+            email: 'temp@gmail.com'
         }
+
+        sessionStorage['userData'] = JSON.stringify(sessionCookie);
+        window.location.href = "http://localhost:3000/home";
+    }
+
+    const fieldsAreEmpty = () => {
+        if (!email || !password) {
+            setFormError('* Visi laukai yra būtini');
+            return true;
+        } 
+    }
+
+    const checkCredentials = () => {
+
+    }
+
+    const setFormError = (message) => {
+        setIsFormInvalid(true);
+        setErrorMessage(message);
     }
 
     return (

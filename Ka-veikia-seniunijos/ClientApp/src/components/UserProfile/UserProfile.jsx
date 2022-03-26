@@ -14,10 +14,11 @@ import PropTypes from 'prop-types';
 // Add error message
 
 export default function UserProfile({ onUpdate }) {
-    const [name, setName] = useState('Vardas');
-    const [surname, setSurname] = useState('Pavardė');
-    const [email, setEmail] = useState('Paštas');
-    const [eldership, setEldership] = useState('Savivaldybė');
+    const sessionData = JSON.parse(sessionStorage['userData']);
+    const [name, setName] = useState(sessionData.name);
+    const [surname, setSurname] = useState(sessionData.surname);
+    const [email, setEmail] = useState(sessionData.email);
+    const [eldership, setEldership] = useState(sessionData.eldership);
     const [isEditEnabled, setIsEditEnabled] = useState(false);
 
     const hadleIconClick = (e) => {

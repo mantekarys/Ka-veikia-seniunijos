@@ -11,18 +11,20 @@
         left: -10%;
         width: 120%;
         line-height: 4rem;
+        z-index: 10;
     }
 
     &__item {
         font-size: 1.5rem;
         transition: all .3s;
-
-        & > svg {
-            padding-right: .5rem;
-        }
+        cursor: pointer;
 
         &:hover {
             font-weight: bold;
         }
+    }
+
+    &__icon {
+        padding-right: .5rem;
     }
 }

@@ -8,6 +8,7 @@ using System.Data;
 using System.Configuration;
 using Ka_veikia_seniunijos.Models;
 using MySqlConnector;
+using System.Security.Cryptography;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -38,49 +39,43 @@ namespace Ka_veikia_seniunijos.Controllers
             return new JsonResult(table);
         }
 
-        [HttpPut]//fix password
+        [HttpPut]//check municipality
         public JsonResult Put(User user)
         {
+            //password hashing
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+            var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] hashBytes = new byte[36];
+            Array.Copy(salt, 0, hashBytes, 0, 16);
+            Array.Copy(hash, 0, hashBytes, 16, 20);
+            string passwordHashed = Convert.ToBase64String(hashBytes);
+            //
             string query = @"
                     update BSJ0CVGChE.User set 
-                    firstName = '" + user.Name + @"'
-                    lastName = '" + user.LastName + @"'
-                    email = '" + user.Email + @"'
-                    municipality = '" + user.Municipality + @"'
-                    passwordHashed = '" + user.Password + @"'
+                    firstName = '" + user.FirstName + @"',
+                    lastName = '" + user.LastName + @"',
+                    email = '" + user.Email + @"',
+                    municipality = '" + user.Municipality + @"',
+                    passwordHashed = '" + passwordHashed + @"'
                     where Id = " + user.Id + @" 
                     ";
             using var connection = new MySqlConnection(_configuration.GetConnectionString("EmployeeAppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
-            MySqlTransaction myTrans;
-            myTrans = connection.BeginTransaction();
-            myCommand.Connection = connection;
-            myCommand.Transaction = myTrans;
             myCommand.CommandText = query;
-            myCommand.ExecuteNonQuery();
-            myTrans.Commit();
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                connection.Close();
+                return new JsonResult("-1");
+            }
             connection.Close();
-            //using (SqlConnection myCon = new SqlConnection(sqlDataSource))
-            //{
-            //    myCon.Open();
-            //    using (SqlCommand myCommand = new SqlCommand(query, myCon))
-            //    {
-            //        try
-            //        {
-            //            myReader = myCommand.ExecuteReader();
-            //            table.Load(myReader); ;
-
-            //            myReader.Close();
-            //            myCon.Close();
-            //        }
-            //        catch (Exception)
-            //        {
-            //            return new JsonResult("-1");
-            //        }
-            //    }
-            //}
-
             return new JsonResult("Updated Successfully");
         }
 

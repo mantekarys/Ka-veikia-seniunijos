@@ -10,10 +10,9 @@ export default class App extends Component {
   render () {
       return (
         <>
-              <Route exact path='/:path(|home)' component={Home} />
+              <Route exact path='/' component={Home} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/eldership' component={Eldership} />
-              {/* <Route exact path='/about' component={About} /> */}
         </>
     );
   }

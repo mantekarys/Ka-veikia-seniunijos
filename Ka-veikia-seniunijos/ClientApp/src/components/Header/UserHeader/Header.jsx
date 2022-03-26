@@ -26,7 +26,8 @@ export default function Header() {
     }
 
     const handleOnMessageClick = () => {
-
+        const { name, surname } = JSON.parse(sessionStorage['userData']);
+        window.location.href = `http://localhost:3000/mailbox?name=${name}.${surname}`;
     }
 
     const handleOnMapClick = () => {

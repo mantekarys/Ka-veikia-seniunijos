@@ -1,16 +1,12 @@
-﻿import React, { useContext } from 'react';
+﻿import React from 'react';
 import Grid from '../../Grid/Grid';
-import Sidebar from '../../Sidebar/Sidebar'
 import Slider from '../../Slider/Slider';
-import { GlobalContext } from '../../Pages/Home/Context/GlobalState';
 
 export default function HomeContent() {
-    const { state, toggleSidebar } = useContext(GlobalContext);
     const areas = ['Vilnius', 'Kaunas', 'Klaipėda'];
     
     return (
         <div className='home__content'>
-            {state.isSidebarOpen && <Sidebar onClose={toggleSidebar} />}
 
             <Slider styling = 'home__slider-section'/>
 

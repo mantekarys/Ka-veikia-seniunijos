@@ -2,11 +2,12 @@
 import Button from '../../Button/Button';
 import Login from '../../Login/Login';
 import Signup from '../../Signup/Signup';
-import { GlobalContext } from '../../Pages/Home/Context/GlobalState';
+import Sidebar from '../../Sidebar/Sidebar';
+import { GlobalContext } from '../Context/HeaderState';
 import BarIcon from '../../Icons/BarIcon/BarIcon';
 import '../../style.css';
 
-export default function HomeHeader() {
+export default function Header() {
     const {
         state,
         toggleLoginPopup,
@@ -23,9 +24,28 @@ export default function HomeHeader() {
         toggleSignupPopup();
         toggleLoginPopup();
     }
+
+    const getSidebarContent = () => {
+        return [
+            {
+                text: 'Prisijungti',
+                onClick: toggleLoginPopup
+            },
+            {
+                text: 'Registruotis',
+                onClick: toggleSignupPopup
+            },
+            {
+                text: 'Apie projektą',
+                onClick: () => window.location.href = 'http://localhost:3000/about'
+            }
+        ];
+    }
     
     return (
         <header className='header'>
+            {state.isSidebarOpen && <Sidebar onClose={toggleSidebar} content={getSidebarContent()}/>}
+
             <BarIcon wrapperStyling='header__icon-wrapper' onClick={toggleSidebar} />
 
             <div className='header__button-wrapper'>

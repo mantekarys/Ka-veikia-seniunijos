@@ -1,13 +1,16 @@
 ﻿import React from 'react';
-import UserHeader from '../../Header/UserHeader/UserHeader';
+import HomeHeader from '../../Header/HomeHeader';
+import UserHeader from '../../Header/UserHeader';
 import EldershipFeedContent from './EldershipFeedContent';
 import Footer from '../../Footer/Footer';
 import { GlobalProvider } from "./Context/GlobalState";
 
+
+
 function Eldership() {
     return (
         <GlobalProvider>
-            <UserHeader />
+            { sessionStorage['userData'] ? <UserHeader /> : <HomeHeader />}
             <EldershipFeedContent />
             <Footer />
         </GlobalProvider > 

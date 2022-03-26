@@ -1,7 +1,8 @@
 ﻿import React, { createContext, useReducer } from "react";
-import HomeReducer from './HomeReducer';
+import HeaderReducer from './HeaderReducer';
 
 const initialState = {
+    isSpinerVisible: false,
     isLoginOpen: false,
     isSignupOpen: false,
     isSidebarOpen: false
@@ -10,7 +11,11 @@ const initialState = {
 export const GlobalContext = createContext(initialState);
 
 export const GlobalProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(HomeReducer, initialState);
+    const [state, dispatch] = useReducer(HeaderReducer, initialState);
+
+    const toggleSpiner = () => {
+        dispatch({ type: 'TOGGLE_SPINER', isSpinerVisible: !state.isSpinerVisible })
+    }
 
     const toggleLoginPopup = () => {
         dispatch({ type: 'TOGGLE_LOGIN', isOpen: !state.isLoginOpen })
@@ -27,6 +32,7 @@ export const GlobalProvider = ({ children }) => {
     return (
         <GlobalContext.Provider value={{
             state: state,
+            toggleSpiner,
             toggleLoginPopup,
             toggleSignupPopup,
             toggleSidebar

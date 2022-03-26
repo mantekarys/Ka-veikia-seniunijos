@@ -31,7 +31,7 @@ export default function Header() {
     }
 
     const handleOnMapClick = () => {
-
+        window.location.href = 'http://localhost:3000/map';
     }
 
     const handleOnLogoutClick = () => {

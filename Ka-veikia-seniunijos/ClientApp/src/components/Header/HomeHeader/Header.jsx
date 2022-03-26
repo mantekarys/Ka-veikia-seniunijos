@@ -36,6 +36,10 @@ export default function Header() {
                 onClick: toggleSignupPopup
             },
             {
+                text: 'Žemėlapis',
+                onClick: () => window.location.href = 'http://localhost:3000/map'
+            },
+            {
                 text: 'Apie projektą',
                 onClick: () => window.location.href = 'http://localhost:3000/about'
             }

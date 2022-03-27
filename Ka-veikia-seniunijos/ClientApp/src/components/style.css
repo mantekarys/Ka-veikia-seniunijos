@@ -287,14 +287,6 @@ body {
   border-radius: 1rem;
   resize: none; }
 
-.leaflet-container {
-  height: 400px;
-  width: 60%;
-  margin: 0 auto; }
-
-.pad {
-  padding-bottom: 20px; }
-
 .btn, .btn:link, .btn:visited {
   text-decoration: none;
   transition: all .2s;
@@ -391,6 +383,12 @@ body {
   background-color: #000000;
   font-size: 1.7rem;
   padding: 1rem 1.4rem; }
+
+.btn--post {
+  background-color: #000000;
+  padding: 1.5rem 1rem;
+  font-size: 1.7rem;
+  width: 20rem; }
 
 .popup {
   height: 100%;

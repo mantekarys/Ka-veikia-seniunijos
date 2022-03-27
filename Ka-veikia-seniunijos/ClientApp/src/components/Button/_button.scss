@@ -127,4 +127,11 @@
         font-size: 1.7rem;
         padding: 1rem 1.4rem;
     }
+
+    &--post {
+        background-color: $color-black;
+        padding: 1.5rem 1rem;
+        font-size: 1.7rem;
+        width: 20rem;
+    }
 }

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 
-export default function Post({ eldershipName, pictureSource, content, date }) {
+export default function Post({ eldershipName, pictureSource, content, date }) {    
     return (
         <div className='post__container'>
             <div className='post__header'>
@@ -16,7 +16,7 @@ export default function Post({ eldershipName, pictureSource, content, date }) {
                     <p className='post__header-date'>{date}</p>
                 </div>
 
-                <FontAwesomeIcon className='post__header-icon' icon={faEllipsis}  />
+                {JSON.parse(sessionStorage['userData']).isEldership ? <FontAwesomeIcon className='post__header-icon' icon={faEllipsis} /> : ''}
             </div>
 
             <div className='post__content'>
@@ -30,5 +30,5 @@ Post.prototype = {
     eldershipName: PropTypes.string,
     pictureSource: PropTypes.string,
     content: PropTypes.string,
-    date: PropTypes.string
+    date: PropTypes.string,
 }

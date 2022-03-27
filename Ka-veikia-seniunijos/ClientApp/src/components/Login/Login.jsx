@@ -23,11 +23,14 @@ export default function Login({ onClose, onLoginRedirect }) {
             name: 'Patrikas',
             surname: 'Voicechovski',
             eldership: 'Vilnius',
-            email: 'temp@gmail.com'
+            email: 'temp@gmail.com',
+            isEldership: true
         }
 
         sessionStorage['userData'] = JSON.stringify(sessionCookie);
-        window.location.href = "http://localhost:3000/home";
+        sessionCookie.isEldership ?
+            window.location.href = `http://localhost:3000/eldership?name=${sessionCookie.eldership}` :
+            window.location.href = 'http://localhost:3000/home';
     }
 
     const fieldsAreEmpty = () => {

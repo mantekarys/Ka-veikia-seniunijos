@@ -1,18 +1,20 @@
 ﻿import React, { useContext } from 'react';
+import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
 import MessageForm from '../../MessageForm/MessageForm';
 import Post from '../../Post/Post';
-import { GlobalContext } from './Context/GlobalState';
+import PostSelection from '../../Post/PostSelection/PostSelection';
 import eldershipPhoto from '../../../images/Vilnius.png';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faMap, faPen } from '@fortawesome/free-solid-svg-icons';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
+import PropTypes from 'prop-types';
+
 
 export default function EldershipFeedContent({ photo, eldershipName }) {
-    const { state, toggleMessageForm } = useContext(GlobalContext);
+    const { state, toggleMessageForm, togglePostSelectionForm } = useContext(GlobalContext);
 
     return (
         <div className='eldership__content'>
@@ -27,11 +29,19 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                 <h1 className='header__primary eldership__header'>Vilniaus seniūnija</h1>
 
                 <div className='eldership__header--buttons'>
-                    <Button
-                        text={<FontAwesomeIcon icon={faEnvelope} />}
-                        styling='btn btn--icon'
-                        onClick={toggleMessageForm}
-                    />
+                    {
+                        JSON.parse(sessionStorage['userData']).isEldership ?
+                            <Button
+                                text={<FontAwesomeIcon icon={faPen} />}
+                                styling='btn btn--icon'
+                                onClick={togglePostSelectionForm}
+                            /> :
+                            <Button
+                                text={<FontAwesomeIcon icon={faEnvelope} />}
+                                styling='btn btn--icon'
+                                onClick={toggleMessageForm}
+                            />
+                    }
 
                     <Button
                         text={<FontAwesomeIcon icon={faMap} />}
@@ -43,6 +53,12 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
             {state.isMessageFormOpen &&
                 <Popup>
                     <MessageForm onClose={toggleMessageForm}/>
+                </Popup>
+            }
+
+            {state.isPostSelectionOpen &&
+                <Popup>
+                    <PostSelection onClose={togglePostSelectionForm} />
                 </Popup>
             }
 

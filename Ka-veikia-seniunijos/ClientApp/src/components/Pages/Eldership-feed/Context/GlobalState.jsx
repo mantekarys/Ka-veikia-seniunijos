@@ -2,7 +2,11 @@
 import EldershipReducer from './EldershipReducer';
 
 const initialState = {
-    isMessageFormOpen: false
+    isMessageFormOpen: false,
+    isPostSelectionOpen: false,
+    isNewPostFromOpen: false,
+    isNewEventFormOpen: false,
+    isNewSurveyFormOpen: false
 }
 
 export const GlobalContext = createContext(initialState);
@@ -15,10 +19,30 @@ export const GlobalProvider = ({ children }) => {
         dispatch({ type: 'TOGGLE_MESSAGE', isMessageFormOpen: !state.isMessageFormOpen })
     }
 
+    const togglePostSelectionForm = () => {
+        dispatch({ type: 'TOGGLE_POST_SELECTION', isPostSelectionOpen: !state.isPostSelectionOpen })
+    }
+
+    const toggleNewPostForm = () => {
+        dispatch({ type: 'TOGGLE_NEW_POST', isNewPostFromOpen: !state.isNewPostFromOpen })
+    }
+
+    const toggleNewEventForm = () => {
+        dispatch({ type: 'TOGGLE_NEW_EVENT', isNewEventFormOpen: !state.isNewEventFormOpen })
+    }
+
+    const toggleNewSurveyForm = () => {
+        dispatch({ type: 'TOGGLE_NEW_SURVEY', isNewSurveyFormOpen: !state.isNewSurveyFormOpen })
+    }
+
     return (
         <GlobalContext.Provider value={{
             state: state,
-            toggleMessageForm
+            toggleMessageForm,
+            togglePostSelectionForm,
+            toggleNewPostForm,
+            toggleNewEventForm,
+            toggleNewSurveyForm
         }}>
             {children}
         </GlobalContext.Provider>

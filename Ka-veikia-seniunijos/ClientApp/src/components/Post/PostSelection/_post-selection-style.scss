@@ -1,0 +1,33 @@
+﻿@import '../../Utils/mixins';
+@import '../../Utils/variables';
+@import '~@djthoms/pretty-checkbox/src/pretty-checkbox.scss';
+
+
+.post-selection {
+    &__container {
+        @include absCenter;
+        width: 50%;
+        height: 50%;
+        background-color: $color-white;
+        border-radius: $default-form-border-radius;
+    }
+
+    &__options {
+        margin-top: 5rem;
+        line-height: 8rem;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    &__buttons {
+        position: absolute;
+        width: 100%;
+        bottom: 4rem;
+        text-align: center;
+
+        & > a:first-child {
+            margin-right: 3rem;
+        }
+    }
+}

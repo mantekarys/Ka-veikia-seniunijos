@@ -1,25 +1,27 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Data;
-using System.Configuration;
 using Ka_veikia_seniunijos.Models;
+using Ka_veikia_seniunijos.DataTransferObjects;
 using MySqlConnector;
+using Ka_veikia_seniunijos.Services;
+using Ka_veikia_seniunijos.Helpers;
 using System.Security.Cryptography;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly IConfiguration _configuration;
 
-        public UserController(IConfiguration configuration)
+        private IUserService _userService;
+
+        public UserController(IConfiguration configuration, IUserService userService)
         {
+            _userService = userService;
             _configuration = configuration;
         }
 
@@ -114,7 +116,7 @@ namespace Ka_veikia_seniunijos.Controllers
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
-         
+
             myCommand.CommandText = query;
             try
             {
@@ -128,6 +130,24 @@ namespace Ka_veikia_seniunijos.Controllers
             connection.Close();
             return 200;//good
 
+        }
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate(AuthenticateRequest model)
+        {
+            var response = _userService.Authenticate(model);
+
+            if (response == null)
+                return BadRequest(new { message = "El. paštas arba slaptažodis yra neteisingi" });
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var users = _userService.GetAll();
+            return Ok(users);
         }
     }
 }

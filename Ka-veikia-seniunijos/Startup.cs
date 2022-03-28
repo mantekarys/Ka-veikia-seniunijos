@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ka_veikia_seniunijos.Helpers;
+using Ka_veikia_seniunijos.Services;
 
 using Newtonsoft.Json.Serialization;
 namespace Ka_veikia_seniunijos
@@ -43,6 +45,14 @@ namespace Ka_veikia_seniunijos
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            //Redas
+            // For JWT
+            // configure strongly typed settings object
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            // configure DI for application services
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,6 +81,8 @@ namespace Ka_veikia_seniunijos
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseSpa(spa =>
             {

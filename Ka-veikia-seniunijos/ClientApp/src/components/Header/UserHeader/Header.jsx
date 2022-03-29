@@ -72,7 +72,7 @@ export default function Header() {
                 <div className='header__user-info'>
                     <div className='header__user-info-wrapper'>
                     <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={() => setIsNavListVisible(!isNavListVisible)} />
-                        <h4 className='header__user-name'>Patrikas</h4>
+                        <h4 className='header__user-name'>Patrikas</h4> {/* Čia manau reikia, kad paimtu is userData */}
 
                     {isNavListVisible && <NavigationList content={getNavigationListContent() }/>}
                     </div>

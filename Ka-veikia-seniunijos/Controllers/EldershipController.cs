@@ -143,5 +143,20 @@ namespace Ka_veikia_seniunijos.Controllers
             return 200;//good
 
         }
+
+        public JsonResult GetElderNamesAndLogo(int id)
+        {
+            string query = @"select Eldership.name,Logo.url from BSJ0CVGChE.Eldership,BSJ0CVGChE.Logo";
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            rdr.Close();
+            connection.Close();
+            return Json(rdr);
+        }
+            
+        
     }
 }

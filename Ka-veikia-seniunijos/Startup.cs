@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ka_veikia_seniunijos.Helpers;
 using Ka_veikia_seniunijos.Services;
-
+using System;
 using Newtonsoft.Json.Serialization;
 namespace Ka_veikia_seniunijos
 {
@@ -19,25 +19,27 @@ namespace Ka_veikia_seniunijos
         }
 
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var _appSettings = Configuration.GetSection(AppSettings.JWTSecret);
+            services.Configure<AppSettings>(_appSettings);
             //Mantas
             //Enable CORS
-            services.AddCors(c =>
-            {
-                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod()
-                 .AllowAnyHeader());
-            });
-
+            // services.AddCors(c =>
+            // {
+            //     c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod()
+            //      .AllowAnyHeader());
+            // });
+            services.AddCors(options =>
+                options.AddDefaultPolicy(builder =>
+                    builder.AllowAnyMethod().AllowCredentials().AllowAnyHeader().WithOrigins("http://localhost:3000")));
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
                 .Json.ReferenceLoopHandling.Ignore)
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver
                 = new DefaultContractResolver()); ;
 
-            services.AddControllers();
             //Mantas
 
             // In production, the React files will be served from this directory
@@ -48,11 +50,10 @@ namespace Ka_veikia_seniunijos
 
             //Redas
             // For JWT
-            // configure strongly typed settings object
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddControllers();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,7 +75,7 @@ namespace Ka_veikia_seniunijos
             app.UseSpaStaticFiles();
 
             app.UseRouting();
-
+            app.UseCors();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -84,6 +85,8 @@ namespace Ka_veikia_seniunijos
             // custom jwt auth middleware
             app.UseMiddleware<JwtMiddleware>();
 
+            //IDK ar reikia jei ka istrinkit
+            app.UseEndpoints(x => x.MapControllers());
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";

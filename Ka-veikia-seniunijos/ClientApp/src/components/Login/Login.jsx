@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { login } from '../../API/auth';
 
 export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
@@ -15,18 +16,14 @@ export default function Login({ onClose, onLoginRedirect }) {
     const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleOnSubmit = () => {
+    const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
-
-        const sessionCookie = {
-            id: '1',
-            name: 'Patrikas',
-            surname: 'Voicechovski',
-            eldership: 'Vilnius',
-            email: 'temp@gmail.com'
+        const [userData, error] = await login({email,password})
+        if(error != null){
+            setFormError(error);
+            return;
         }
-
-        sessionStorage['userData'] = JSON.stringify(sessionCookie);
+        sessionStorage['userData'] = JSON.stringify(userData);
         window.location.href = "http://localhost:3000/home";
     }
 
@@ -35,10 +32,6 @@ export default function Login({ onClose, onLoginRedirect }) {
             setFormError('* Visi laukai yra būtini');
             return true;
         } 
-    }
-
-    const checkCredentials = () => {
-
     }
 
     const setFormError = (message) => {

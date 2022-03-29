@@ -4,34 +4,59 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
 using System.Text;
+using System.Security.Cryptography;
 using Ka_veikia_seniunijos.Models;
 using Ka_veikia_seniunijos.Helpers;
 using Ka_veikia_seniunijos.DataTransferObjects;
+using MySqlConnector;
+using System.Data;
+
 
 namespace Ka_veikia_seniunijos.Services
 {
     public interface IUserService
     {
         AuthenticateResponse Authenticate(AuthenticateRequest model);
-        IEnumerable<User> GetAll();
+        List<User> GetAll();
         User GetById(int id);
     }
     public class UserService : IUserService
     {
-        private List<User> _users = new List<User>
+
+        private List<User> _users;
+
+        public UserService()
         {
-            new User
+            _users = GetAll();
+        }
+        public List<User> GetAll()
+        {
+            List<User> _users = new List<User>();
+            string query = @"select * from BSJ0CVGChE.User";
+            using var connection = new MySqlConnection("Server=remotemysql.com;Database=BSJ0CVGChE;User ID= BSJ0CVGChE; password = wElEvnn5cl;");
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            while (rdr.Read())
             {
-                Id = 1,
-                FirstName = "Test",
-                LastName = "Test",
-                Email = "test@test.com",
-                Password = "testPassword",
-                Municipality = "Kaunas"
+                User user = new User();
+                user.Id = rdr.GetInt32("id");
+                user.FirstName = rdr.GetString("firstName");
+                user.LastName = rdr.GetString("lastName");
+                user.Email = rdr.GetString("email");
+                user.Municipality = rdr.GetString("municipality");
+                user.Password = rdr.GetString("passwordHashed");
+                _users.Add(user);
             }
-        };
+            rdr.Close();
+            connection.Close();
+            return _users;
+
+        }
         private readonly AppSettings _appSettings;
 
         public UserService(IOptions<AppSettings> appSettings)
@@ -41,23 +66,30 @@ namespace Ka_veikia_seniunijos.Services
 
         public AuthenticateResponse Authenticate(AuthenticateRequest model)
         {
-            var user = _users.SingleOrDefault(x => x.Email == model.Email && x.Password == model.Password);
-
+            Boolean notsame = false;
+            _users = GetAll();
+            var user = _users.SingleOrDefault(x => x.Email == model.Email);
             if (user == null) return null;
+            byte[] hashBytes = Convert.FromBase64String(user.Password);
+            // Extract
+            byte[] salt = new byte[16];
+            Array.Copy(hashBytes, 0, salt, 0, 16);
+
+            var pbkdf2 = new Rfc2898DeriveBytes(model.Password, salt, 100000);
+            byte[] hash = pbkdf2.GetBytes(20);
+            for (int i = 0; i < 20; i++)
+                if (hashBytes[i + 16] != hash[i])
+                    notsame = true;
+            if (notsame) return null;
 
             //user found so generate token
             var token = generateJwtToken(user);
 
             return new AuthenticateResponse(user, token);
         }
-
-        public IEnumerable<User> GetAll()
-        {
-            return _users;
-        }
-
         public User GetById(int id)
         {
+            _users = GetAll();
             return _users.FirstOrDefault(x => x.Id == id);
         }
 

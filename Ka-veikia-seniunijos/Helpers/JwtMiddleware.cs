@@ -14,11 +14,11 @@ namespace Ka_veikia_seniunijos.Helpers
         private readonly RequestDelegate _next;
         private readonly AppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, AppSettings appSettings)
+        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
         {
 
             _next = next;
-            _appSettings = appSettings;
+            _appSettings = appSettings.Value;
         }
         public async Task Invoke(HttpContext context, IUserService userService)
         {

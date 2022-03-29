@@ -96,19 +96,25 @@ namespace Ka_veikia_seniunijos.Controllers
             return 200;//good
         }
 
-        [HttpPost]
-        public int Post(User user)
+        //For reusing
+        private string hashPassword(string password)
         {
             //password hashing
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-            var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 100000);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);
             byte[] hashBytes = new byte[36];
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 20);
             string passwordHashed = Convert.ToBase64String(hashBytes);
+            return passwordHashed;
+        }
+        [HttpPost]
+        public int Post(User user)
+        {
             //
+            string passwordHashed = hashPassword(user.Password);
             string query = @"
                         insert into BSJ0CVGChE.User (firstName, lastName, email, municipality, passwordHashed) values 
                         ('" + user.FirstName + "','" + user.LastName + "','" + user.Email + "','" + user.Municipality + "','" + passwordHashed + "')";
@@ -131,9 +137,12 @@ namespace Ka_veikia_seniunijos.Controllers
             return 200;//good
 
         }
-        [HttpPost("authenticate")]
+        [Route("auth")]
+        [HttpPost]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
+            //var passwordHashed = hashPassword(model.Password);
+            //model.Password = passwordHashed;
             var response = _userService.Authenticate(model);
 
             if (response == null)

@@ -1,0 +1,30 @@
+﻿@import '../../Utils/mixins';
+@import '../../Utils/variables';
+
+.post-form {
+    &__container {
+        @include absCenter;
+        width: 40%;
+        height: 35rem;
+        background-color: $color-white;
+        border-radius: $default-form-border-radius;
+        padding: 0 2rem;
+    }
+
+    &__textarea {
+        display: block;
+        margin: 5rem auto;
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid $color-black;
+        border-radius: 0;
+    }
+
+    &__buttons {
+        float: right;
+
+        & > a:first-child {
+            margin-right: 2rem;
+        }
+    }
+}

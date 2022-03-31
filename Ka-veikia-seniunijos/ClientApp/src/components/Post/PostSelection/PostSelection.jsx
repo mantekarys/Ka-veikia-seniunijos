@@ -1,14 +1,13 @@
 ﻿import React, { useState } from 'react';
 import Button from '../../Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import NewPostHeader from '../NewPostHeader';
 import { Radio } from 'pretty-checkbox-react';
 import PropTypes from 'prop-types';
 import '../../Button/_button.scss';
 import './_post-selection-style.scss';
 import '../../Utils/_base.scss';
 
-export default function PostSelection({ onClose }) {
+export default function PostSelection({ onClose, onPostSelect, onNewEventSelect }) {
     const [checked, setChecked] = useState({
         post: true,
         event: false,
@@ -23,12 +22,14 @@ export default function PostSelection({ onClose }) {
         });
     }
 
+    const handleOnNext = () => {
+        if (checked.post) onPostSelect();
+        else if (checked.event) onNewEventSelect();
+    }
+
     return (
         <div className='post-selection__container'>
-            <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
-            <h2 className='header__secondary u-text-center u-margin-top-medium'>
-                Pasirinkite įrašo tipą
-            </h2>
+            <NewPostHeader onClose={onClose} text='Pasirinkite įrašo tipą'/>
 
             <div className='post-selection__options'>
                 <div className='post-selection__options-radio'>
@@ -78,6 +79,7 @@ export default function PostSelection({ onClose }) {
                 <Button
                     text='Toliau'
                     styling='btn btn--post'
+                    onClick={handleOnNext}
                 />
             </div>
         </div>
@@ -85,5 +87,6 @@ export default function PostSelection({ onClose }) {
 }
 
 PostSelection.propTypes = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onPostSelect: PropTypes.func,
 }

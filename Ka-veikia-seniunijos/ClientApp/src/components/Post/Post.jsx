@@ -16,7 +16,7 @@ export default function Post({ eldershipName, pictureSource, content, date }) {
                     <p className='post__header-date'>{date}</p>
                 </div>
 
-                {JSON.parse(sessionStorage['userData']).isEldership ? <FontAwesomeIcon className='post__header-icon' icon={faEllipsis} /> : ''}
+                {sessionStorage['userData']?.isEldership ? <FontAwesomeIcon className='post__header-icon' icon={faEllipsis} /> : ''}
             </div>
 
             <div className='post__content'>

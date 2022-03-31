@@ -68,3 +68,11 @@
         margin-top: 2rem;
     }
 }
+
+.buttons__container {
+    display: flex;
+    justify-content: end;
+    gap: 2rem;
+    width: 80%;
+    margin: 0 auto;
+}

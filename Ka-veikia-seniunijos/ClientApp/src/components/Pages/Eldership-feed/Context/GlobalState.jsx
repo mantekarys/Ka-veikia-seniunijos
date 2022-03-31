@@ -29,6 +29,7 @@ export const GlobalProvider = ({ children }) => {
 
     const toggleNewEventForm = () => {
         dispatch({ type: 'TOGGLE_NEW_EVENT', isNewEventFormOpen: !state.isNewEventFormOpen })
+        return 
     }
 
     const toggleNewSurveyForm = () => {

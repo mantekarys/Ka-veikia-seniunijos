@@ -133,5 +133,12 @@
         padding: 1.5rem 1rem;
         font-size: 1.7rem;
         width: 20rem;
+
+        &-small {
+            background-color: $color-black;
+            padding: 1rem 1rem;
+            font-size: 1.8rem;
+            width: 12rem;
+        }
     }
 }

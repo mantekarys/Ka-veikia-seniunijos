@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ka_veikia_seniunijos.Services;
+using Ka_veikia_seniunijos.Interfaces;
+
 namespace Ka_veikia_seniunijos.Helpers
 {
     public class JwtMiddleware

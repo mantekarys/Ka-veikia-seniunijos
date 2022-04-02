@@ -8,36 +8,36 @@ import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { login } from '../../API/auth';
+import axios from 'axios';
 
 export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
-        const [userData, error] = await login({email,password})
-        if(error != null){
-            setFormError(error);
-            return;
-        }
-        sessionStorage['userData'] = JSON.stringify(userData);
-        window.location.href = "http://localhost:3000/home";
+
+        axios.post('https://localhost:44330/api/user/auth', {
+                'email': email,
+                'password': password
+            })
+            .then(res => {
+                sessionStorage['userData']
+            })
+            .catch(err => {
+                const {message} = err.response.data;
+                setErrorMessage(message);
+            })
     }
 
     const fieldsAreEmpty = () => {
         if (!email || !password) {
-            setFormError('* Visi laukai yra būtini');
+            setErrorMessage('Visi laukai yra būtini');
             return true;
         } 
     }
 
-    const setFormError = (message) => {
-        setIsFormInvalid(true);
-        setErrorMessage(message);
-    }
 
     return (
         <Popup>
@@ -81,7 +81,7 @@ export default function Login({ onClose, onLoginRedirect }) {
                         />
                     </div>
 
-                    {isFormInvalid && <Error text={errorMessage} />}
+                    {errorMessage && <Error text={errorMessage} />}
                 </form>
 
                 <FormFooter

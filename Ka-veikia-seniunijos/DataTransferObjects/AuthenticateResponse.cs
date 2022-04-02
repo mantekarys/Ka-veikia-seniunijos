@@ -1,4 +1,3 @@
-using Ka_veikia_seniunijos.Models;
 
 namespace Ka_veikia_seniunijos.DataTransferObjects
 {
@@ -11,13 +10,14 @@ namespace Ka_veikia_seniunijos.DataTransferObjects
         public string Municipality { get; set; }//Savivaldybė
         public string Token { get; set; }
 
-        public AuthenticateResponse(User user, string token)
+        public AuthenticateResponse(int id, string firstname, string lastname,
+                                    string email, string municipality, string token)
         {
-            Id = user.Id;
-            FirstName = user.FirstName;
-            LastName = user.LastName;
-            Email = user.Email;
-            Municipality = user.Municipality;
+            Id = id;
+            FirstName = firstname;
+            LastName = lastname;
+            Email = email;
+            Municipality = municipality;
             Token = token;
         }
     }

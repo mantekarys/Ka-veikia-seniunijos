@@ -24,6 +24,20 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         toggleNewEventForm
     } = useContext(GlobalContext);
 
+    const USER_TYPES = {
+        GUEST: 'GUEST',
+        RESIDENT: 'RESIDENT',
+        ELDERSHIP: 'EDLSERSHIP'
+    }
+
+    const getUserType = () => {
+        if (sessionStorage['userData']) {
+            return (sessionStorage['userData'].isEldership ? USER_TYPES.ELDERSHIP : USER_TYPES.RESIDENT)
+        }
+
+        return USER_TYPES.GUEST;
+    }
+
 
     return (
         <div className='eldership__content'>
@@ -39,7 +53,7 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
 
                 <div className='eldership__header--buttons'>
                     {
-                        true ?
+                        getUserType() === USER_TYPES.RESIDENT ?
                             <Button
                                 text={<FontAwesomeIcon icon={faPen} />}
                                 styling='btn btn--icon'

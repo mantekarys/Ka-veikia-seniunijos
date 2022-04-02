@@ -8,9 +8,13 @@
     &__container {
         @include absCenter;
         width: 50%;
-        height: 50%;
+        height: 50rem;
         background-color: $color-white;
         border-radius: $default-form-border-radius;
+
+        @include respond(mobile) {
+            width: 90%;
+        }
     }
 
     &__options {
@@ -19,6 +23,14 @@
         position: absolute;
         left: 50%;
         transform: translateX(-50%);
+
+        @include respond(tab-port) {
+            margin-top: 3rem;
+        }
+
+        @include respond(mobile) {
+            margin-top: 2rem;
+        }
     }
 
     &__buttons {

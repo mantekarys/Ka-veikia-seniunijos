@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useLayoutEffect } from 'react';
 import Button from '../../Button/Button';
 import NewPostHeader from '../NewPostHeader';
 import { Radio } from 'pretty-checkbox-react';
@@ -13,6 +13,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
         event: false,
         survey: false
     });
+    const [radioSize, setRadioSize] = useState('25px');
 
     const handleOnRadioChange = (e) => {
         setChecked({
@@ -27,6 +28,15 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
         else if (checked.event) onNewEventSelect();
     }
 
+    useLayoutEffect(() => {
+        const updateSize = () => {
+            window.innerWidth <= 900 ? setRadioSize('20px') : setRadioSize('25px');
+        }
+        window.addEventListener('resize', updateSize);
+        updateSize();
+        return () => window.removeEventListener('resize', updateSize);
+    }, [])
+
     return (
         <div className='post-selection__container'>
             <NewPostHeader onClose={onClose} text='Pasirinkite įrašo tipą'/>
@@ -36,7 +46,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                     <Radio
                         name="post"
                         color="primary"
-                        style={{ fontSize: '25px' }}
+                        style={{ fontSize: radioSize }}
                         checked={checked.post}
                         onChange={handleOnRadioChange}
                     >
@@ -48,7 +58,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                     <Radio
                         name="event"
                         color="primary"
-                        style={{ fontSize: '25px' }}
+                        style={{ fontSize: radioSize }}
                         checked={checked.event}
                         onChange={handleOnRadioChange}
                     >
@@ -60,7 +70,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                     <Radio
                         name="survey"
                         color="primary"
-                        style={{ fontSize: '25px' }}
+                        style={{ fontSize: radioSize }}
                         checked={checked.survey}
                         onChange={handleOnRadioChange}
                     >
@@ -73,12 +83,12 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                 <Button
                     text='Uždaryti'
                     onClick={onClose}
-                    styling='btn btn--post'
+                    styling='btn btn--post-small'
                 />
 
                 <Button
                     text='Toliau'
-                    styling='btn btn--post'
+                    styling='btn btn--post-small'
                     onClick={handleOnNext}
                 />
             </div>

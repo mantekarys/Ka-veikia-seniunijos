@@ -8,6 +8,14 @@
 
     &__secondary {
         font-size: 3.5rem;
+
+        @include respond(tab-port) {
+            font-size: 3rem;
+        }
+
+        @include respond(mobile) {
+            font-size: 2.5rem;
+        }
     }
 
     &__tertiary {

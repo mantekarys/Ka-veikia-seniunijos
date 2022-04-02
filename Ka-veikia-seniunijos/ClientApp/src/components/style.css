@@ -19,6 +19,12 @@ body {
 
 .header__secondary {
   font-size: 3.5rem; }
+  @media (max-width: 56.25em) {
+    .header__secondary {
+      font-size: 3rem; } }
+  @media (max-width: 37.5em) {
+    .header__secondary {
+      font-size: 2.5rem; } }
 
 .header__tertiary {
   font-size: 2.5rem; }
@@ -400,8 +406,12 @@ body {
   .btn--post-small {
     background-color: #000000;
     padding: 1rem 1rem;
-    font-size: 1.4rem;
-    width: 10rem; }
+    font-size: 1.8rem;
+    width: 12rem; }
+    @media (max-width: 37.5em) {
+      .btn--post-small {
+        font-size: 1.4rem;
+        width: 10rem; } }
 
 .popup {
   height: 100%;

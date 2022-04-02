@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useLayoutEffect } from 'react';
 import { TimePicker, DatePicker } from 'antd';
 import moment from 'moment';
 import './_time-input-style.scss';
@@ -31,17 +31,19 @@ export default function TimeInput({
         return `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`;
     }
 
+
+
     return (
         <div className='time__container'>
             <div className='time__container-input'>
-                <label className='time__container-label'>Renginio data</label>
+                <label className='time__container-label'>Renginio pabaiga</label>
 
-                <DatePicker
-                    defaultValue={moment(currentDate, FORMATS.DATE)}
-                    format={FORMATS.DATE}
+                <TimePicker
+                    defaultValue={moment(endTime, FORMATS.TIME)}
+                    format={FORMATS.TIME}
+                    showNow={false}
+                    onChange={(value) => onEndTimeChange(moment(value).format(FORMATS.TIME))}
                     style={timeInputStyle}
-                    onChange={(date) => onDateChange(parseDate(date))}
-                    disabledDate={(current) => current && current < moment(currentDate, FORMATS.DATE)}
                 />
             </div>
 
@@ -58,14 +60,14 @@ export default function TimeInput({
             </div>
 
             <div className='time__container-input'>
-                <label className='time__container-label'>Renginio pabaiga</label>
+                <label className='time__container-label'>Renginio data</label>
 
-                <TimePicker
-                    defaultValue={moment(endTime, FORMATS.TIME)}
-                    format={FORMATS.TIME}
-                    showNow={false}
-                    onChange={(value) => onEndTimeChange(moment(value).format(FORMATS.TIME))}
+                <DatePicker
+                    defaultValue={moment(currentDate, FORMATS.DATE)}
+                    format={FORMATS.DATE}
                     style={timeInputStyle}
+                    onChange={(date) => onDateChange(parseDate(date))}
+                    disabledDate={(current) => current && current < moment(currentDate, FORMATS.DATE)}
                 />
             </div>
         </div>

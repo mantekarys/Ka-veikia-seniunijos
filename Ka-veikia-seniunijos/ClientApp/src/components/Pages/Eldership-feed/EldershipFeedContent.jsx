@@ -1,4 +1,4 @@
-﻿import React, { useContext } from 'react';
+﻿import React, { useContext, useState } from 'react';
 import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
@@ -23,6 +23,7 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         toggleNewPostForm,
         toggleNewEventForm
     } = useContext(GlobalContext);
+
 
     return (
         <div className='eldership__content'>

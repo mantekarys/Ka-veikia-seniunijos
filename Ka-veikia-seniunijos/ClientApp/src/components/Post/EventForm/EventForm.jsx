@@ -23,6 +23,16 @@ export default function EventForm({ onClose, onBack, onPost}) {
     const [endTime, setEndTime] = useState('19:30');
     const [isFree, setIsFree] = useState(true);
     const [price, setPrice] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleOnSubmit = () => {
+        if (!name || !place) {
+            setErrorMessage('Renginio pavadinimas ir vieta yra privalomi!');
+            return;
+        }
+
+        onPost();
+    }
 
     return (
         <form className="event-form__container">
@@ -85,9 +95,11 @@ export default function EventForm({ onClose, onBack, onPost}) {
                 </div>
             </div>
 
+            {errorMessage && < Error text={errorMessage} />}
+
             <NewPostButtons
                 onBack={onBack}
-                onSubmit={onPost}
+                onSubmit={handleOnSubmit}
             />
         </form>
     );

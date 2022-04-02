@@ -36,7 +36,7 @@ namespace Ka_veikia_seniunijos.Services
         {
             List<User> _users = new List<User>();
             string query = @"select * from BSJ0CVGChE.User";
-            using var connection = new MySqlConnection("Server=remotemysql.com;Database=BSJ0CVGChE;User ID= BSJ0CVGChE; password = wElEvnn5cl;");
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
             myCommand.CommandText = query;

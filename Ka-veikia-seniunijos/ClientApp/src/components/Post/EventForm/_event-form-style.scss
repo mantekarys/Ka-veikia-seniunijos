@@ -1,0 +1,86 @@
+﻿@import '../../Utils/mixins';
+@import '../../Utils/variables';
+@import '~@djthoms/pretty-checkbox/src/pretty-checkbox.scss';
+
+.event-form {
+    &__container {
+        @include absCenter;
+        width: 50%;
+        height: 80%;
+        background-color: $color-white;
+        border-radius: $default-form-border-radius;
+        padding: 2rem;
+        overflow-y: auto;
+
+        @include respond(tab-land) {
+            width: 60%;
+        }
+
+        @include respond(tab-port) {
+            width: 80%;
+            height: 90%;
+        }
+
+        @include respond(mobile) {
+            width: 100%;
+            height: 100%;
+        }
+
+        &::-webkit-scrollbar {
+            width: .5rem;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $color-placeholder;
+            border-radius: $default-form-border-radius;
+        }
+
+        &-content {
+            padding: 3rem 0;
+            text-align: center;
+
+            & > *:not(:first-child) {
+                margin-top: 3rem;
+            }
+        }
+    }
+
+    &__input {
+        width: 80%;
+        border: 2px solid $color-placeholder;
+        border-radius: 0;
+        outline: none;
+        font-size: 2rem;
+        padding: 1rem;
+
+        &:hover {
+            &::-webkit-input-placeholder {
+                color: $color-black;
+            }
+        }
+
+        @include respond(mobile) {
+            font-size: 1.5rem;
+            padding: .5rem;
+        }
+
+        &--price {
+            width: 40%;
+            font-size: 1.5rem;
+            padding: .5rem;
+        }
+    }
+
+    &__switch {
+        display: flex;
+        width: 80%;
+        margin: 3rem auto;
+        align-items: center;
+    }
+
+    &-time {
+        width: 80%;
+        margin-top: 3rem;
+        margin: 0 auto;
+    }
+}

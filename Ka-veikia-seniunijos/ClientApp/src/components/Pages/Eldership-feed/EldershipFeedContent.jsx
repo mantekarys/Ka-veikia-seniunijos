@@ -1,18 +1,29 @@
-﻿import React, { useContext } from 'react';
+﻿import React, { useContext, useState } from 'react';
+import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
 import MessageForm from '../../MessageForm/MessageForm';
 import Post from '../../Post/Post';
-import { GlobalContext } from './Context/GlobalState';
+import PostSelection from '../../Post/PostSelection/PostSelection';
+import PostForm from '../../Post/PostForm/PostForm';
+import EventForm from '../../Post/EventForm/EventForm';
 import eldershipPhoto from '../../../images/Vilnius.png';
-import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faMap } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faMap, faPen } from '@fortawesome/free-solid-svg-icons';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
+import PropTypes from 'prop-types';
+
 
 export default function EldershipFeedContent({ photo, eldershipName }) {
-    const { state, toggleMessageForm } = useContext(GlobalContext);
+    const {
+        state,
+        toggleMessageForm,
+        togglePostSelectionForm,
+        toggleNewPostForm,
+        toggleNewEventForm
+    } = useContext(GlobalContext);
+
 
     return (
         <div className='eldership__content'>
@@ -27,11 +38,19 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                 <h1 className='header__primary eldership__header'>Vilniaus seniūnija</h1>
 
                 <div className='eldership__header--buttons'>
-                    <Button
-                        text={<FontAwesomeIcon icon={faEnvelope} />}
-                        styling='btn btn--icon'
-                        onClick={toggleMessageForm}
-                    />
+                    {
+                        true ?
+                            <Button
+                                text={<FontAwesomeIcon icon={faPen} />}
+                                styling='btn btn--icon'
+                                onClick={togglePostSelectionForm}
+                            /> :
+                            <Button
+                                text={<FontAwesomeIcon icon={faEnvelope} />}
+                                styling='btn btn--icon'
+                                onClick={toggleMessageForm}
+                            />
+                    }
 
                     <Button
                         text={<FontAwesomeIcon icon={faMap} />}
@@ -45,6 +64,50 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                     <MessageForm onClose={toggleMessageForm}/>
                 </Popup>
             }
+
+            {state.isPostSelectionOpen &&
+                <Popup>
+                <PostSelection
+                    onClose={togglePostSelectionForm}
+                    onPostSelect={() => {
+                        togglePostSelectionForm();
+                        toggleNewPostForm();
+                    }}
+                    onNewEventSelect={() => {
+                        togglePostSelectionForm();
+                        toggleNewEventForm();
+                    }}
+                    />
+                </Popup>
+            }
+
+            {state.isNewPostFromOpen &&
+                <Popup>
+                    <PostForm
+                        onClose={toggleNewPostForm}
+                        onBack={() => {
+                            toggleNewPostForm();
+                            togglePostSelectionForm();
+                        }}
+                        onPost={() => window.location.reload()}
+                    />
+                </Popup>
+            }
+
+            {state.isNewEventFormOpen &&
+                <Popup>
+                    <EventForm
+                    onClose={toggleNewEventForm}
+                    onBack={() => {
+                        toggleNewEventForm();
+                        togglePostSelectionForm();
+                    }}
+                    onPost={() => window.location.reload()}
+                    />
+                </Popup>
+            }
+
+
 
             <div className='eldership__feed'>
                 <Post

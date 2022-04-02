@@ -10,6 +10,7 @@ export default function Header() {
     const [isNavListVisible, setIsNavListVisible] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const userData = JSON.parse(sessionStorage['userData']);
 
     useLayoutEffect(() => {
         const updateSize = () => {
@@ -72,7 +73,9 @@ export default function Header() {
                 <div className='header__user-info'>
                     <div className='header__user-info-wrapper'>
                     <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={() => setIsNavListVisible(!isNavListVisible)} />
-                        <h4 className='header__user-name'>Patrikas</h4>
+                    <h4 className='header__user-name'>
+                        {userData.isEldership ? userData.eldership : userData.name }
+                    </h4>
 
                     {isNavListVisible && <NavigationList content={getNavigationListContent() }/>}
                     </div>

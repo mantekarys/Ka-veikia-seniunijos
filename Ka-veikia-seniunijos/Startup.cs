@@ -9,6 +9,8 @@ using Ka_veikia_seniunijos.Helpers;
 using Ka_veikia_seniunijos.Services;
 using System;
 using Newtonsoft.Json.Serialization;
+using Ka_veikia_seniunijos.Interfaces;
+
 namespace Ka_veikia_seniunijos
 {
     public class Startup

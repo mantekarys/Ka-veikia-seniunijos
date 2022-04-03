@@ -74,7 +74,7 @@ export default function Header() {
                     <div className='header__user-info-wrapper'>
                     <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={() => setIsNavListVisible(!isNavListVisible)} />
                     <h4 className='header__user-name'>
-                        {userData.isEldership ? userData.eldership : userData.name }
+                        {userData.isEldership ? userData.Municipality : userData.FirstName }
                     </h4>
 
                     {isNavListVisible && <NavigationList content={getNavigationListContent() }/>}

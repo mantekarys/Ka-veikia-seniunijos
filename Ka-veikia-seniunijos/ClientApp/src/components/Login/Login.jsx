@@ -23,7 +23,13 @@ export default function Login({ onClose, onLoginRedirect }) {
                 'password': password
             })
             .then(res => {
-                sessionStorage['userData']
+                const isEldership = res.data.FirstName && res.data.LastName ? false : true;
+                const data = {
+                    ...res.data,
+                    isEldership
+                }
+                sessionStorage['userData'] = JSON.stringify(data);
+                window.location.href = "http://localhost:3000/home";
             })
             .catch(err => {
                 const {message} = err.response.data;

@@ -51,7 +51,6 @@ export default function Signup({ onClose, onSignupRedirect }) {
             'Password': password
         })
         .then(res => {
-            console.log(res)
             if(res.status === 200)
                 setErrorMessage('Vartotojas buvo sėkmingai užregistruotas');
         })

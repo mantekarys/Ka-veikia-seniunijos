@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Input from '../Form/Input';
 import Dropdown from '../Form/Dropdown';
 import Button from '../Button/Button';
@@ -9,17 +9,33 @@ import userProfile from '../../images/user-profile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // Add change photo funcionality
 // Add error message
 
 export default function UserProfile({ onUpdate }) {
     const sessionData = JSON.parse(sessionStorage['userData']);
-    const [name, setName] = useState(sessionData.name);
-    const [surname, setSurname] = useState(sessionData.surname);
-    const [email, setEmail] = useState(sessionData.email);
-    const [eldership, setEldership] = useState(sessionData.eldership);
+    const [name, setName] = useState(sessionData.FirstName);
+    const [surname, setSurname] = useState(sessionData.LastName);
+    const [email, setEmail] = useState(sessionData.Email);
+    const [eldership, setEldership] = useState(sessionData.Municipality);
+    const [elderships, setElderships] = useState([]);
     const [isEditEnabled, setIsEditEnabled] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await axios.get('https://localhost:44330/api/eldership');
+                const elderships = result.data.map(eldership => eldership.municipality);
+                setElderships(elderships);
+            } catch(error) {
+                console.error(error);
+            }
+        }
+
+        fetchData();
+    }, []);
 
     const hadleIconClick = (e) => {
         e.target.classList.add('user-profile__icon--black');
@@ -36,8 +52,32 @@ export default function UserProfile({ onUpdate }) {
     }
 
     const handleOnSubmit = () => {
+        axios.put('https://localhost:44330/api/user', {
+            'FirstName': name,
+            'LastName': surname,
+            'Email': email,
+            'Municipality': eldership 
+        })
+        .then(res => {
+            if(res.status === 200) {
+                updateSession();
+               if (onUpdate) onUpdate();
 
-        if (onUpdate) onUpdate();
+            }
+        })
+        .catch(_ => {
+            // TODO: implement error msg
+        })
+    }
+
+    const updateSession = () => {
+        sessionStorage['userData'] = JSON.stringify({
+            ...sessionData,
+            'FirstName': name,
+            'LastName': surname,
+            'Email': email,
+            'Municipality': eldership
+        })
     }
 
     return (
@@ -100,7 +140,7 @@ export default function UserProfile({ onUpdate }) {
                             <Dropdown
                                 styling='form__dropdown user-profile__dropdown'
                                 placeholder={eldership}
-                                values={['Vilnius', 'Kaunas']}
+                                values={elderships}
                                 onChange={handleOnDropdownChange}
                              />
                         </div>

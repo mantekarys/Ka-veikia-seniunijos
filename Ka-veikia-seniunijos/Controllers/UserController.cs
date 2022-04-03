@@ -45,40 +45,66 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(User user)
         {
-            //password hashing
+            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            int returnCode = 200;
+
+            MySqlCommand command = user.Password == null ?
+                                    getUserProfileUpdateCommand(user, connection) :
+                                    getUesrPasswordUpdateCommand(user, connection);
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch
+            {
+                returnCode = 1062;
+            }
+
+            connection.Close();
+            return returnCode;
+        }
+
+        private MySqlCommand getUserProfileUpdateCommand(User user, MySqlConnection connection)
+        {
+            MySqlCommand command = new MySqlCommand("UPDATE BSJ0CVGChE.User SET " +
+                                        "firstName=?firstName, " +
+                                        "lastName=?lastName, " +
+                                        "email=?email, " +
+                                        "municipality=?municipality " +
+                                        "WHERE Id=?id", connection);
+
+            command.Parameters.Add(new MySqlParameter("firstName", user.FirstName));
+            command.Parameters.Add(new MySqlParameter("lastName", user.LastName));
+            command.Parameters.Add(new MySqlParameter("email", user.Email));
+            command.Parameters.Add(new MySqlParameter("municipality", user.Municipality));
+
+            return command;
+        }
+
+        private MySqlCommand getUesrPasswordUpdateCommand(User user, MySqlConnection connection)
+        {
+            string hashedPassword = getHashedPassword(user.Password);
+            MySqlCommand command = new MySqlCommand("UPDATE BSJ0CVGChE.User SET " +
+                            "passwordHashed=?passwordHashed, " +
+                            "WHERE Id=?id", connection);
+
+            command.Parameters.Add(new MySqlParameter("passwordHashed", hashedPassword));
+
+            return command;
+        }
+
+        private string getHashedPassword(string password)
+        {
             byte[] salt;
             new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-            var pbkdf2 = new Rfc2898DeriveBytes(user.Password, salt, 100000);
+            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);
             byte[] hashBytes = new byte[36];
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 20);
-            string passwordHashed = Convert.ToBase64String(hashBytes);
-            //
-            string query = @"
-                    update BSJ0CVGChE.User set 
-                    firstName = '" + user.FirstName + @"',
-                    lastName = '" + user.LastName + @"',
-                    email = '" + user.Email + @"',
-                    municipality = '" + user.Municipality + @"',
-                    passwordHashed = '" + passwordHashed + @"'
-                    where Id = " + user.Id + @" 
-                    ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            try
-            {
-                myCommand.ExecuteNonQuery();
-            }
-            catch
-            {
-                connection.Close();
-                return 1062;//error
-            }
-            connection.Close();
-            return 200;//good
+
+            return Convert.ToBase64String(hashBytes);
         }
 
         [HttpDelete("{id}")]

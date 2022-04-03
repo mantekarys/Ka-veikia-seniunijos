@@ -22,13 +22,13 @@ export default function Header() {
     }, []);
 
     const handleOnProfileClick = () => {
-        const { name, surname } = JSON.parse(sessionStorage['userData']);
-        window.location.href = `http://localhost:3000/profile?name=${name}.${surname}`;
+        const { FirstName, LastName } = JSON.parse(sessionStorage['userData']);
+        window.location.href = `http://localhost:3000/profile?name=${FirstName}.${LastName}`;
     }
 
     const handleOnMessageClick = () => {
-        const { name, surname } = JSON.parse(sessionStorage['userData']);
-        window.location.href = `http://localhost:3000/mailbox?name=${name}.${surname}`;
+        const { FirstName, LastName } = JSON.parse(sessionStorage['userData']);
+        window.location.href = `http://localhost:3000/mailbox?name=${FirstName}.${LastName}`;
     }
 
     const handleOnMapClick = () => {

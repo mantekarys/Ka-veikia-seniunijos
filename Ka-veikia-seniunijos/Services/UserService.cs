@@ -63,10 +63,10 @@ namespace Ka_veikia_seniunijos.Services
             AuthenticateResponse authenticateResponse;
             string token = null;
 
-            if(user == null)
+            if(user.Email == null)
             {
                 Eldership eldership = GetEldership(model.Email);
-                if(eldership != null && passwordMatches(model.Password, eldership.Password))
+                if(eldership.Email != null && passwordMatches(model.Password, eldership.Password))
                 {
                     token = generateJwtToken(eldership.Id);
                     authenticateResponse = new AuthenticateResponse(eldership.Id, null, null, eldership.Email,

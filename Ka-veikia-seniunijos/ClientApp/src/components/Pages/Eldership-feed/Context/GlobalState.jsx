@@ -6,7 +6,7 @@ const initialState = {
     isPostSelectionOpen: false,
     isNewPostFromOpen: false,
     isNewEventFormOpen: false,
-    isNewSurveyFormOpen: false
+    isNewSurveyFormOpen: true,
 }
 
 export const GlobalContext = createContext(initialState);
@@ -36,6 +36,10 @@ export const GlobalProvider = ({ children }) => {
         dispatch({ type: 'TOGGLE_NEW_SURVEY', isNewSurveyFormOpen: !state.isNewSurveyFormOpen })
     }
 
+    const setUserType = (userType) => {
+        dispatch({type: 'SET_USER_TYPE', userType: userType})
+    }
+
     return (
         <GlobalContext.Provider value={{
             state: state,
@@ -43,7 +47,8 @@ export const GlobalProvider = ({ children }) => {
             togglePostSelectionForm,
             toggleNewPostForm,
             toggleNewEventForm,
-            toggleNewSurveyForm
+            toggleNewSurveyForm,
+            setUserType
         }}>
             {children}
         </GlobalContext.Provider>

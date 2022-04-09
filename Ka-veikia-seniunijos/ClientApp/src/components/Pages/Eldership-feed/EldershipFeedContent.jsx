@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState } from 'react';
+﻿import React, { useContext, useEffect } from 'react';
 import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
@@ -7,6 +7,7 @@ import Post from '../../Post/Post';
 import PostSelection from '../../Post/PostSelection/PostSelection';
 import PostForm from '../../Post/PostForm/PostForm';
 import EventForm from '../../Post/EventForm/EventForm';
+import SurveyForm from '../../Post/SurveryForm/SurveyForm';
 import eldershipPhoto from '../../../images/Vilnius.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faMap, faPen } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +22,9 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         toggleMessageForm,
         togglePostSelectionForm,
         toggleNewPostForm,
-        toggleNewEventForm
+        toggleNewEventForm,
+        toggleNewSurveyForm,
+        setUserType
     } = useContext(GlobalContext);
 
     const USER_TYPES = {
@@ -29,6 +32,11 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         RESIDENT: 'RESIDENT',
         ELDERSHIP: 'EDLSERSHIP'
     }
+
+    useEffect(() => {
+        const userType = getUserType();
+        setUserType(userType);
+    }, []);
 
     const getUserType = () => {
         if (sessionStorage['userData']) {
@@ -38,7 +46,22 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         return USER_TYPES.GUEST;
     }
 
-
+    const renderVisibleButton = () => {
+        if( state.userType !== USER_TYPES.GUEST) {
+            return state.userType === USER_TYPES.RESIDENT ?
+                <Button
+                    text={<FontAwesomeIcon icon={faPen} />}
+                    styling='btn btn--icon'
+                    onClick={togglePostSelectionForm}
+                /> :
+                <Button
+                    text={<FontAwesomeIcon icon={faEnvelope} />}
+                    styling='btn btn--icon'
+                    onClick={toggleMessageForm}
+                />
+        }
+    }
+    
     return (
         <div className='eldership__content'>
             <div className='eldership__photo-container'>
@@ -52,20 +75,12 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                 <h1 className='header__primary eldership__header'>Vilniaus seniūnija</h1>
 
                 <div className='eldership__header--buttons'>
-                    {
-                        getUserType() === USER_TYPES.RESIDENT ?
-                            <Button
-                                text={<FontAwesomeIcon icon={faPen} />}
-                                styling='btn btn--icon'
-                                onClick={togglePostSelectionForm}
-                            /> :
-                            <Button
-                                text={<FontAwesomeIcon icon={faEnvelope} />}
-                                styling='btn btn--icon'
-                                onClick={toggleMessageForm}
-                            />
-                    }
-
+                    {renderVisibleButton()}
+                    <Button
+                    text={<FontAwesomeIcon icon={faPen} />}
+                    styling='btn btn--icon'
+                    onClick={togglePostSelectionForm}
+                />
                     <Button
                         text={<FontAwesomeIcon icon={faMap} />}
                         styling='btn btn--icon'
@@ -90,6 +105,10 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                     onNewEventSelect={() => {
                         togglePostSelectionForm();
                         toggleNewEventForm();
+                    }}
+                    onNewSurveySelect={() => {
+                        togglePostSelectionForm();
+                        toggleNewSurveyForm();
                     }}
                     />
                 </Popup>
@@ -117,6 +136,14 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                         togglePostSelectionForm();
                     }}
                     onPost={() => window.location.reload()}
+                    />
+                </Popup>
+            }
+
+            {state.isNewSurveyFormOpen &&
+                <Popup>
+                    <SurveyForm 
+                        onClose={toggleNewSurveyForm}
                     />
                 </Popup>
             }

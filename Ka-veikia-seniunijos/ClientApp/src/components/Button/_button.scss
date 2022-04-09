@@ -134,11 +134,22 @@
         font-size: 1.7rem;
         width: 20rem;
 
+        &-question {
+            display: block;
+            width: 10rem;
+            margin: 2rem auto;
+            padding: 1rem 1rem;
+            font-size: 1.5rem;
+            background-color: $color-black;
+        }
+
         &-small {
             background-color: $color-black;
             padding: 1rem 1rem;
             font-size: 1.8rem;
             width: 12rem;
+            cursor: pointer;
+
 
             @include respond(mobile) {
                 font-size: 1.4rem;

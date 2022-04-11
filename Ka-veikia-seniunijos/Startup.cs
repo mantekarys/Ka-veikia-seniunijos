@@ -54,6 +54,9 @@ namespace Ka_veikia_seniunijos
             // For JWT
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IPlaceService, PlaceService>();
+
             services.AddControllers();
 
         }

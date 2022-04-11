@@ -1,15 +1,11 @@
-using Ka_veikia_seniunijos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Ka_veikia_seniunijos.Interfaces;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -18,20 +14,22 @@ namespace Ka_veikia_seniunijos.Controllers
     public class EventController : Controller
     {
         private readonly IConfiguration _configuration;
+        private IEventService _eventService;
 
-        public EventController(IConfiguration configuration)
+        public EventController(IConfiguration configuration, IEventService eventService)
         {
             _configuration = configuration;
+            _eventService = eventService;
         }
 
         [HttpGet("{eldership}")]
-        public JsonResult Get(string eldership, [FromQuery]string[] options = null)
+        public JsonResult Get(string eldership, [FromQuery] string[] options = null)
         {
             bool optionAdd = false;
             eldership = eldership.ToLowerInvariant();
             StringBuilder query = new StringBuilder();
             query.Append(@"select * from BSJ0CVGChE.Event where eldership = " + "'" + eldership + "'");
-            if(options.Length > 0)
+            if (options.Length > 0)
             {
                 optionAdd = true;
             }
@@ -47,7 +45,6 @@ namespace Ka_veikia_seniunijos.Controllers
             if (optionAdd)
             {
                 query.Length -= 2;
-
             }
             Console.WriteLine(query.ToString());
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
@@ -61,6 +58,12 @@ namespace Ka_veikia_seniunijos.Controllers
             connection.Close();
             return new JsonResult(table);
         }
-
+        [HttpGet("pins")]
+        public JsonResult GetPins([FromQuery] bool free = false)
+        {
+            string result = _eventService.GetAllPinsJson(free);
+            JsonResult table = new JsonResult(JsonConvert.DeserializeObject(result));
+            return table;
+        }
     }
 }

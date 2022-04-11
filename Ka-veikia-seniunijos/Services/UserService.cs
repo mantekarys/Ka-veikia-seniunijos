@@ -6,7 +6,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using System.Security.Claims;
-using System.Text; 
+using System.Configuration;
+using System.Text;
 using System.Security.Cryptography;
 using Ka_veikia_seniunijos.Models;
 using Ka_veikia_seniunijos.Helpers;
@@ -15,10 +16,10 @@ using Ka_veikia_seniunijos.Interfaces;
 using MySqlConnector;
 
 namespace Ka_veikia_seniunijos.Services
-{ 
+{
     public class UserService : IUserService
     {
-
+        //string connectionString = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
         private List<User> _users;
 
         public UserService()
@@ -63,10 +64,10 @@ namespace Ka_veikia_seniunijos.Services
             AuthenticateResponse authenticateResponse;
             string token = null;
 
-            if(user.Email == null)
+            if (user.Email == null)
             {
                 Eldership eldership = GetEldership(model.Email);
-                if(eldership.Email != null && passwordMatches(model.Password, eldership.Password))
+                if (eldership.Email != null && passwordMatches(model.Password, eldership.Password))
                 {
                     token = generateJwtToken(eldership.Id);
                     authenticateResponse = new AuthenticateResponse(eldership.Id, null, null, eldership.Email,
@@ -74,7 +75,7 @@ namespace Ka_veikia_seniunijos.Services
                 }
                 else
                     return null;
-            } 
+            }
             else
             {
                 if (passwordMatches(model.Password, user.Password))

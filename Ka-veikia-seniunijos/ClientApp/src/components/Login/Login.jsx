@@ -18,6 +18,7 @@ export default function Login({ onClose, onLoginRedirect }) {
     const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
 
+    const handleOnSubmit = () => {
         axios.post('http://localhost:5000/api/user/auth', {
                 'email': email,
                 'password': password

@@ -32,14 +32,9 @@ namespace Ka_veikia_seniunijos.Controllers
             if (events)
             {
                 string eventPins = _eventService.GetAllPinsJson(free);
-                Console.WriteLine(eventPins);
                 eventPins = eventPins.Replace('[', ' ');
                 eventPins = eventPins.Replace(']', ' ');
-                Console.WriteLine(eventPins);
                 result.Append(eventPins);
-
-
-                // result.Add(temp);
             }
             if (places && events)
             {

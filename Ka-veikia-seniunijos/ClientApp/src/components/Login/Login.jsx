@@ -17,6 +17,26 @@ export default function Login({ onClose, onLoginRedirect }) {
 
 
     const handleOnSubmit = () => {
+        axios.post('http://localhost:5000/api/user/auth', {
+                'email': email,
+                'password': password
+            })
+            .then(res => {
+                const isEldership = res.data.FirstName && res.data.LastName ? false : true;
+                const data = {
+                    ...res.data,
+                    isEldership
+                }
+                sessionStorage['userData'] = JSON.stringify(data);
+                window.location.href = "http://localhost:3000/home";
+            })
+            .catch(err => {
+                const {message} = err.response.data;
+                setErrorMessage(message);
+            })
+    }
+
+    const fieldsAreEmpty = () => {
         if (!email || !password) {
             setIsFormInvalid(true);
             setErrorMessage('* Visi laukai yra būtini');

@@ -39,6 +39,21 @@ namespace Ka_veikia_seniunijos.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet]
+        public JsonResult GetAll()
+        {
+            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+
+            MySqlCommand command = new MySqlCommand("Select * from BSJ0CVGChE.Eldership", connection);
+            MySqlDataReader reader = command.ExecuteReader();
+            DataTable table = new DataTable();
+            table.Load(reader);
+            reader.Close();
+            connection.Close();
+            return new JsonResult(table);
+        }
+
         [HttpPut]
         public int Put(Eldership Eldership)
         {
@@ -105,7 +120,7 @@ namespace Ka_veikia_seniunijos.Controllers
             Array.Copy(hash, 0, hashBytes, 16, 20);
             string passwordHashed = Convert.ToBase64String(hashBytes);
             //
-            string query = @"select * from BSJ0CVGChE.Eldership where municipality = '" + Eldership.Municipality +"'";
+            string query = @"select * from BSJ0CVGChE.Eldership where municipality = '" + Eldership.Municipality + "'";
 
             string query2 = @"
                         insert into BSJ0CVGChE.Eldership (email, municipality, passwordHashed) values 

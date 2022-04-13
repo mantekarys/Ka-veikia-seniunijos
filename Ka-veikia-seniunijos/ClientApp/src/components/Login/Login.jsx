@@ -8,13 +8,15 @@ import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
 
 export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const handleOnSubmit = async () => {
+        if (fieldsAreEmpty()) return;
 
     const handleOnSubmit = () => {
         axios.post('http://localhost:5000/api/user/auth', {
@@ -38,11 +40,11 @@ export default function Login({ onClose, onLoginRedirect }) {
 
     const fieldsAreEmpty = () => {
         if (!email || !password) {
-            setIsFormInvalid(true);
-            setErrorMessage('* Visi laukai yra būtini');
-            return;
-        }
+            setErrorMessage('Visi laukai yra būtini');
+            return true;
+        } 
     }
+
 
     return (
         <Popup>
@@ -86,7 +88,7 @@ export default function Login({ onClose, onLoginRedirect }) {
                         />
                     </div>
 
-                    {isFormInvalid && <Error text={errorMessage} />}
+                    {errorMessage && <Error text={errorMessage} />}
                 </form>
 
                 <FormFooter

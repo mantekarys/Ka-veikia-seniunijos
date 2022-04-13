@@ -13,7 +13,6 @@ namespace Ka_veikia_seniunijos
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -21,7 +20,8 @@ namespace Ka_veikia_seniunijos
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                        .UseUrls("http://localhost:5000");
                 });
     }
 }

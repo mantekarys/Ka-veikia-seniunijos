@@ -1,35 +1,39 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Popup from '../Popup/Popup';
 import Input from '../Form/Input';
 import Dropdown from '../Form/Dropdown';
 import Button from '../Button/Button';
-import SignupUserType from './SignupUserType/SignupUserType';
 import FormFooter from '../Form/Footer/FormFooter';
 import Error from '../Error/Error';
 import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 export default function Signup({ onClose, onSignupRedirect }) {
-    const [userType, setUserType] = useState('Gyventojas');
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [area, setArea] = useState('');
+    const [elderships, setElderships] = useState([]);
     const [password, setPassword] = useState('');
     const [passwordRepeat, setPasswordRepeat] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [isUserTypeSelected, setIsUserTypeSelected] = useState(false);
-    const [isFormInvalid, setIsFormInvalid] = useState(false);
 
-    const handleOnTypeChange = (userType) => {
-        setUserType(userType);
-    }
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const result = await axios.get('https://localhost:44330/api/eldership');
+                const elderships = result.data.map(eldership => eldership.municipality);
+                setElderships(elderships);
+            } catch(error) {
+                console.error(error);
+            }
+        }
 
-    const handleOnNextClick = () => {
-        setIsUserTypeSelected(true);
-    }
+        fetchData();
+    }, []);
 
     const handleOnChange = (e) => {
         e.target.classList.remove('form__dropdown--default');
@@ -37,26 +41,41 @@ export default function Signup({ onClose, onSignupRedirect }) {
     }
 
     const handleOnSubmit = () => {
-        if (!name || !surname || !email || !area || !password || !passwordRepeat) {
-            setIsFormInvalid(true);
-            setErrorMessage('* Visi laukai yra būtini')
-            return;
-        }
+        if (!inputsAreValid() || !isPasswordValid()) return;
 
-        if (!validatePassword()) return;
-
+        axios.post('https://localhost:44330/api/user', {
+            'FirstName': name,
+            'LastName': surname,
+            'Email': email,
+            'Municipality': area,
+            'Password': password
+        })
+        .then(res => {
+            if(res.status === 200)
+                setErrorMessage('Vartotojas buvo sėkmingai užregistruotas');
+        })
+        .catch(_ => {
+            setErrorMessage('Įvyko nenumatyta klaida');
+        })
     }
 
-    const validatePassword = () => {
+    const inputsAreValid = () => {
+        if (!name || !surname || !email || !area || !password || !passwordRepeat) {
+            setErrorMessage('Visi laukai yra būtini')
+            return false;
+        }
+
+        return true;
+    }
+
+    const isPasswordValid = () => {
         if (password !== passwordRepeat) {
-            setIsFormInvalid(true);
-            setErrorMessage('* Slaptažodžiai turi sutapti')
+            setErrorMessage('Slaptažodžiai turi sutapti')
             return false;
         }
 
         if (password.length <= 8) {
-            setIsFormInvalid(true);
-            setErrorMessage('* Slaptažodžio ilgis turi būti nemažiau nei 8')
+            setErrorMessage('Slaptažodžio ilgis turi būti nemažiau nei 8')
             return false;
         }
 
@@ -68,11 +87,8 @@ export default function Signup({ onClose, onSignupRedirect }) {
             <div className='login__container login__container--signup'>
                 <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
                 <h2 className='header__secondary u-text-center'>Registracija</h2>
-                {!isUserTypeSelected &&
-                    <SignupUserType onTypeChange={handleOnTypeChange} onClick={handleOnNextClick} />
-                }
 
-                {isUserTypeSelected && <form className='signup__content'>
+                <form className='signup__content'>
                     <div className="login__input-wrapper">
                         <Input
                             styling='form__input'
@@ -107,7 +123,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
                         <Dropdown
                             styling='form__dropdown form__dropdown--default'
                             placeholder='Savivaldybė'
-                            values={['Vilnius', 'Kaunas']}
+                            values={elderships}
                             onChange={handleOnChange}
                         />
                     </div>
@@ -141,8 +157,8 @@ export default function Signup({ onClose, onSignupRedirect }) {
                         />
                     </div>
 
-                    {isFormInvalid && <Error text={errorMessage} />}
-                </form>}
+                    {errorMessage && <Error text={errorMessage} />}
+                </form>
 
                 <FormFooter
                     paragraphText='Turite paskyrą?'

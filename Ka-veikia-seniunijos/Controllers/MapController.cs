@@ -36,8 +36,6 @@ namespace Ka_veikia_seniunijos.Controllers
                 eventPins = eventPins.Replace(']', ' ');
                 result.Append(eventPins);
 
-
-                // result.Add(temp);
             }
             if (places && events)
             {

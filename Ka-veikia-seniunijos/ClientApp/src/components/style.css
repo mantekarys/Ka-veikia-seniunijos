@@ -19,6 +19,12 @@ body {
 
 .header__secondary {
   font-size: 3.5rem; }
+  @media (max-width: 56.25em) {
+    .header__secondary {
+      font-size: 3rem; } }
+  @media (max-width: 37.5em) {
+    .header__secondary {
+      font-size: 2.5rem; } }
 
 .header__tertiary {
   font-size: 2.5rem; }
@@ -114,6 +120,14 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0); } }
+
+@keyframes moveBackLeft {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%); }
+  100% {
+    opacity: 0;
+    transform: translate(-100%, -50%); } }
 
 @keyframes fadeIn {
   0% {
@@ -287,14 +301,6 @@ body {
   border-radius: 1rem;
   resize: none; }
 
-.leaflet-container {
-  height: 400px;
-  width: 60%;
-  margin: 0 auto; }
-
-.pad {
-  padding-bottom: 20px; }
-
 .btn, .btn:link, .btn:visited {
   text-decoration: none;
   transition: all .2s;
@@ -391,6 +397,21 @@ body {
   background-color: #000000;
   font-size: 1.7rem;
   padding: 1rem 1.4rem; }
+
+.btn--post {
+  background-color: #000000;
+  padding: 1.5rem 1rem;
+  font-size: 1.7rem;
+  width: 20rem; }
+  .btn--post-small {
+    background-color: #000000;
+    padding: 1rem 1rem;
+    font-size: 1.8rem;
+    width: 12rem; }
+    @media (max-width: 37.5em) {
+      .btn--post-small {
+        font-size: 1.4rem;
+        width: 10rem; } }
 
 .popup {
   height: 100%;
@@ -548,6 +569,14 @@ body {
   100% {
     opacity: 1;
     transform: translateY(0); } }
+
+@keyframes moveBackLeft {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%); }
+  100% {
+    opacity: 0;
+    transform: translate(-100%, -50%); } }
 
 @keyframes fadeIn {
   0% {

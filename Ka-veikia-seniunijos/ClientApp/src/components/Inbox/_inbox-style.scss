@@ -1,0 +1,82 @@
+﻿@import '../Utils/mixins';
+@import '../Utils/variables';
+
+.inbox {
+    &__container {
+        @include absCenter;
+        width: 80%;
+        height: 80vh;
+        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+    }
+
+    &__tabs {
+        width: 100%;
+        height: 10%;
+        background-color: $color-white;
+
+        &-name {
+            display: inline-block;
+            font-size: 2rem;
+            text-align: center;
+            padding: 2rem;
+            cursor: pointer;
+
+            &--active {
+                border-bottom: 1px solid $color-black;
+            }
+        }
+    }
+
+    &__content {
+        width: 100%;
+        height: 90%;
+        border-radius: $default-form-border-radius;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            width: .5rem;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $color-placeholder;
+        }
+
+        &-text {
+            @include absCenter;
+            font-size: 2rem;
+        }
+
+        &-item {
+            height: 10rem;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            transition: all .2s;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba($color-black, .1);
+            }
+
+            &--black {
+                background-color: rgba($color-black, .1);
+            }
+
+            & > span {
+                font-size: 2rem;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+.message {
+    &-sender {
+       width: 20%;
+    }
+
+    &-topic {
+        flex-grow: 1;
+    }
+}

@@ -23,8 +23,8 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
 
-        [HttpGet("GetDayEvents/{eldership}")]
-        public JsonResult GetDayEvents(string eldership, DateTime? date = null, bool descending = true)
+        [HttpGet("GetDayPots/{eldership}")]
+        public JsonResult GetDayPots(string eldership, DateTime? date = null, bool descending = true)
         {
             string desc = descending ? "DESC" : "ASC";
             StringBuilder query = new StringBuilder();

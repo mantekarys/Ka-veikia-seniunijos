@@ -25,6 +25,11 @@
                 ...state,
                 isNewSurveyFormOpen: action.isNewSurveyFormOpen
             }
+        case 'SET_USER_TYPE':
+            return {
+                ...state,
+                userType: action.userType
+            }
         default:
             return state;
     }

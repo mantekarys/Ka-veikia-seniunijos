@@ -7,7 +7,7 @@ import '../../Button/_button.scss';
 import './_post-selection-style.scss';
 import '../../Utils/_base.scss';
 
-export default function PostSelection({ onClose, onPostSelect, onNewEventSelect }) {
+export default function PostSelection({ onClose, onPostSelect, onNewEventSelect, onNewSurveySelect }) {
     const [checked, setChecked] = useState({
         post: true,
         event: false,
@@ -26,6 +26,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
     const handleOnNext = () => {
         if (checked.post) onPostSelect();
         else if (checked.event) onNewEventSelect();
+        else onNewSurveySelect();
     }
 
     useLayoutEffect(() => {
@@ -63,7 +64,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                         onChange={handleOnRadioChange}
                     >
                         Nauajas renginys
-                </Radio>
+                    </Radio>
                 </div>
 
                 <div className='post-selection__options-radio'>
@@ -75,7 +76,7 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
                         onChange={handleOnRadioChange}
                     >
                         Nauja apklausa
-                </Radio>
+                    </Radio>
                 </div>
             </div>
 
@@ -99,4 +100,6 @@ export default function PostSelection({ onClose, onPostSelect, onNewEventSelect 
 PostSelection.propTypes = {
     onClose: PropTypes.func,
     onPostSelect: PropTypes.func,
+    onNewEventSelect: PropTypes.func,
+    onNewSurveySelect: PropTypes.func
 }

@@ -15,10 +15,10 @@ export default function Login({ onClose, onLoginRedirect }) {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+
     const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
 
-    const handleOnSubmit = () => {
         axios.post('http://localhost:5000/api/user/auth', {
                 'email': email,
                 'password': password
@@ -33,6 +33,7 @@ export default function Login({ onClose, onLoginRedirect }) {
                 window.location.href = "http://localhost:3000/home";
             })
             .catch(err => {
+                console.log(err)
                 const {message} = err.response.data;
                 setErrorMessage(message);
             })

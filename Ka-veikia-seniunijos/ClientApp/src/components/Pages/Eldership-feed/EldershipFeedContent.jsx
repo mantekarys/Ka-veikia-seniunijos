@@ -144,6 +144,11 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                 <Popup>
                     <SurveyForm 
                         onClose={toggleNewSurveyForm}
+                        onBack={() => {
+                            toggleNewSurveyForm();
+                            togglePostSelectionForm();
+                        }}
+                        onPost={() => window.location.reload()}
                     />
                 </Popup>
             }

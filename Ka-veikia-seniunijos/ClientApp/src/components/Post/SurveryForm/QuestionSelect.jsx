@@ -12,14 +12,14 @@ export default function QuestionSelect({onAdd}) {
   const [checked, setChecked] = useState({
     open: true,
     rating: false,
-    closed: false
   });
 
   const [question, setQuestion] = useState({
       questionName: '',
       scale: 0,
-      answers: []
   })
+
+
   
   const [isOptionsOpen, setIsOptionsOpne] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -28,8 +28,14 @@ export default function QuestionSelect({onAdd}) {
         setChecked({
             open: e.target.name === 'open',
             rating: e.target.name === 'rating',
-            closed: e.target.name === 'closed',
         });
+
+        if(e.target.name === 'rating') {
+            setQuestion({
+                ...question,
+                'scale': 5
+            })
+        }
     }
 
     const handleOnAdd = () => {
@@ -39,7 +45,11 @@ export default function QuestionSelect({onAdd}) {
             return;
         }
 
-        onAdd(question)
+            onAdd(question);
+            setQuestion({
+                ...question,
+                questionName: ''
+            })
     }
 
   return (
@@ -70,16 +80,6 @@ export default function QuestionSelect({onAdd}) {
                         onChange={handleOnRadioChange}
                     >
                         Vertinimo klausimas
-                    </Radio>
-
-                    <Radio
-                        name="closed"
-                        color="primary"
-                        style={{ fontSize: '15px' }}
-                        checked={checked.closed}
-                        onChange={handleOnRadioChange}
-                    >
-                        Uždaras klausiams
                     </Radio>
                 </div>
 

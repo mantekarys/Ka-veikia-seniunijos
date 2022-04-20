@@ -2,29 +2,31 @@ import React, {useState} from 'react'
 import NewPostHeader from '../NewPostHeader';
 import QuestionSelect from './QuestionSelect';
 import Error from '../../Error/Error';
-import Button from '../../Button/Button';
 import Input from '../../Form/Input';
-import { Radio } from 'pretty-checkbox-react';
+import NewPostButtons from '../NewPostButtons';
 import PropTypes from 'prop-types';
 import './_survey-form-style.scss';
 
 
-export default function SurveyForm({onClose}) {
+export default function SurveyForm({onClose, onBack, onPost}) {
     const [name, setName] = useState('');
     const [questions, setQuestions] = useState({'questions':[]});
-    
-    const renderRadioButtons = (scale) => {
-        const radioButtons = [];
-        for(let i = 0; i < scale; i++) {
-            radioButtons.push( 
-                <Radio name="rating" color="primary" style={{ fontSize: '10px' }} key={i}>
-                    {i + 1}
-                </Radio>
-            )
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const onFormSubmit = () => {
+        if(!name) {
+            setErrorMessage('Apklausa turi turėti pavadinimą');
+            return;
         }
 
-        return radioButtons;
+        if(questions.questions.length == 0) {
+            setErrorMessage('Apklausa turi turėti bent vieną klausimą');
+            return;
+        }
+
+        onPost();
     }
+    
 
     return (
         <div className='survey-form__container'>
@@ -42,20 +44,22 @@ export default function SurveyForm({onClose}) {
                     {questions.questions.map((question, index) => 
                         <>
                             <p key={index} className='survey-form__question'>{`${index + 1}. ${question.questionName}`}</p>
-                            <div className='survey-form__question-rating' key={index + 100}>
-                                {renderRadioButtons()}
-                            </div>
                         </>
                     )}
                 </div>
                 <QuestionSelect onAdd={(newQuestion) => setQuestions({
                     'questions': [...questions.questions, newQuestion]
                 })}/>
+
+                {errorMessage && <Error text={errorMessage} />}
+                <NewPostButtons onBack={onBack} onSubmit={onFormSubmit} />
             </form>
         </div>
     )
 }
 
 SurveyForm.propTypes = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    onBack: PropTypes.func,
+    onPost: PropTypes.func
 }

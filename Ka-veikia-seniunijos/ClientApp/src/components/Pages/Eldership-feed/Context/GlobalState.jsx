@@ -6,7 +6,7 @@ const initialState = {
     isPostSelectionOpen: false,
     isNewPostFromOpen: false,
     isNewEventFormOpen: false,
-    isNewSurveyFormOpen: true,
+    isNewSurveyFormOpen: false,
 }
 
 export const GlobalContext = createContext(initialState);

@@ -32,7 +32,7 @@ export default function Header() {
     }
 
     const handleOnMapClick = () => {
-        window.location.href = 'http://localhost:3000/map';
+        window.location.href = 'http://localhost:3000/map?events=true&places=true&free=true';
     }
 
     const handleOnLogoutClick = () => {

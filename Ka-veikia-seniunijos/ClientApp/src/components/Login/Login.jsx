@@ -33,7 +33,6 @@ export default function Login({ onClose, onLoginRedirect }) {
                 window.location.href = "http://localhost:3000/home";
             })
             .catch(err => {
-                console.log(err)
                 const {message} = err.response.data;
                 setErrorMessage(message);
             })

@@ -19,7 +19,7 @@ namespace Ka_veikia_seniunijos.Services
         public string DataTableToJSON(DataTable table)
         {
             string JSONString = string.Empty;
-            JSONString = JsonConvert.SerializeObject(table);
+            JSONString = JsonConvert.SerializeObject(table, Formatting.Indented);
             return JSONString;
         }
 

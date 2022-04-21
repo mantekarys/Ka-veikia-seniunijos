@@ -28,31 +28,47 @@ namespace Ka_veikia_seniunijos.Controllers
         public IActionResult GetPins([FromQuery] bool events = true, [FromQuery] bool places = false, [FromQuery] bool free = false)
         {
             StringBuilder result = new StringBuilder();
+            bool eventPinsExist = false;
             result.Append('[');
             if (events)
             {
                 string eventPins = _eventService.GetAllPinsJson(free);
-                eventPins = eventPins.Replace('[', ' ');
-                eventPins = eventPins.Replace(']', ' ');
-                result.Append(eventPins);
+                Console.WriteLine(eventPins);
+                if (eventPins == "[]")
+                {
+                }
+                else
+                {
+                    eventPinsExist = true;
+                    eventPins = eventPins.Replace('[', ' ');
+                    eventPins = eventPins.Replace(']', ' ');
+                    result.Append(eventPins);
+                }
 
-            }
-            if (places && events)
-            {
-                result.Append(",");
             }
             if (places)
             {
                 string placesPins = _placeService.GetAllPinsJson();
-                placesPins = placesPins.Replace('[', ' ');
-                placesPins = placesPins.Replace(']', ' ');
-                result.Append(placesPins);
+                if (placesPins == "[]")
+                {
+                }
+                else
+                {
+                    if (places && eventPinsExist)
+                    {
+                        result.Append(",");
+                    }
+                    placesPins = placesPins.Replace('[', ' ');
+                    placesPins = placesPins.Replace(']', ' ');
+                    result.Append(placesPins);
+                }
             }
             if (events == false && places == false)
             {
                 return StatusCode(500);
             }
             result.Append(']');
+
             JsonResult table = new JsonResult(JsonConvert.DeserializeObject(result.ToString()));
             return Ok(table.Value);
         }

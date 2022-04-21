@@ -35,7 +35,7 @@ export default function Slider({ styling }) {
                     backgroundImage={EventImage}
                     index={0}
                     activeSlide={activeSlide}
-                    href='http://localhost:3000/map'
+                    href='http://localhost:3000/map?events=true&places=true&free=true'
                 />
 
                 <Slide
@@ -44,7 +44,7 @@ export default function Slider({ styling }) {
                     backgroundImage={PlaceImage}
                     index={1}
                     activeSlide={activeSlide}
-                    href='http://localhost:3000/map'
+                    href='http://localhost:3000/map?events=true&places=true&free=true'
                 />
 
                 <Slide

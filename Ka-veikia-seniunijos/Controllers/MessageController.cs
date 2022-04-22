@@ -34,7 +34,6 @@ namespace Ka_veikia_seniunijos.Controllers
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
-
             myCommand.CommandText = query;
             try
             {
@@ -47,7 +46,6 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             connection.Close();
             return 200;//good
-
         }
 
         [HttpGet("{id}/{user}")]

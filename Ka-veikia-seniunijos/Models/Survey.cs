@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Ka_veikia_seniunijos.Models
 {
-    public class Post
+    public class Survey
     {
-        public string Header { get; set; }
-        public string Text { get; set; }
-        public string Date { get; set; }
+        public string Name { get; set; }
         public string Eldership { get; set; }
+        public DateTime Date { get; set; }
+        public Question[] Questions { get; set; }
     }
 }

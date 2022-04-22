@@ -6,6 +6,8 @@ using System.Data;
 using System.Text;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
+using Ka_veikia_seniunijos.Models;
+using System.Globalization;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -65,6 +67,33 @@ namespace Ka_veikia_seniunijos.Controllers
             string result = _eventService.GetAllPinsJson(free);
             JsonResult table = new JsonResult(JsonConvert.DeserializeObject(result));
             return table;
+        }
+
+        [HttpPost]
+        public int Post(Event ev)
+        {
+            string query = @"
+                        insert into BSJ0CVGChE.Event (id, name, description," + (ev.Type != null? "type,":"") +" price, date, startTime, endTime,"+(ev.Municipality != null ? "municipality," : "") +" eldership, address, latitude, longtitude) values" +
+                        "('" + ev.Id + "','" + ev.Name + "','" + ev.Description + "','" +(ev.Type != null ? ev.Type+"','" : "") + ev.Price + "','" + ev.Date.ToString("o",CultureInfo.GetCultureInfo("en-US")) + "','" + ev.StartTime + "','" +
+                        ev.EndTime + "','" + (ev.Municipality != null ? ev.Municipality + "','" : "") + ev.Eldership + "','" + ev.Address + "','" + ev.Latitude + "','" + ev.Longtitude + "')";
+
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+
+            myCommand.CommandText = query;
+            try
+            {
+                myCommand.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                connection.Close();
+                return -1;//error
+            }
+            connection.Close();
+            return 200;//good
+
         }
     }
 }

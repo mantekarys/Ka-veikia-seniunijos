@@ -51,7 +51,7 @@ namespace Ka_veikia_seniunijos.Controllers
 
             MySqlCommand command = user.Password == null ?
                                     getUserProfileUpdateCommand(user, connection) :
-                                    getUesrPasswordUpdateCommand(user, connection);
+                                    getUserPasswordUpdateCommand(user, connection);
             try
             {
                 command.ExecuteNonQuery();
@@ -82,7 +82,7 @@ namespace Ka_veikia_seniunijos.Controllers
             return command;
         }
 
-        private MySqlCommand getUesrPasswordUpdateCommand(User user, MySqlConnection connection)
+        private MySqlCommand getUserPasswordUpdateCommand(User user, MySqlConnection connection)
         {
             string hashedPassword = getHashedPassword(user.Password);
             MySqlCommand command = new MySqlCommand("UPDATE BSJ0CVGChE.User SET " +

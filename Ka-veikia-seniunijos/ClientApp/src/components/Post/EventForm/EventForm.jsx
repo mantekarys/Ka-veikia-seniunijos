@@ -6,6 +6,7 @@ import { Switch } from 'pretty-checkbox-react';
 import Error from '../../Error/Error';
 import TextArea from '../../Form/TextArea';
 import Input from '../../Form/Input';
+import axios from 'axios';
 import './_event-form-style.scss';
 import '../../Utils/_base.scss';
 import '../../Button/_button.scss';
@@ -24,6 +25,7 @@ export default function EventForm({ onClose, onBack, onPost}) {
     const [isFree, setIsFree] = useState(true);
     const [price, setPrice] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const {REACT_APP_POSITION_STACK_API_KEY} = process.env;
 
     const handleOnSubmit = () => {
         if (!name || !place) {
@@ -31,7 +33,23 @@ export default function EventForm({ onClose, onBack, onPost}) {
             return;
         }
 
-        onPost();
+        fetchCoords();
+    }
+
+    const fetchCoords = async () => {
+        try {
+            const position = await axios.get(`http://api.positionstack.com/v1/forward?access_key=${REACT_APP_POSITION_STACK_API_KEY}&query=${place}`);
+            if(!position.data.data.length) {
+                setErrorMessage('Netinkama renginio vieta');
+                return;
+            }
+
+            // lat: position.data.data[0].latitude,
+            // lng: position.data.data[0].longitude
+            // onPost();
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -52,7 +70,7 @@ export default function EventForm({ onClose, onBack, onPost}) {
                     placeholder='Renginio vieta'
                     value={place}
                     onChange={(e) => setPlace(e.target.value)}
-                /> 
+                />
 
                 <TimeInput
                     startTime={startTime}

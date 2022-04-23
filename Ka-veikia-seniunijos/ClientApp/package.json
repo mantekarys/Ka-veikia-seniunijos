@@ -10,6 +10,7 @@
     "antd": "^4.19.5",
     "axios": "^0.26.1",
     "bootstrap": "^4.1.3",
+    "dotenv": "^8.2.0",
     "jquery": "^3.4.1",
     "leaflet": "^1.7.1",
     "material-ui-slider": "^3.0.8",

@@ -22,17 +22,17 @@ namespace Ka_veikia_seniunijos.Controllers
             _eventService = eventService;
         }
 
-        [HttpGet("GetDayPots/{eldership}")]
-        public JsonResult GetDayPots(string eldership, DateTime? date = null, bool descending = true)
+        [HttpGet("GetDayPosts/{eldership}")]
+        public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
         {
             string desc = descending ? "DESC" : "ASC";
             StringBuilder query = new StringBuilder();
-            query.Append(@"select * from BSJ0CVGChE.Post WHERE eldership ='" + eldership + "'");
+            query.Append(@"select * from BSJ0CVGChE.Post WHERE eldership_fk = (SELECT id FROM Eldership WHERE name = '" + eldership + "')");
             if (date.HasValue)
             {
-                query.Append(@" and Date ='" + date.Value.ToString("yyyy-MM-dd") + "'");
+                query.Append(@" and postDate ='" + date.Value.ToString("yyyy-MM-dd") + "'");
             }
-            query.Append(@" ORDER BY Date " + desc);
+            query.Append(@" ORDER BY postDate " + desc);
             Console.WriteLine(query.ToString());
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();

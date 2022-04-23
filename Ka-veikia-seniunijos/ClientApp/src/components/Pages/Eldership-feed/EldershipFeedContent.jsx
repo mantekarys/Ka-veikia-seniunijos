@@ -1,4 +1,4 @@
-﻿import React, { useContext, useEffect } from 'react';
+﻿import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
@@ -11,11 +11,10 @@ import SurveyForm from '../../Post/SurveryForm/SurveyForm';
 import eldershipPhoto from '../../../images/Vilnius.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faMap, faPen } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
 import PropTypes from 'prop-types';
-
-
 export default function EldershipFeedContent({ photo, eldershipName }) {
     const {
         state,
@@ -27,6 +26,8 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         setUserType
     } = useContext(GlobalContext);
 
+    const [posts, setPosts] = useState([]);
+
     const USER_TYPES = {
         GUEST: 'GUEST',
         RESIDENT: 'RESIDENT',
@@ -37,6 +38,15 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         const userType = getUserType();
         setUserType(userType);
     }, []);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const postsData = await axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`);
+            
+        }
+
+        fetchPosts();
+    }, [])
 
     const getUserType = () => {
         if (sessionStorage['userData']) {
@@ -122,7 +132,6 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                             toggleNewPostForm();
                             togglePostSelectionForm();
                         }}
-                        onPost={() => window.location.reload()}
                     />
                 </Popup>
             }

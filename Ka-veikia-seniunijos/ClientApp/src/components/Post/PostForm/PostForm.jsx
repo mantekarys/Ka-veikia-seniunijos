@@ -7,8 +7,9 @@ import './_post-form-style.scss';
 import '../../Utils/_base.scss';
 import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
-export default function PostForm({ onClose, onBack, onPost }) {
+export default function PostForm({ onClose, onBack }) {
     const [text, setText] = useState("");
     const [error, setError] = useState("");
 
@@ -17,8 +18,22 @@ export default function PostForm({ onClose, onBack, onPost }) {
             setError('Įrašo tekstas neagli būti tuščias!');
             return;
         }
+        const todaysDate = getTodaysDate();
+        // // axios.post('https://localhost:44330/api/user', {
 
-        onPost();
+        // // })
+        // .then(res => {
+        //     if(res.status === 200) window.location.reload();
+        // })
+        // .catch(_ => {
+        //     setErrorMessage('Įvyko nenumatyta klaida');
+        // })
+        window.location.reload();
+    }
+
+    const getTodaysDate = () => {
+        const today = new Date();
+        return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     }
 
     return (
@@ -53,5 +68,4 @@ export default function PostForm({ onClose, onBack, onPost }) {
 PostForm.propTypes = {
     onClose: PropTypes.func,
     onBack: PropTypes.func,
-    onPost: PropTypes.func,
 }

@@ -5,7 +5,7 @@ const initialState = {
     isMessageFormOpen: false,
     isPostSelectionOpen: false,
     isNewPostFromOpen: false,
-    isNewEventFormOpen: true,
+    isNewEventFormOpen: false,
     isNewSurveyFormOpen: false,
 }
 

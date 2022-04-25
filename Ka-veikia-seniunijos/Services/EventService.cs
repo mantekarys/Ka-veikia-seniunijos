@@ -1,20 +1,18 @@
 using Ka_veikia_seniunijos.Interfaces;
-using MySqlConnector;
 using System.Data;
-using System;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
+using Ka_veikia_seniunijos.ModelsEF;
 
 namespace Ka_veikia_seniunijos.Services
 {
     public class EventService : IEventService
     {
-        private readonly IConfiguration _configuration;
-        public EventService(IConfiguration configuration)
+        public DatabaseContext _databaseContext;
+
+        public EventService(DatabaseContext databaseContext)
         {
-            _configuration = configuration;
+            _databaseContext = databaseContext;
         }
         public string DataTableToJSON(DataTable table)
         {
@@ -25,26 +23,32 @@ namespace Ka_veikia_seniunijos.Services
 
         public string GetAllPinsJson(bool free = false)
         {
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            StringBuilder query = new StringBuilder();
-            query.Append("Select Name,Price,Latitude,Longtitude from Event  ");
-            if (free)
-            {
-                query.Append("WHERE Price = 0.00");
-            }
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query.ToString();
-            MySqlDataReader rdr = myCommand.ExecuteReader();
+            var events = _databaseContext.Event.Select(
+                p => new
+                {
+                    p.Name,
+                    p.Latitude,
+                    p.Longtitude,
+                    p.Price
+                }
+            );
             DataTable table = new DataTable();
-            table.Columns.Add("Type", typeof(string));
-            table.Load(rdr);
-            foreach (DataRow row in table.Rows)
+            table.Columns.Add("Name", typeof(string)).SetOrdinal(1);
+            table.Columns.Add("Price", typeof(string)).SetOrdinal(2);
+            table.Columns.Add("Latitude", typeof(float)).SetOrdinal(3);
+            table.Columns.Add("Longtitude", typeof(float)).SetOrdinal(4);
+            foreach (var element in events)
             {
+                DataRow row;
+                row = table.NewRow();
                 row["Type"] = "event";
+                row["Name"] = element.Name;
+                row["Price"] = element.Price;
+                row["Latitude"] = element.Latitude;
+                row["Longtitude"] = element.Longtitude;
+                table.Rows.Add(row);
             }
-            rdr.Close();
-            connection.Close();
+
             return DataTableToJSON(table);
         }
     }

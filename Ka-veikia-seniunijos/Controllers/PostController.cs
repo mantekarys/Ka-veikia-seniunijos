@@ -4,7 +4,9 @@ using MySqlConnector;
 using System;
 using System.Data;
 using System.Text;
+using System.Linq;
 using Newtonsoft.Json;
+using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Interfaces;
 
 namespace Ka_veikia_seniunijos.Controllers
@@ -13,45 +15,26 @@ namespace Ka_veikia_seniunijos.Controllers
     [ApiController]
     public class PostController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private IEventService _eventService;
-
-        public PostController(IConfiguration configuration, IEventService eventService)
+        private DatabaseContext _databaseContext;
+        public PostController(DatabaseContext databaseContext)
         {
-            _configuration = configuration;
-            _eventService = eventService;
+            _databaseContext = databaseContext;
         }
 
-        [HttpGet("GetDayPots/{eldership}")]
-        public JsonResult GetDayPots(string eldership, DateTime? date = null, bool descending = true)
+        [HttpGet("GetDayPosts/{eldership}")]
+        public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
         {
-            string desc = descending ? "DESC" : "ASC";
-            StringBuilder query = new StringBuilder();
-            query.Append(@"select * from BSJ0CVGChE.Post WHERE eldership ='" + eldership + "'");
-            if (date.HasValue)
+            eldership = eldership.ToLower();
+            var posts = _databaseContext.Post.Where(p => p.Eldership == eldership).OrderByDescending(p => p.Date).ToList();
+            if (posts == null)
             {
-                query.Append(@" and Date ='" + date.Value.ToString("yyyy-MM-dd") + "'");
+                return new JsonResult("Empty posts by " + eldership);
             }
-            query.Append(@" ORDER BY Date " + desc);
-            Console.WriteLine(query.ToString());
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query.ToString();
-            DataTable table = new DataTable();
-            try
+            if (!descending)
             {
-                MySqlDataReader rdr = myCommand.ExecuteReader();
-                table.Load(rdr);
-                rdr.Close();
+                posts.OrderBy(p => p.Date);
             }
-            catch (Exception e)
-            {
-                connection.Close();
-                return new JsonResult("-1");//error
-            }
-            connection.Close();
-            return new JsonResult(table);//good
+            return new JsonResult(posts);//good
         }
     }
 }

@@ -83,8 +83,6 @@ namespace Ka_veikia_seniunijos.Services
             table.Columns.Add("Price", typeof(string)).SetOrdinal(2);
             table.Columns.Add("Latitude", typeof(float)).SetOrdinal(3);
             table.Columns.Add("Longtitude", typeof(float)).SetOrdinal(4);
-
-
             foreach (var place in places)
             {
                 DataRow row;

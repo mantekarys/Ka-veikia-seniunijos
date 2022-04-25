@@ -1,4 +1,4 @@
-﻿import React, { useContext, useEffect } from 'react';
+﻿import React, { useContext, useEffect, useState } from 'react';
 import { GlobalContext } from './Context/GlobalState';
 import Button from '../../Button/Button';
 import Popup from '../../Popup/Popup';
@@ -11,12 +11,12 @@ import SurveyForm from '../../Post/SurveryForm/SurveyForm';
 import eldershipPhoto from '../../../images/Vilnius.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faMap, faPen } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import EventPost from '../../Post/EventPost/EventPost';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
 import PropTypes from 'prop-types';
-
-
-export default function EldershipFeedContent({ photo, eldershipName }) {
+export default function EldershipFeedContent() {
     const {
         state,
         toggleMessageForm,
@@ -27,10 +27,16 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         setUserType
     } = useContext(GlobalContext);
 
+    const url = new URL(window.location.href);
+    const eldershipName = url.searchParams.get("eldership");
+    const [posts, setPosts] = useState([]);
+    const { Name, isEldership } = JSON.parse(sessionStorage['userData']);
+
     const USER_TYPES = {
         GUEST: 'GUEST',
         RESIDENT: 'RESIDENT',
-        ELDERSHIP: 'EDLSERSHIP'
+        ELDERSHIP: 'EDLSERSHIP',
+        ELDERSHIPS_ACCOUNT: 'ELDERSHIPS_ACCOUNT'
     }
 
     useEffect(() => {
@@ -38,27 +44,51 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
         setUserType(userType);
     }, []);
 
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const postsData = await axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`);
+            setPosts(() => [...posts, ...postsData.data]);
+        }
+
+        fetchPosts();
+
+        axios.all([axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`),
+                   axios.get(`https://localhost:44330/api/event/${eldershipName}`)])
+             .then(axios.spread((postsResponse, eventsResponse) => {
+                setPosts([...postsResponse.data, ...eventsResponse.data]);
+             }))
+    }, []);
+
     const getUserType = () => {
         if (sessionStorage['userData']) {
-            return (sessionStorage['userData'].isEldership ? USER_TYPES.ELDERSHIP : USER_TYPES.RESIDENT)
+            if(isEldership) {
+               return Name === eldershipName ? USER_TYPES.ELDERSHIPS_ACCOUNT : USER_TYPES.ELDERSHIP;
+            }
+            return  USER_TYPES.RESIDENT;
         }
 
         return USER_TYPES.GUEST;
     }
 
     const renderVisibleButton = () => {
-        if( state.userType !== USER_TYPES.GUEST) {
-            return state.userType === USER_TYPES.RESIDENT ?
-                <Button
-                    text={<FontAwesomeIcon icon={faPen} />}
-                    styling='btn btn--icon'
-                    onClick={togglePostSelectionForm}
-                /> :
-                <Button
-                    text={<FontAwesomeIcon icon={faEnvelope} />}
-                    styling='btn btn--icon'
-                    onClick={toggleMessageForm}
-                />
+        if(state.userType !== USER_TYPES.GUEST) {
+            if(state.userType === USER_TYPES.RESIDENT) {
+                return (
+                    <Button
+                        text={<FontAwesomeIcon icon={faEnvelope} />}
+                        styling='btn btn--icon'
+                        onClick={toggleMessageForm}
+                    />
+                );
+            } else if(state.userType === USER_TYPES.ELDERSHIPS_ACCOUNT) {
+                return (
+                    <Button
+                        text={<FontAwesomeIcon icon={faPen} />}
+                        styling='btn btn--icon'
+                        onClick={togglePostSelectionForm}
+                    />
+                );
+            }
         }
     }
     
@@ -72,18 +102,14 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
             </div>
 
             <div className='eldership__header--content'>
-                <h1 className='header__primary eldership__header'>Vilniaus seniūnija</h1>
+                <h1 className='header__primary eldership__header'>{eldershipName}</h1>
 
                 <div className='eldership__header--buttons'>
                     {renderVisibleButton()}
                     <Button
-                    text={<FontAwesomeIcon icon={faPen} />}
-                    styling='btn btn--icon'
-                    onClick={togglePostSelectionForm}
-                />
-                    <Button
                         text={<FontAwesomeIcon icon={faMap} />}
                         styling='btn btn--icon'
+                        onClick={() => window.location.href = 'http://localhost:3000/map?events=true&places=true&free=true'}
                     />
                 </div>
             </div>
@@ -96,21 +122,21 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
 
             {state.isPostSelectionOpen &&
                 <Popup>
-                <PostSelection
-                    onClose={togglePostSelectionForm}
-                    onPostSelect={() => {
-                        togglePostSelectionForm();
-                        toggleNewPostForm();
-                    }}
-                    onNewEventSelect={() => {
-                        togglePostSelectionForm();
-                        toggleNewEventForm();
-                    }}
-                    onNewSurveySelect={() => {
-                        togglePostSelectionForm();
-                        toggleNewSurveyForm();
-                    }}
-                    />
+                    <PostSelection
+                        onClose={togglePostSelectionForm}
+                        onPostSelect={() => {
+                            togglePostSelectionForm();
+                            toggleNewPostForm();
+                        }}
+                        onNewEventSelect={() => {
+                            togglePostSelectionForm();
+                            toggleNewEventForm();
+                        }}
+                        onNewSurveySelect={() => {
+                            togglePostSelectionForm();
+                            toggleNewSurveyForm();
+                        }}
+                        />
                 </Popup>
             }
 
@@ -122,7 +148,6 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                             toggleNewPostForm();
                             togglePostSelectionForm();
                         }}
-                        onPost={() => window.location.reload()}
                     />
                 </Popup>
             }
@@ -153,92 +178,29 @@ export default function EldershipFeedContent({ photo, eldershipName }) {
                 </Popup>
             }
 
-
-
             <div className='eldership__feed'>
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
+                {posts.map((post, index) => {
+                    return (
+                        <Post
+                            eldershipName={eldershipName}
+                            pictureSource={eldershipPhoto}
+                            content={post.text}
+                            date={post.postDate.slice(0, post.postDate.indexOf('T'))}
+                            key={index}
+                        >
+                            {post.hasOwnProperty('name') ? 
+                                <EventPost event={post} /> :
+                                <p className='paragraph--post'>{post.text}</p>
+                            }
 
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
-
-                <Post
-                    eldershipName={'Vilniaus seniūnija'}
-                    pictureSource={eldershipPhoto}
-                    content={"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."}
-                    date={"2022-03-19"}
-                />
+                        </Post>
+                    );
+                })}
             </div>
         </div>
     );
 }
 
 EldershipFeedContent.prototype = {
-    photo: PropTypes.string.isRequired,
     eldershipName: PropTypes.string.isRequired
 }

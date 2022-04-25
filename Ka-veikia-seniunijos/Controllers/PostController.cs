@@ -25,7 +25,8 @@ namespace Ka_veikia_seniunijos.Controllers
         public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
         {
             eldership = eldership.ToLower();
-            var posts = _databaseContext.Post.Where(p => p.Eldership == eldership).OrderByDescending(p => p.Date).ToList();
+            var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            var posts = _databaseContext.Post.Where(p => p.Eldership == eldership_fk).OrderByDescending(p => p.PostDate).ToList();
             if (posts == null)
             {
                 return new JsonResult("Empty posts by " + eldership);

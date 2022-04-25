@@ -37,7 +37,7 @@ export default function Header() {
             },
             {
                 text: 'Žemėlapis',
-                onClick: () => window.location.href = 'http://localhost:3000/map'
+                onClick: () => window.location.href = 'http://localhost:3000/map?events=true&places=true&free=true'
             },
             {
                 text: 'Apie projektą',

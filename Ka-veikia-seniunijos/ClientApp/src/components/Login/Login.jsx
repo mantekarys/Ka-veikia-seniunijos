@@ -19,7 +19,7 @@ export default function Login({ onClose, onLoginRedirect }) {
     const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
 
-        axios.post('http://localhost:5000/api/user/auth', {
+        axios.post('https://localhost:44330/api/user/auth', {
                 'email': email,
                 'password': password
             })
@@ -33,7 +33,6 @@ export default function Login({ onClose, onLoginRedirect }) {
                 window.location.href = "http://localhost:3000/home";
             })
             .catch(err => {
-                console.log(err)
                 const {message} = err.response.data;
                 setErrorMessage(message);
             })

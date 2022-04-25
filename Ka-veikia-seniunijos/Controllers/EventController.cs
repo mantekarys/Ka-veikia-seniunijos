@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using MySqlConnector;
-using System;
 using System.Data;
-using System.Text;
+using Ka_veikia_seniunijos.ModelsEF;
+using System.Linq;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
 
@@ -13,50 +11,37 @@ namespace Ka_veikia_seniunijos.Controllers
     [ApiController]
     public class EventController : Controller
     {
-        private readonly IConfiguration _configuration;
+        public DatabaseContext _databaseContext;
+
         private IEventService _eventService;
 
-        public EventController(IConfiguration configuration, IEventService eventService)
+        public EventController(IEventService eventService, DatabaseContext databaseContext)
         {
-            _configuration = configuration;
             _eventService = eventService;
+            _databaseContext = databaseContext;
         }
 
         [HttpGet("{eldership}")]
         public JsonResult Get(string eldership, [FromQuery] string[] options = null)
         {
-            bool optionAdd = false;
             eldership = eldership.ToLowerInvariant();
-            StringBuilder query = new StringBuilder();
-            query.Append(@"select * from BSJ0CVGChE.Event where eldership_FK = 
-                        (SELECT id FROM Eldership WHERE name =" + "'" + eldership + "')");
-            if (options.Length > 0)
-            {
-                optionAdd = true;
-            }
-            if (optionAdd)
-            {
-                query.Append(" order By ");
+            var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            var events = _databaseContext
+                                    .Event.Where(e => e.Eldership == eldership_fk).ToList();
+            if (options.Contains("price"))
 
-            }
-            foreach (var opt in options)
             {
-                query.Append(opt + ", ");
+                events.OrderBy(e => e.Price);
             }
-            if (optionAdd)
+            if (options.Contains("name"))
             {
-                query.Length -= 2;
+                events.OrderBy(e => e.Name);
             }
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query.ToString();
-            MySqlDataReader rdr = myCommand.ExecuteReader();
-            DataTable table = new DataTable();
-            table.Load(rdr);
-            rdr.Close();
-            connection.Close();
-            return new JsonResult(table);
+            if (options.Contains("date"))
+            {
+                events.OrderBy(e => e.Date);
+            }
+            return new JsonResult(events);w
         }
 
         [HttpGet("pins")]

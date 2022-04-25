@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Helpers;
 using Ka_veikia_seniunijos.Services;
 using System;
+using MySql.EntityFrameworkCore.Extensions;
 using Newtonsoft.Json.Serialization;
 using Ka_veikia_seniunijos.Interfaces;
 
@@ -58,6 +61,8 @@ namespace Ka_veikia_seniunijos
             services.AddScoped<IPlaceService, PlaceService>();
 
             services.AddControllers();
+            // Database
+            services.AddDbContext<DatabaseContext>(options => options.UseMySQL(Configuration.GetConnectionString("AppCon")));
 
         }
 

@@ -28,7 +28,8 @@ namespace Ka_veikia_seniunijos.Controllers
             bool optionAdd = false;
             eldership = eldership.ToLowerInvariant();
             StringBuilder query = new StringBuilder();
-            query.Append(@"select * from BSJ0CVGChE.Event where eldership = " + "'" + eldership + "'");
+            query.Append(@"select * from BSJ0CVGChE.Event where eldership_FK = 
+                        (SELECT id FROM Eldership WHERE name =" + "'" + eldership + "')");
             if (options.Length > 0)
             {
                 optionAdd = true;
@@ -46,7 +47,6 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 query.Length -= 2;
             }
-            Console.WriteLine(query.ToString());
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();

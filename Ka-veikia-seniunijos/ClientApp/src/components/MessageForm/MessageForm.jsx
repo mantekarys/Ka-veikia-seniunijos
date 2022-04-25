@@ -9,9 +9,7 @@ import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
-
-// TODO: add verification if user wants to send mssg without topic
-// TODO: add success message or banner after message was sent
+import axios from 'axios';
 
 export default function MessageForm({ onClose }) {
     const [messageTopic, setMessageTopic] = useState('');
@@ -24,6 +22,14 @@ export default function MessageForm({ onClose }) {
             setErrorMessage('Žinutė negali būti tuščia!');
             setIsFormInvalid(true);
         }
+
+        // axios.post('https://localhost:44330/api/message', {
+
+        // })
+        // .then(resp => {
+
+        // })
+        // .catch
     }
 
     return (

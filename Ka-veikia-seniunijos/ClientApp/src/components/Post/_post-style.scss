@@ -37,11 +37,12 @@
             display: flex;
             flex-wrap: wrap;
             gap: 2rem;
-            align-items: center;
+            align-items: end;
         }
 
         &-name, &-date {
             font-weight: bold;
+            margin-bottom: 0;
         }
 
         &-name, &-icon {
@@ -62,10 +63,32 @@
                 color: $color-black;
             }
         }
+
+        &-event {
+            font-size: 1.8rem;
+        }
     }
 
     &__content {
         margin-top: 2rem;
+
+        &-event {
+            display: flex;
+            justify-content: space-between;
+
+            &--description {
+                margin-left: 1rem;
+            }
+
+            &--times {
+                display: flex;
+                gap: 2rem;
+            }
+
+            & p {
+                font-size: 1.6rem;
+            }
+        }
     }
 }
 

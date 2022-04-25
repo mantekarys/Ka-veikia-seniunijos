@@ -10,7 +10,8 @@ export default function Header() {
     const [isNavListVisible, setIsNavListVisible] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const userData = JSON.parse(sessionStorage['userData']);
+    const { FirstName, LastName, isEldership, Name } = JSON.parse(sessionStorage['userData']);
+
 
     useLayoutEffect(() => {
         const updateSize = () => {
@@ -22,12 +23,12 @@ export default function Header() {
     }, []);
 
     const handleOnProfileClick = () => {
-        const { FirstName, LastName } = JSON.parse(sessionStorage['userData']);
-        window.location.href = `http://localhost:3000/profile?name=${FirstName}.${LastName}`;
+        window.location.href = isEldership ? 
+        `http://localhost:3000/eldership?eldership=${Name}` :
+        `http://localhost:3000/profile?name=${FirstName}.${LastName}`;
     }
 
     const handleOnMessageClick = () => {
-        const { FirstName, LastName } = JSON.parse(sessionStorage['userData']);
         window.location.href = `http://localhost:3000/mailbox?name=${FirstName}.${LastName}`;
     }
 
@@ -74,13 +75,13 @@ export default function Header() {
                     <div className='header__user-info-wrapper'>
                     <FontAwesomeIcon className='header__user-icon' icon={faCaretDown} onClick={() => setIsNavListVisible(!isNavListVisible)} />
                     <h4 className='header__user-name'>
-                        {userData.isEldership ? userData.Municipality : userData.FirstName }
+                        {isEldership ? Name : FirstName }
                     </h4>
 
                     {isNavListVisible && <NavigationList content={getNavigationListContent() }/>}
                     </div>
 
-                    <img src={UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
+                    <img src={isEldership ? require(`../../../images/${Name}.png`) : UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />
                 </div>
             }
         </header>

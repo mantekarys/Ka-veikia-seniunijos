@@ -12,10 +12,8 @@ namespace Ka_veikia_seniunijos.Models
         public string Receiver { get; set; }
         public string ReceiverType { get; set; }
         public string Topic { get; set; }
-        public string Date { get; set; }
         public string Text { get; set; }
-        public bool Reply { get; set; }
-        public bool Received { get; set; }
+        public int? Reply { get; set; }
         public int Fk_user { get; set; }
         public int Fk_eldership { get; set; }
     }

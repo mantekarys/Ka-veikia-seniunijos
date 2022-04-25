@@ -52,11 +52,13 @@ namespace Ka_veikia_seniunijos.Controllers
             MySqlCommand command = user.Password == null ?
                                     getUserProfileUpdateCommand(user, connection) :
                                     getUesrPasswordUpdateCommand(user, connection);
+
+            command.Parameters.Add(new MySqlParameter("id", user.Id));
             try
             {
                 command.ExecuteNonQuery();
             }
-            catch
+            catch(Exception e)
             {
                 returnCode = 1062;
             }

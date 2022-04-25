@@ -7,6 +7,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
 using Ka_veikia_seniunijos.Models;
+using System.Collections.Generic;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -27,9 +28,9 @@ namespace Ka_veikia_seniunijos.Controllers
         public int Post(Message message)
         {
             string query = @"
-                        insert into BSJ0CVGChE.Message (sender, senderType, receiver, receiverType, topic, date, text, reply, received, fk_user, fk_eldership) values" +
-                        "('" + message.Sender + "','" + message.SenderType + "','" + message.Receiver + "','" + message.ReceiverType + "','" + message.Topic + "','" + message.Date + "','" + message.Text + "'," +
-                        message.Reply + "," + message.Received + "," + message.Fk_user + "," + message.Fk_eldership + ")";
+                        insert into BSJ0CVGChE.Message (sender, senderType, receiver, receiverType, topic, date, text,"+(message.Reply != null? "reply,":"")+" fk_user, fk_eldership) values" +
+                        "('" + message.Sender + "','" + message.SenderType + "','" + message.Receiver + "','" + message.ReceiverType + "','" + message.Topic + "','" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "','" + message.Text + "'," +
+                        (message.Reply != null ? message.Reply + "," : "") + message.Fk_user + "," + message.Fk_eldership + ")";
 
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
@@ -48,21 +49,40 @@ namespace Ka_veikia_seniunijos.Controllers
             return 200;//good
         }
 
-        [HttpGet("{id}/{user}")]
-        public JsonResult Get(int id, bool user)
+        [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received - sent - all
+        public JsonResult GetAll(int id, bool isUser, string type)
         {
-            string fk = user ? "fk_user" : "fk_eldership";
-            string query = @"select * from BSJ0CVGChE.Message where " + fk + " = " + id;
+            string fk = isUser ? "fk_user" : "fk_eldership";
+            string t = "";
+            if (type == "received") t = " and receiverType ='" + fk.Substring(3) + "'";
+            else if (type == "sent") t = " and senderType ='" + fk.Substring(3) + "'";
+            string query = @"select * from BSJ0CVGChE.Message where " + fk + " = " + id + t;
             using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
             connection.Open();
             MySqlCommand myCommand = connection.CreateCommand();
             myCommand.CommandText = query;
             MySqlDataReader rdr = myCommand.ExecuteReader();
-            DataTable table = new DataTable();
-            table.Load(rdr);
+            var tables = new List<DataTable>();
+            var ids = new List<int>();
+            while (rdr.Read())
+            {
+                bool flag = true;
+                if (rdr[8] is System.DBNull || ((type == "received" || type == "sent") && !ids.Contains((int)rdr[8]))) ids.Add((int)rdr[0]);
+            }
             rdr.Close();
+            foreach (var i in ids)
+            {
+                DataTable table = new DataTable();
+                string query2 = @"select * from BSJ0CVGChE.Message where reply = " + i + " OR id = " + i;
+                myCommand.CommandText = query2;
+                MySqlDataReader rdr2 = myCommand.ExecuteReader();
+                table.Load(rdr2);
+                tables.Add(table);
+                rdr2.Close();
+            }
+            myCommand.CommandText = query;
             connection.Close();
-            return new JsonResult(table);
+            return new JsonResult(tables);
         }
 
         [HttpDelete("{id}")]

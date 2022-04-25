@@ -2,16 +2,16 @@
 import GridElement from './GridElement';
 import PropTypes from 'prop-types';
 
-export default function Grid({ areas }) {
+export default function Grid({ elderships }) {
     return (
         <div className='grid u-margin-top-medium' id='grid'>
-            {areas.map((text, key) => {
-                return <GridElement text={text} key={key} />
+            {elderships.map((eldership, key) => {
+                return <GridElement text={eldership.name} key={key} />
             })}
         </div>
     );
 }
 
 Grid.prototype = {
-    areas: PropTypes.array
+    elderships: PropTypes.array
 }

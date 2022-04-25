@@ -25,7 +25,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
         const fetchData = async () => {
             try {
                 const result = await axios.get('https://localhost:44330/api/eldership');
-                const elderships = result.data.map(eldership => eldership.municipality);
+                const elderships = result.data.map(eldership => eldership.name);
                 setElderships(elderships);
             } catch(error) {
                 console.error(error);

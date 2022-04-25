@@ -70,7 +70,7 @@ namespace Ka_veikia_seniunijos.Services
                 if (eldership.Email != null && passwordMatches(model.Password, eldership.Password))
                 {
                     token = generateJwtToken(eldership.Id);
-                    authenticateResponse = new AuthenticateResponse(eldership.Id, null, null, eldership.Email,
+                    authenticateResponse = new AuthenticateResponse(eldership.Id, null, null, eldership.Email, eldership.Name,
                                                                     eldership.Municipality, token);
                 }
                 else
@@ -82,7 +82,7 @@ namespace Ka_veikia_seniunijos.Services
                 {
                     token = generateJwtToken(user.Id);
                     authenticateResponse = new AuthenticateResponse(user.Id, user.FirstName, user.LastName,
-                                                                    user.Email, user.Municipality, token);
+                                                                    user.Email, null, user.Municipality, token);
                 }
                 else
                     return null;
@@ -145,6 +145,7 @@ namespace Ka_veikia_seniunijos.Services
                 eldership.Id = reader.GetInt32("id");
                 eldership.Email = reader.GetString("email");
                 eldership.Municipality = reader.GetString("municipality");
+                eldership.Name = reader.GetString("name");
                 eldership.Password = reader.GetString("passwordHashed");
             }
 

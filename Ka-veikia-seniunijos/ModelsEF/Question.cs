@@ -11,6 +11,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
     {
         public int Id { get; set; }
         public string Text { get; set; }
+        public int? Rating { get; set; }
         public int Number { get; set; }
         public int ForeignSurvey { get; set; }
 

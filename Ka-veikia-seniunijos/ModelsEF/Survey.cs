@@ -15,9 +15,11 @@ namespace Ka_veikia_seniunijos.ModelsEF
         }
 
         public int Id { get; set; }
-        public int Name { get; set; }
-        public string Eldership { get; set; }
+        public string Name { get; set; }
+        public int EldershipFk { get; set; }
+        public DateTime Date { get; set; }
 
+        public virtual Eldership EldershipFkNavigation { get; set; }
         public virtual ICollection<Question> Question { get; set; }
     }
 }

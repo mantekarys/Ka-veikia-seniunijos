@@ -26,14 +26,14 @@ namespace Ka_veikia_seniunijos.Controllers
         {
             eldership = eldership.ToLower();
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
-            var posts = _databaseContext.Post.Where(p => p.Eldership == eldership_fk).OrderByDescending(p => p.PostDate).ToList();
+            var posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk).OrderByDescending(p => p.PostDate).ToList();
             if (posts == null)
             {
                 return new JsonResult("Empty posts by " + eldership);
             }
             if (!descending)
             {
-                posts.OrderBy(p => p.Date);
+                posts.OrderBy(p => p.PostDate);
             }
             return new JsonResult(posts);//good
         }

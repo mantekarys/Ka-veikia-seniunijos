@@ -11,8 +11,10 @@ namespace Ka_veikia_seniunijos.ModelsEF
     {
         public Eldership()
         {
+            Event = new HashSet<Event>();
             Message = new HashSet<Message>();
             Post = new HashSet<Post>();
+            Survey = new HashSet<Survey>();
         }
 
         public int Id { get; set; }
@@ -21,7 +23,9 @@ namespace Ka_veikia_seniunijos.ModelsEF
         public string Municipality { get; set; }
         public string PasswordHashed { get; set; }
 
+        public virtual ICollection<Event> Event { get; set; }
         public virtual ICollection<Message> Message { get; set; }
         public virtual ICollection<Post> Post { get; set; }
+        public virtual ICollection<Survey> Survey { get; set; }
     }
 }

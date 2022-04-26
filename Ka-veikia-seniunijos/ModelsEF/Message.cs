@@ -9,6 +9,11 @@ namespace Ka_veikia_seniunijos.ModelsEF
 {
     public partial class Message
     {
+        public Message()
+        {
+            InverseReplyNavigation = new HashSet<Message>();
+        }
+
         public int Id { get; set; }
         public string Sender { get; set; }
         public string SenderType { get; set; }
@@ -17,12 +22,13 @@ namespace Ka_veikia_seniunijos.ModelsEF
         public string Topic { get; set; }
         public DateTime Date { get; set; }
         public string Text { get; set; }
-        public bool Reply { get; set; }
-        public bool Received { get; set; }
+        public int? Reply { get; set; }
         public int FkUser { get; set; }
         public int FkEldership { get; set; }
 
         public virtual Eldership FkEldershipNavigation { get; set; }
         public virtual User FkUserNavigation { get; set; }
+        public virtual Message ReplyNavigation { get; set; }
+        public virtual ICollection<Message> InverseReplyNavigation { get; set; }
     }
 }

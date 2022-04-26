@@ -27,7 +27,7 @@ namespace Ka_veikia_seniunijos.Controllers
             eldership = eldership.ToLowerInvariant();
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
             var events = _databaseContext
-                                    .Event.Where(e => e.Eldership == eldership_fk).ToList();
+                                    .Event.Where(e => e.EldershipFk == eldership_fk).ToList();
             if (options.Contains("price"))
 
             {
@@ -41,7 +41,7 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 events.OrderBy(e => e.Date);
             }
-            return new JsonResult(events);w
+            return new JsonResult(events);
         }
 
         [HttpGet("pins")]

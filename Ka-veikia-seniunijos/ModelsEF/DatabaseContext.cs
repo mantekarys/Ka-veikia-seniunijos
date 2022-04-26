@@ -32,7 +32,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("Server=remotemysql.com;Database=BSJ0CVGChE;User ID= BSJ0CVGChE; password = wElEvnn5cl;");
+                optionsBuilder.UseMySQL("Server=remotemysql.com;Database=Database;User ID= Database; password = wElEvnn5cl;");
             }
         }
 
@@ -75,7 +75,17 @@ namespace Ka_veikia_seniunijos.ModelsEF
 
             modelBuilder.Entity<Event>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasIndex(e => e.EldershipFk)
+                    .HasName("eldership_FK");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.Address)
+                    .IsRequired()
+                    .HasColumnName("address")
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Date)
                     .HasColumnName("date")
@@ -85,32 +95,31 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .IsRequired()
                     .HasColumnName("description");
 
-                entity.Property(e => e.Eldership)
-                    .IsRequired()
-                    .HasColumnName("eldership")
-                    .HasMaxLength(20);
+                entity.Property(e => e.EldershipFk)
+                    .HasColumnName("eldership_FK")
+                    .HasColumnType("int(11)");
 
-                entity.Property(e => e.Id)
-                    .IsRequired()
-                    .HasColumnName("id")
-                    .HasMaxLength(8);
-
-                entity.Property(e => e.Municipality)
-                    .IsRequired()
-                    .HasColumnName("municipality")
-                    .HasMaxLength(15);
+                entity.Property(e => e.EndTime).HasColumnName("endTime");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.PostDate)
+                    .HasColumnName("postDate")
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("'curdate()'");
+
                 entity.Property(e => e.Price).HasColumnName("price");
 
-                entity.Property(e => e.Type)
-                    .IsRequired()
-                    .HasColumnName("type")
-                    .HasMaxLength(30);
+                entity.Property(e => e.StartTime).HasColumnName("startTime");
+
+                entity.HasOne(d => d.EldershipFkNavigation)
+                    .WithMany(p => p.Event)
+                    .HasForeignKey(d => d.EldershipFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("Event_ibfk_1");
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -120,6 +129,9 @@ namespace Ka_veikia_seniunijos.ModelsEF
 
                 entity.HasIndex(e => e.FkUser)
                     .HasName("user_message");
+
+                entity.HasIndex(e => e.Reply)
+                    .HasName("reply_message");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
@@ -137,8 +149,6 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .HasColumnName("fk_user")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Received).HasColumnName("received");
-
                 entity.Property(e => e.Receiver)
                     .IsRequired()
                     .HasColumnName("receiver")
@@ -149,7 +159,9 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .HasColumnName("receiverType")
                     .HasMaxLength(20);
 
-                entity.Property(e => e.Reply).HasColumnName("reply");
+                entity.Property(e => e.Reply)
+                    .HasColumnName("reply")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Sender)
                     .IsRequired()
@@ -180,6 +192,11 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .HasForeignKey(d => d.FkUser)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("user_message");
+
+                entity.HasOne(d => d.ReplyNavigation)
+                    .WithMany(p => p.InverseReplyNavigation)
+                    .HasForeignKey(d => d.Reply)
+                    .HasConstraintName("reply_message");
             });
 
             modelBuilder.Entity<Place>(entity =>
@@ -219,37 +236,35 @@ namespace Ka_veikia_seniunijos.ModelsEF
 
             modelBuilder.Entity<Post>(entity =>
             {
-                entity.HasIndex(e => e.Eldership)
-                    .HasName("Eldership_post");
+                entity.HasIndex(e => e.EldershipFk)
+                    .HasName("eldership_fk");
 
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Date)
-                    .HasColumnName("date")
+                entity.Property(e => e.EldershipFk)
+                    .HasColumnName("eldership_fk")
+                    .HasColumnType("int(11)");
+
+                entity.Property(e => e.PostDate)
+                    .HasColumnName("postDate")
                     .HasColumnType("date");
-
-                entity.Property(e => e.Eldership)
-                    .IsRequired()
-                    .HasColumnName("eldership")
-                    .HasMaxLength(20);
-
-                entity.Property(e => e.Header)
-                    .IsRequired()
-                    .HasColumnName("header")
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.Text)
                     .IsRequired()
                     .HasColumnName("text");
 
-                entity.HasOne(d => d.EldershipNavigation)
+                entity.Property(e => e.Topic)
+                    .IsRequired()
+                    .HasColumnName("topic")
+                    .HasMaxLength(30);
+
+                entity.HasOne(d => d.EldershipFkNavigation)
                     .WithMany(p => p.Post)
-                    .HasPrincipalKey(p => p.Name)
-                    .HasForeignKey(d => d.Eldership)
+                    .HasForeignKey(d => d.EldershipFk)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Eldership_post");
+                    .HasConstraintName("Post_ibfk_1");
             });
 
             modelBuilder.Entity<Question>(entity =>
@@ -269,6 +284,10 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .HasColumnName("number")
                     .HasColumnType("int(11)");
 
+                entity.Property(e => e.Rating)
+                    .HasColumnName("rating")
+                    .HasColumnType("int(11)");
+
                 entity.Property(e => e.Text)
                     .IsRequired()
                     .HasColumnName("text")
@@ -277,24 +296,36 @@ namespace Ka_veikia_seniunijos.ModelsEF
                 entity.HasOne(d => d.ForeignSurveyNavigation)
                     .WithMany(p => p.Question)
                     .HasForeignKey(d => d.ForeignSurvey)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("survey_question");
             });
 
             modelBuilder.Entity<Survey>(entity =>
             {
+                entity.HasIndex(e => e.EldershipFk)
+                    .HasName("eldership_survey");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Eldership)
-                    .IsRequired()
-                    .HasColumnName("eldership")
-                    .HasMaxLength(20);
+                entity.Property(e => e.Date)
+                    .HasColumnName("date")
+                    .HasColumnType("date");
+
+                entity.Property(e => e.EldershipFk)
+                    .HasColumnName("eldership_FK")
+                    .HasColumnType("int(11)");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasColumnName("name")
-                    .HasColumnType("int(20)");
+                    .HasMaxLength(20);
+
+                entity.HasOne(d => d.EldershipFkNavigation)
+                    .WithMany(p => p.Survey)
+                    .HasForeignKey(d => d.EldershipFk)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("eldership_survey");
             });
 
             modelBuilder.Entity<User>(entity =>

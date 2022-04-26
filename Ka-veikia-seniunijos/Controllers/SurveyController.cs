@@ -4,9 +4,11 @@ using MySqlConnector;
 using System;
 using System.Data;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
-using Ka_veikia_seniunijos.Models;
+using Ka_veikia_seniunijos.ModelsEF;
 using System.Globalization;
 
 namespace Ka_veikia_seniunijos.Controllers
@@ -15,27 +17,18 @@ namespace Ka_veikia_seniunijos.Controllers
     [ApiController]
     public class SurveyController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private IEventService _eventService;
+        private DatabaseContext _databaseContext;
 
-        public SurveyController(IConfiguration configuration, IEventService eventService)
+        public SurveyController(DatabaseContext databaseContext)
         {
-            _configuration = configuration;
-            _eventService = eventService;
+            _databaseContext = databaseContext;
         }
 
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
-            string query = @"select * from BSJ0CVGChE.Survey where id = " + id;
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            MySqlDataReader rdr = myCommand.ExecuteReader();
+            var survey = _databaseContext.Survey.FirstOrDefault(s => s.Id == id);
             DataTable table = new DataTable();
-            table.Load(rdr);
-            rdr.Close();
 
             string query2 = @"select * from BSJ0CVGChE.Question where foreign_survey = " + id;
             myCommand.CommandText = query2;

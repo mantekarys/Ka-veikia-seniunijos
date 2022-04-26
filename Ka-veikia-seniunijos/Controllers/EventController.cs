@@ -7,7 +7,6 @@ using Ka_veikia_seniunijos.ModelsEF;
 using System.Linq;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
-using Ka_veikia_seniunijos.Models;
 using System.Globalization;
 
 namespace Ka_veikia_seniunijos.Controllers
@@ -32,9 +31,8 @@ namespace Ka_veikia_seniunijos.Controllers
             eldership = eldership.ToLowerInvariant();
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
             var events = _databaseContext
-                                    .Event.Where(e => e.Eldership == eldership_fk).ToList();
+                                    .Event.Where(e => e.EldershipFk == eldership_fk).ToList();
             if (options.Contains("price"))
-
             {
                 events.OrderBy(e => e.Price);
             }
@@ -46,7 +44,7 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 events.OrderBy(e => e.Date);
             }
-            return new JsonResult(events);w
+            return new JsonResult(events);
         }
 
         [HttpGet("pins")]
@@ -60,26 +58,12 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Event ev)
         {
-            string query = @"
-                        insert into BSJ0CVGChE.Event (name, description, price, date, startTime, endTime, eldership_FK, address, latitude, longtitude, postDate) values" +
-                        "('" + ev.Name + "','" + ev.Description + "','" + ev.Price + "','" + ev.Date.ToString("o",CultureInfo.GetCultureInfo("en-US")) + "','" + ev.StartTime + "','" +
-                        ev.EndTime + "','" + ev.Eldership_FK + "','" + ev.Address + "'," + ev.Latitude + "," + ev.Longtitude + ",'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-
-            myCommand.CommandText = query;
-            try
+            _databaseContext.Event.Add(ev);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
             {
-                myCommand.ExecuteNonQuery();
+                return 1062;
             }
-            catch (Exception e)
-            {
-                connection.Close();
-                return -1;//error
-            }
-            connection.Close();
             return 200;//good
 
         }
@@ -87,62 +71,46 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Event ev)
         {
-            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            int returnCode = 200;
-
-            MySqlCommand command = new MySqlCommand("UPDATE BSJ0CVGChE.Event SET " +
-                            "name=?name, " +
-                            "description=?description, " +
-                            "price=?price, " +
-                            "date=?date, " +
-                            "startTime=?startTime, " +
-                            "endTime=?endTime, " +
-                            "eldership_FK=?eldership_FK, " +
-                            "address=?address, " +
-                            "latitude=?latitude, " +
-                            "longtitude=?longtitude, " +
-                            "postDate=?postDate " +
-                            "WHERE Id=?id", connection);
-
-            command.Parameters.Add(new MySqlParameter("name", ev.Name));
-            command.Parameters.Add(new MySqlParameter("description", ev.Description));
-            command.Parameters.Add(new MySqlParameter("price", ev.Price));
-            command.Parameters.Add(new MySqlParameter("date", ev.Date));
-            command.Parameters.Add(new MySqlParameter("startTime", ev.StartTime));
-            command.Parameters.Add(new MySqlParameter("endTime", ev.EndTime));
-            command.Parameters.Add(new MySqlParameter("eldership_FK", ev.Eldership_FK));
-            command.Parameters.Add(new MySqlParameter("address", ev.Address));
-            command.Parameters.Add(new MySqlParameter("latitude", ev.Latitude));
-            command.Parameters.Add(new MySqlParameter("longtitude", ev.Longtitude));
-            command.Parameters.Add(new MySqlParameter("postDate", ev.PostDate));
-            command.Parameters.Add(new MySqlParameter("id", ev.Id));
-            try
+            var dbEvent = _databaseContext.Event.FirstOrDefault(e => e.Id == ev.Id);
+            if (dbEvent == null)
             {
-                command.ExecuteNonQuery();
+                return 1062;
             }
-            catch(Exception e)
+            dbEvent = ev;
+            // dbEvent.Name = ev.Name;
+            // dbEvent.Description = ev.Description;
+            // dbEvent.Price = ev.Price;
+            // dbEvent.Date = ev.Date;
+            // dbEvent.StartTime = ev.StartTime;
+            // dbEvent.EndTime = ev.EndTime;
+            // dbEvent.EldershipFk = ev.EldershipFk;
+            // dbEvent.Address = ev.Address;
+            // dbEvent.Latitude = ev.Latitude;
+            // dbEvent.Longtitude = ev.Longtitude;
+            // dbEvent.PostDate = ev.PostDate;
+            _databaseContext.Event.Update(dbEvent);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
             {
-                returnCode = 1062;
+                return 1062;
             }
-
-            connection.Close();
-            return returnCode;
+            return 200;
         }
 
         [HttpDelete("{id}")]
         public int Delete(int id)
         {
-            string query = @"
-                    delete from  BSJ0CVGChE.Event
-                    where id = " + id + @" 
-                    ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            myCommand.ExecuteNonQuery();
-            connection.Close();
+            var ev = _databaseContext.Event.FirstOrDefault(p => p.Id == id);
+            if (ev == null)
+            {
+                return 1062;
+            }
+            _databaseContext.Event.Remove(ev);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+            {
+                return 1062;
+            }
             return 200;//good
         }
     }

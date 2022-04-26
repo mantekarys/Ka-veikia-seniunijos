@@ -17,41 +17,54 @@ namespace Ka_veikia_seniunijos.Controllers
     public class MessageController : Controller
     {
         private DatabaseContext _databaseContext;
-        private IEventService _eventService;
-
-        public MessageController(DatabaseContext databaseContext, IEventService eventService)
+        public MessageController(DatabaseContext databaseContext)
         {
             _databaseContext = databaseContext;
-            _eventService = eventService;
         }
 
         [HttpPost]
         public int Post(Message message)
         {
+			message.Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             _databaseContext.Message.Add(message);
             _databaseContext.SaveChanges();
             return 200;//good
-
         }
 
-        [HttpGet("{id}/{user}")]
-        public JsonResult Get(int id, bool user)
+        [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received - sent - all
+        public JsonResult GetAll(int id, bool isUser, string type)
         {
-            List<Message> messages = new List<Message>();
-            if (user)
+            string fk = isUser ? "fk_user" : "fk_eldership";
+            string t = "";
+            if (type == "received") t = " and receiverType ='" + fk.Substring(3) + "'";
+            else if (type == "sent") t = " and senderType ='" + fk.Substring(3) + "'";
+            string query = @"select * from BSJ0CVGChE.Message where " + fk + " = " + id + t;
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
+            connection.Open();
+            MySqlCommand myCommand = connection.CreateCommand();
+            myCommand.CommandText = query;
+            MySqlDataReader rdr = myCommand.ExecuteReader();
+            var tables = new List<DataTable>();
+            var ids = new List<int>();
+            while (rdr.Read())
             {
-                messages = _databaseContext.Message.Where(m => m.FkUser == id).ToList();
+                bool flag = true;
+                if (rdr[8] is System.DBNull || ((type == "received" || type == "sent") && !ids.Contains((int)rdr[8]))) ids.Add((int)rdr[0]);
             }
-            else if (!user)
+            rdr.Close();
+            foreach (var i in ids)
             {
-                messages = _databaseContext.Message.Where(m => m.FkEldership == id).ToList();
+                DataTable table = new DataTable();
+                string query2 = @"select * from BSJ0CVGChE.Message where reply = " + i + " OR id = " + i;
+                myCommand.CommandText = query2;
+                MySqlDataReader rdr2 = myCommand.ExecuteReader();
+                table.Load(rdr2);
+                tables.Add(table);
+                rdr2.Close();
             }
-            else
-            {
-                return new JsonResult(1062);
-            }
-
-            return new JsonResult(messages);
+            myCommand.CommandText = query;
+            connection.Close();
+            return new JsonResult(tables);
         }
 
         [HttpDelete("{id}")]

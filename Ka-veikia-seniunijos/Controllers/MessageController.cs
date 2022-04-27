@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
 using System.Data;
+using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
-using Ka_veikia_seniunijos.Models;
+using Ka_veikia_seniunijos.ModelsEF;
+using System.Linq;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -14,72 +16,78 @@ namespace Ka_veikia_seniunijos.Controllers
     [ApiController]
     public class MessageController : Controller
     {
-        private readonly IConfiguration _configuration;
-        private IEventService _eventService;
-
-        public MessageController(IConfiguration configuration, IEventService eventService)
+        private DatabaseContext _databaseContext;
+        public MessageController(DatabaseContext databaseContext)
         {
-            _configuration = configuration;
-            _eventService = eventService;
+            _databaseContext = databaseContext;
         }
 
         [HttpPost]
         public int Post(Message message)
         {
-            string query = @"
-                        insert into BSJ0CVGChE.Message (sender, senderType, receiver, receiverType, topic, date, text, reply, received, fk_user, fk_eldership) values" +
-                        "('" + message.Sender + "','" + message.SenderType + "','" + message.Receiver + "','" + message.ReceiverType + "','" + message.Topic + "','" + message.Date + "','" + message.Text + "'," +
-                        message.Reply + "," + message.Received + "," + message.Fk_user + "," + message.Fk_eldership + ")";
-
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-
-            myCommand.CommandText = query;
-            try
-            {
-                myCommand.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                connection.Close();
-                return 1062;//error
-            }
-            connection.Close();
+            // message.Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            _databaseContext.Message.Add(message);
+            _databaseContext.SaveChanges();
             return 200;//good
-
         }
 
-        [HttpGet("{id}/{user}")]
-        public JsonResult Get(int id, bool user)
+        [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received - sent - all
+        public JsonResult GetAll(int id, bool isUser, string type)
         {
-            string fk = user ? "fk_user" : "fk_eldership";
-            string query = @"select * from BSJ0CVGChE.Message where " + fk + " = " + id;
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            MySqlDataReader rdr = myCommand.ExecuteReader();
-            DataTable table = new DataTable();
-            table.Load(rdr);
-            rdr.Close();
-            connection.Close();
-            return new JsonResult(table);
+            List<Message> messages = new List<Message>();
+            List<int> ids = new List<int>();
+            List<List<Message>> repliesAll = new List<List<Message>>();
+            if (isUser && type == "received")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkUser == id && m.ReceiverType == "user").ToList();
+            }
+            else if (isUser && type == "sent")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkUser == id && m.SenderType == "user").ToList();
+            }
+            else if (!isUser && type == "received")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkEldership == id && m.ReceiverType == "eldership").ToList();
+            }
+            else if (isUser && type == "sent")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkEldership == id && m.SenderType == "eldership").ToList();
+            }
+            else
+            {
+                return new JsonResult(BadRequest());
+            }
+            foreach (var mes in messages)
+            {
+                if (mes.Reply != null || ((type == "received" || type == "sent") && !ids.Contains((int)mes.Reply)))
+                {
+                    ids.Add(mes.Id);
+                }
+
+            }
+            // while (rdr.Read())
+            // {
+            //     bool flag = true;
+            //     if (rdr[8] is System.DBNull || ((type == "received" || type == "sent") && !ids.Contains((int)rdr[8]))) ids.Add((int)rdr[0]);
+            // }
+            foreach (var i in ids)
+            {
+                var replies = _databaseContext.Message.Where(m => m.Reply == i || m.Id == i).ToList();
+                repliesAll.Add(replies);
+            }
+            return new JsonResult(repliesAll);
         }
 
         [HttpDelete("{id}")]
         public int Delete(int id)
         {
-            string query = @"
-                    delete from  BSJ0CVGChE.Message
-                    where id = " + id + @" 
-                    ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            myCommand.ExecuteNonQuery();
-            connection.Close();
+            var message = _databaseContext.Message.FirstOrDefault(m => m.Id == id);
+            if (message == null)
+            {
+                return 1062;
+            }
+            _databaseContext.Message.Remove(message);
+            _databaseContext.SaveChanges();
             return 200;//good
         }
     }

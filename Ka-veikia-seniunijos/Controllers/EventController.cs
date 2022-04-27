@@ -1,11 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
 using System.Data;
-using System.Text;
+using Ka_veikia_seniunijos.ModelsEF;
+using System.Linq;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
+using System.Globalization;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -13,50 +15,36 @@ namespace Ka_veikia_seniunijos.Controllers
     [ApiController]
     public class EventController : Controller
     {
-        private readonly IConfiguration _configuration;
+        public DatabaseContext _databaseContext;
+
         private IEventService _eventService;
 
-        public EventController(IConfiguration configuration, IEventService eventService)
+        public EventController(IEventService eventService, DatabaseContext databaseContext)
         {
-            _configuration = configuration;
             _eventService = eventService;
+            _databaseContext = databaseContext;
         }
 
         [HttpGet("{eldership}")]
         public JsonResult Get(string eldership, [FromQuery] string[] options = null)
         {
-            bool optionAdd = false;
             eldership = eldership.ToLowerInvariant();
-            StringBuilder query = new StringBuilder();
-            query.Append(@"select * from BSJ0CVGChE.Event where eldership_FK = 
-                        (SELECT id FROM Eldership WHERE name =" + "'" + eldership + "')");
-            if (options.Length > 0)
+            var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            var events = _databaseContext
+                                    .Event.Where(e => e.EldershipFk == eldership_fk).ToList();
+            if (options.Contains("price"))
             {
-                optionAdd = true;
+                events.OrderBy(e => e.Price);
             }
-            if (optionAdd)
+            if (options.Contains("name"))
             {
-                query.Append(" order By ");
-
+                events.OrderBy(e => e.Name);
             }
-            foreach (var opt in options)
+            if (options.Contains("date"))
             {
-                query.Append(opt + ", ");
+                events.OrderBy(e => e.Date);
             }
-            if (optionAdd)
-            {
-                query.Length -= 2;
-            }
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query.ToString();
-            MySqlDataReader rdr = myCommand.ExecuteReader();
-            DataTable table = new DataTable();
-            table.Load(rdr);
-            rdr.Close();
-            connection.Close();
-            return new JsonResult(table);
+            return new JsonResult(events);
         }
 
         [HttpGet("pins")]
@@ -65,6 +53,65 @@ namespace Ka_veikia_seniunijos.Controllers
             string result = _eventService.GetAllPinsJson(free);
             JsonResult table = new JsonResult(JsonConvert.DeserializeObject(result));
             return table;
+        }
+
+        [HttpPost]
+        public int Post(Event ev)
+        {
+            _databaseContext.Event.Add(ev);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+            {
+                return 1062;
+            }
+            return 200;//good
+
+        }
+
+        [HttpPut]
+        public int Put(Event ev)
+        {
+            var dbEvent = _databaseContext.Event.FirstOrDefault(e => e.Id == ev.Id);
+            if (dbEvent == null)
+            {
+                return 1062;
+            }
+            dbEvent = ev;
+            // dbEvent.Name = ev.Name;
+            // dbEvent.Description = ev.Description;
+            // dbEvent.Price = ev.Price;
+            // dbEvent.Date = ev.Date;
+            // dbEvent.StartTime = ev.StartTime;
+            // dbEvent.EndTime = ev.EndTime;
+            // dbEvent.EldershipFk = ev.EldershipFk;
+            // dbEvent.Address = ev.Address;
+            // dbEvent.Latitude = ev.Latitude;
+            // dbEvent.Longtitude = ev.Longtitude;
+            // dbEvent.PostDate = ev.PostDate;
+            _databaseContext.Event.Update(dbEvent);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+            {
+                return 1062;
+            }
+            return 200;
+        }
+
+        [HttpDelete("{id}")]
+        public int Delete(int id)
+        {
+            var ev = _databaseContext.Event.FirstOrDefault(p => p.Id == id);
+            if (ev == null)
+            {
+                return 1062;
+            }
+            _databaseContext.Event.Remove(ev);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+            {
+                return 1062;
+            }
+            return 200;//good
         }
     }
 }

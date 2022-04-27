@@ -30,7 +30,7 @@ export default function EldershipFeedContent() {
     const url = new URL(window.location.href);
     const eldershipName = url.searchParams.get("eldership");
     const [posts, setPosts] = useState([]);
-    const { Name, isEldership } = JSON.parse(sessionStorage['userData']);
+    const [sessionData, setSessionData] = useState(null);
 
     const USER_TYPES = {
         GUEST: 'GUEST',
@@ -41,6 +41,7 @@ export default function EldershipFeedContent() {
 
     useEffect(() => {
         const userType = getUserType();
+        if(userType !== USER_TYPES.GUEST) sessionData(JSON.parse(sessionStorage['userData']));
         setUserType(userType);
     }, []);
 
@@ -61,8 +62,8 @@ export default function EldershipFeedContent() {
 
     const getUserType = () => {
         if (sessionStorage['userData']) {
-            if(isEldership) {
-               return Name === eldershipName ? USER_TYPES.ELDERSHIPS_ACCOUNT : USER_TYPES.ELDERSHIP;
+            if(sessionData.isEldership) {
+               return sessionData.Name === eldershipName ? USER_TYPES.ELDERSHIPS_ACCOUNT : USER_TYPES.ELDERSHIP;
             }
             return  USER_TYPES.RESIDENT;
         }

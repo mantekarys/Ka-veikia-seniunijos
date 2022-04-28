@@ -30,7 +30,7 @@ export default function EldershipFeedContent() {
     const url = new URL(window.location.href);
     const eldershipName = url.searchParams.get("eldership");
     const [posts, setPosts] = useState([]);
-    const { Name, isEldership } = JSON.parse(sessionStorage['userData']);
+    const [isAutohor, setIsAuthor] = useState(false);
 
     const USER_TYPES = {
         GUEST: 'GUEST',
@@ -61,8 +61,14 @@ export default function EldershipFeedContent() {
 
     const getUserType = () => {
         if (sessionStorage['userData']) {
-            if(isEldership) {
-               return Name === eldershipName ? USER_TYPES.ELDERSHIPS_ACCOUNT : USER_TYPES.ELDERSHIP;
+            const session = JSON.parse(sessionStorage['userData']);
+            if(session.isEldership) {
+                if(session.Name === eldershipName) {
+                    setIsAuthor(true);
+                    return USER_TYPES.ELDERSHIPS_ACCOUNT;
+                }
+
+               return USER_TYPES.ELDERSHIP;
             }
             return  USER_TYPES.RESIDENT;
         }
@@ -187,6 +193,7 @@ export default function EldershipFeedContent() {
                             content={post.text}
                             date={post.postDate.slice(0, post.postDate.indexOf('T'))}
                             key={index}
+                            isAutohor={isAutohor}
                         >
                             {post.hasOwnProperty('name') ? 
                                 <EventPost event={post} /> :

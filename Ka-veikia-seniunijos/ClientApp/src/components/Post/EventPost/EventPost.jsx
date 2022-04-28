@@ -8,7 +8,7 @@ export default function EventPost({event}) {
     <>
         <h3 className='header__tertiary'>Renginys</h3>
         <p className='post__header-event'><b>{event.name}</b></p>
-        <p>{event.desciption}</p>
+        <p>{event.description}</p>
         <div className='post__content-event'>
             <div className='post__content-event--left'>
                 <p>
@@ -17,7 +17,7 @@ export default function EventPost({event}) {
                 </p>
                 <p>
                     <FontAwesomeIcon icon={faCalendar} />
-                    <span className='post__content-event--description'><b>Data: </b>{event.date}</span>
+                    <span className='post__content-event--description'><b>Data: </b>{event.date.slice(0, 10)}</span>
                 </p>
             </div>
             <div className='post__content-event--right'>

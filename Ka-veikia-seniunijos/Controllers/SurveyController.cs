@@ -24,117 +24,75 @@ namespace Ka_veikia_seniunijos.Controllers
             _databaseContext = databaseContext;
         }
 
+        //Specific survey by ID
         [HttpGet("{id}")]
         public JsonResult Get(int id)
         {
             var survey = _databaseContext.Survey.FirstOrDefault(s => s.Id == id);
-            DataTable table = new DataTable();
-
-            string query2 = @"select * from BSJ0CVGChE.Question where foreign_survey = " + id;
-            myCommand.CommandText = query2;
-            MySqlDataReader rdr2 = myCommand.ExecuteReader();
-            DataTable table2 = new DataTable();
-            table2.Load(rdr2);
-            rdr2.Close();
-
-            connection.Close();
-            DataTable[] arr = { table, table2 };
-            return new JsonResult(arr);
+            if (survey == null)
+            {
+                return new JsonResult(BadRequest());
+            }
+            var questions = _databaseContext.Question.Where(q => q.ForeignSurvey == id).ToList();
+            foreach (var q in questions)
+            {
+                survey.Question.Add(q);
+            }
+            return new JsonResult(survey);
         }
 
         [HttpPost]
         public int Post(Survey survey)
         {
-            string query = @"
-                        insert into BSJ0CVGChE.Survey (name, eldership, date) values" +
-                        "('" + survey.Name + "'," + survey.Eldership_FK + ",'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-
-
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            try
+            _databaseContext.Survey.Add(survey);
+            var lastSurvey = _databaseContext.Survey.Last();
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
             {
-                myCommand.ExecuteNonQuery();
-
-                int surveyId = (int)myCommand.LastInsertedId;
-                foreach (var question in survey.Questions)
-                {
-                    string query2 = @"
-                        insert into BSJ0CVGChE.Question (text, " + (question.Rating != null ? "rating," : "") + " number, foreign_survey) values" +
-                        "('" + question.Text + "'," + (question.Rating != null ? question.Rating + "," : "") + question.Number + "," + surveyId + ")";
-                    myCommand.CommandText = query2;
-                    myCommand.ExecuteNonQuery();
-                }
+                return 1062;
             }
-            catch (Exception e)
+            foreach (var question in survey.Question)
             {
-                connection.Close();
-                return -1;//error
+                question.ForeignSurvey = lastSurvey.Id;
+                _databaseContext.Question.Add(question);
             }
-            connection.Close();
+            update = _databaseContext.SaveChanges();
             return 200;//good
         }
 
         [HttpPut]
         public int Put(Survey survey)
         {
-            MySqlConnection connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            int returnCode = 200;
-
-            MySqlCommand command = new MySqlCommand("UPDATE BSJ0CVGChE.Survey SET " +
-                            "name=?name, " +
-                            "eldership_FK=?eldership_FK, " +
-                            "date=?date " +
-                            "WHERE id=?id", connection);
-
-            command.Parameters.Add(new MySqlParameter("name", survey.Name));
-            command.Parameters.Add(new MySqlParameter("eldership_FK", survey.Eldership_FK));
-            command.Parameters.Add(new MySqlParameter("date", survey.Date));
-            command.Parameters.Add(new MySqlParameter("id", survey.Id));
-
-            try
+            var dbSurvey = _databaseContext.Survey.SingleOrDefault(s => s.Id == survey.Id);
+            dbSurvey = survey;
+            _databaseContext.Survey.Update(dbSurvey);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
             {
-                command.ExecuteNonQuery();
-                foreach (var question in survey.Questions)
-                {
-                    command.Parameters.Clear();
-                    string query2 = "UPDATE BSJ0CVGChE.Question SET " +
-                            "text=?text, " +
-                            "rating=?rating, " +
-                            "number=?number " +
-                            "WHERE id=?id";
-                    command.CommandText = query2;
-                    command.Parameters.Add(new MySqlParameter("text", question.Text));
-                    command.Parameters.Add(new MySqlParameter("rating", question.Rating));
-                    command.Parameters.Add(new MySqlParameter("number", question.Number));
-                    command.Parameters.Add(new MySqlParameter("id", question.Id));
-                    command.ExecuteNonQuery();
-                }
+                return 1062;
             }
-            catch (Exception e)
+            foreach (var question in survey.Question)
             {
-                returnCode = 1062;
+                question.ForeignSurvey = dbSurvey.Id;
+                _databaseContext.Question.Update(question);
             }
-
-            connection.Close();
-            return returnCode;
+            update = _databaseContext.SaveChanges();
+            return 200;
         }
         [HttpDelete("{id}")]
         public int Delete(int id)
         {
-            string query = @"
-                    delete from  BSJ0CVGChE.Survey
-                    where id = " + id + @" 
-                    ";
-            using var connection = new MySqlConnection(_configuration.GetConnectionString("AppCon"));
-            connection.Open();
-            MySqlCommand myCommand = connection.CreateCommand();
-            myCommand.CommandText = query;
-            myCommand.ExecuteNonQuery();
-            connection.Close();
+            var survey = _databaseContext.Survey.FirstOrDefault(s => s.Id == id);
+            if (survey == null)
+            {
+                return 1062;
+            }
+            _databaseContext.Survey.Remove(survey);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+            {
+                return 1062;
+            }
             return 200;//good
         }
     }

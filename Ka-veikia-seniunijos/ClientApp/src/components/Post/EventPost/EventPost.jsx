@@ -8,7 +8,7 @@ export default function EventPost({event}) {
     <>
         <h3 className='header__tertiary'>Renginys</h3>
         <p className='post__header-event'><b>{event.name}</b></p>
-        <p>{event.desciption}</p>
+        <p>{event.description}</p>
         <div className='post__content-event'>
             <div className='post__content-event--left'>
                 <p>

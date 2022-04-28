@@ -78,7 +78,7 @@ export default function Header() {
                         {isEldership ? Name : FirstName }
                     </h4>
 
-                    {isNavListVisible && <NavigationList content={getNavigationListContent() }/>}
+                    {isNavListVisible && <NavigationList content={getNavigationListContent() } side='left'/>}
                     </div>
 
                     <img src={isEldership ? require(`../../../images/${Name}.png`) : UserPicture} alt='Vartotojo nuotrauka' className='header__user-picture' />

@@ -9,6 +9,7 @@ export default function HomeContent() {
     useEffect(() => {
         const fetchElderships = async () => {
             const eldershipData = await axios.get('https://localhost:44330/api/eldership/');
+            console.log(eldershipData)
             setElderships(eldershipData.data);
         }
 

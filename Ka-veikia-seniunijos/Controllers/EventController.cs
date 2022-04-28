@@ -71,24 +71,7 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Event ev)
         {
-            var dbEvent = _databaseContext.Event.FirstOrDefault(e => e.Id == ev.Id);
-            if (dbEvent == null)
-            {
-                return 1062;
-            }
-            dbEvent = ev;
-            // dbEvent.Name = ev.Name;
-            // dbEvent.Description = ev.Description;
-            // dbEvent.Price = ev.Price;
-            // dbEvent.Date = ev.Date;
-            // dbEvent.StartTime = ev.StartTime;
-            // dbEvent.EndTime = ev.EndTime;
-            // dbEvent.EldershipFk = ev.EldershipFk;
-            // dbEvent.Address = ev.Address;
-            // dbEvent.Latitude = ev.Latitude;
-            // dbEvent.Longtitude = ev.Longtitude;
-            // dbEvent.PostDate = ev.PostDate;
-            _databaseContext.Event.Update(dbEvent);
+            _databaseContext.Event.Update(ev);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {

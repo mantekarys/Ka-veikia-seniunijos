@@ -24,7 +24,8 @@ export default function EldershipFeedContent() {
         toggleNewPostForm,
         toggleNewEventForm,
         toggleNewSurveyForm,
-        setUserType
+        setUserType,
+        setEditablePostText
     } = useContext(GlobalContext);
 
     const url = new URL(window.location.href);
@@ -149,11 +150,15 @@ export default function EldershipFeedContent() {
             {state.isNewPostFromOpen &&
                 <Popup>
                     <PostForm
-                        onClose={toggleNewPostForm}
+                        onClose={() => {
+                            setEditablePostText(null);
+                            toggleNewPostForm();
+                        }}
                         onBack={() => {
                             toggleNewPostForm();
                             togglePostSelectionForm();
                         }}
+                        postContent={state.editablePost}
                     />
                 </Popup>
             }
@@ -191,15 +196,15 @@ export default function EldershipFeedContent() {
                             eldershipName={eldershipName}
                             pictureSource={eldershipPhoto}
                             content={post.text}
-                            date={post.postDate.slice(0, post.postDate.indexOf('T'))}
+                            date={post.PostDate.slice(0, post.PostDate.indexOf('T'))}
                             key={index}
                             isAutohor={isAutohor}
+                            id={post.Id}
                         >
-                            {post.hasOwnProperty('name') ? 
+                            {post.hasOwnProperty('Name') ? 
                                 <EventPost event={post} /> :
-                                <p className='paragraph--post'>{post.text}</p>
+                                <p className='paragraph--post'>{post.Text}</p>
                             }
-
                         </Post>
                     );
                 })}

@@ -1,20 +1,35 @@
-﻿import React, {useState} from 'react';
+﻿import React, {useContext, useState, useEffect} from 'react';
 import NavigationList from '../NavigationList/NavigationList';
+import { GlobalContext } from '../Pages/Eldership-feed/Context/GlobalState';
 import './_post-style.scss';
 import '../Utils/_base.scss';
 import '../Utils/_typography.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios';
 
 export default function Post(props) {
+    const { state, toggleNewPostForm, setEditablePostText } = useContext(GlobalContext);
     const [isOptionsOpen, setIsOptionOpen] = useState(false);
-    const handleOnPostEdit = () => {
 
+    const handleOnPostEdit = () => {
+        axios.get(`https://localhost:44330/api/post/${props.id}`)
+        .then(res => {
+            setEditablePostText({
+                text: res.data.Text,
+                id: res.data.Id
+            });
+            toggleNewPostForm();
+        });
     }
 
     const handleOnPostDelete = () =>{
 
     }
+
+    useEffect(() => {
+        if(state.isNewPostFromOpen) setIsOptionOpen(false)
+    }, [state.isNewPostFromOpen])
 
     const navigationListContent = [
         {

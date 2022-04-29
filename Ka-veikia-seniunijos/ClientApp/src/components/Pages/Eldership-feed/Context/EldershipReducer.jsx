@@ -30,6 +30,11 @@
                 ...state,
                 userType: action.userType
             }
+        case 'SET_POST_TEXT':
+            return {
+                ...state,
+                editablePost: action.postContent
+            }
         default:
             return state;
     }

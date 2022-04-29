@@ -9,13 +9,18 @@ import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function PostForm({ onClose, onBack }) {
-    const [text, setText] = useState("");
+export default function PostForm({ onClose, onBack, postContent }) {
+    const [text, setText] = useState(postContent?.text ? postContent.text : "");
     const [error, setError] = useState("");
 
     const handleOnSubmit = () => {
         if (!text) {
             setError('Įrašo tekstas neagli būti tuščias!');
+            return;
+        }
+
+        if(text && postContent?.text) {
+            handleOnUpdate();
             return;
         }
         const todaysDate = getTodaysDate();
@@ -29,6 +34,13 @@ export default function PostForm({ onClose, onBack }) {
         //     setErrorMessage('Įvyko nenumatyta klaida');
         // })
         window.location.reload();
+    }
+
+    const handleOnUpdate = () => {
+        if(text === postContent.text) {
+            setError('Įrašo tekstas nepasikeitė!');
+            return;
+        }
     }
 
     const getTodaysDate = () => {
@@ -50,13 +62,16 @@ export default function PostForm({ onClose, onBack }) {
             {error && <Error text={error} />}
 
             <div className='post-form__buttons'>
+                {!postContent?.text &&
+                    <Button
+                        text='Atgal'
+                        styling='btn btn--post-small'
+                        onClick={onBack}
+                    />
+                }
+
                 <Button
-                    text='Atgal'
-                    styling='btn btn--post-small'
-                    onClick={onBack}
-                />
-                <Button
-                    text='Skelbti'
+                    text={postContent?.text ? 'Atnaujinti' : 'Skelbti'}
                     styling='btn btn--post-small'
                     onClick={handleOnSubmit}
                 />
@@ -68,4 +83,8 @@ export default function PostForm({ onClose, onBack }) {
 PostForm.propTypes = {
     onClose: PropTypes.func,
     onBack: PropTypes.func,
+    postContent: PropTypes.shape({
+        text: PropTypes.string,
+        id: PropTypes.number
+    })
 }

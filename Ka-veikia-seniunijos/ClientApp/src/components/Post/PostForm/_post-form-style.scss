@@ -5,10 +5,9 @@
     &__container {
         @include absCenter;
         width: 40%;
-        height: 35rem;
         background-color: $color-white;
         border-radius: $default-form-border-radius;
-        padding: 0 2rem;
+        padding: 2rem;
 
         @include respond(tab-land) {
             width: 60%;

@@ -25,7 +25,7 @@ export default function EldershipFeedContent() {
         toggleNewEventForm,
         toggleNewSurveyForm,
         setUserType,
-        setEditablePostText
+        resetEditableContent
     } = useContext(GlobalContext);
 
     const url = new URL(window.location.href);
@@ -40,10 +40,19 @@ export default function EldershipFeedContent() {
         ELDERSHIPS_ACCOUNT: 'ELDERSHIPS_ACCOUNT'
     }
 
+    const POST_TYPES = {
+        POST: 'POST',
+        EVENT: 'EVENT'
+    }
+
     useEffect(() => {
         const userType = getUserType();
         setUserType(userType);
     }, []);
+
+    useEffect(() => {
+        resetEditableContent();
+    }, [])
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -151,7 +160,7 @@ export default function EldershipFeedContent() {
                 <Popup>
                     <PostForm
                         onClose={() => {
-                            setEditablePostText(null);
+                            resetEditableContent();
                             toggleNewPostForm();
                         }}
                         onBack={() => {
@@ -166,12 +175,15 @@ export default function EldershipFeedContent() {
             {state.isNewEventFormOpen &&
                 <Popup>
                     <EventForm
-                    onClose={toggleNewEventForm}
+                    onClose={() => {
+                        resetEditableContent();
+                        toggleNewEventForm();
+                    }}
                     onBack={() => {
                         toggleNewEventForm();
                         togglePostSelectionForm();
                     }}
-                    onPost={() => window.location.reload()}
+                    eventContent={state.editableEvent}
                     />
                 </Popup>
             }
@@ -200,6 +212,7 @@ export default function EldershipFeedContent() {
                             key={index}
                             isAutohor={isAutohor}
                             id={post.Id}
+                            postType={post.hasOwnProperty('Name') ? POST_TYPES.EVENT : POST_TYPES.POST}
                         >
                             {post.hasOwnProperty('Name') ? 
                                 <EventPost event={post} /> :

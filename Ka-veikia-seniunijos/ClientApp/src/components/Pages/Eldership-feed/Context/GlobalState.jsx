@@ -7,7 +7,8 @@ const initialState = {
     isNewPostFromOpen: false,
     isNewEventFormOpen: false,
     isNewSurveyFormOpen: false,
-    editablePost: null
+    editablePost: null,
+    editableEvent: null
 }
 
 export const GlobalContext = createContext(initialState);
@@ -45,6 +46,14 @@ export const GlobalProvider = ({ children }) => {
         dispatch({type: 'SET_POST_TEXT', postContent})
     }
 
+    const setEditableEventContent = (eventContent) => {
+        dispatch({type: 'SET_EDITABLE_EVENT_CONTENT', eventContent})
+    }
+
+    const resetEditableContent = () => {
+        dispatch({type: 'RESET_EDITABLE_CONTENT'})
+    }
+
     return (
         <GlobalContext.Provider value={{
             state: state,
@@ -54,7 +63,9 @@ export const GlobalProvider = ({ children }) => {
             toggleNewEventForm,
             toggleNewSurveyForm,
             setUserType,
-            setEditablePostText
+            setEditablePostText,
+            setEditableEventContent,
+            resetEditableContent
         }}>
             {children}
         </GlobalContext.Provider>

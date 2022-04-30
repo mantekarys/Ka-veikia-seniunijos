@@ -5,13 +5,16 @@ import PropTypes from 'prop-types';
 export default function NewPostButtons({ onBack, onSubmit }) {
     return (
         <div className='buttons__container'>
+            {onBack && 
+                <Button
+                    text='Atgal'
+                    styling='btn btn--post-small'
+                    onClick={onBack}
+                />
+            }
+
             <Button
-                text='Atgal'
-                styling='btn btn--post-small'
-                onClick={onBack}
-            />
-            <Button
-                text='Skelbti'
+                text={onBack ? 'Skelbti' : 'Atnaujinti'}
                 styling='btn btn--post-small'
                 onClick={onSubmit}
             />

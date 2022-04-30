@@ -24,16 +24,12 @@ export default function PostForm({ onClose, onBack, postContent }) {
             return;
         }
         const todaysDate = getTodaysDate();
-        // // axios.post('https://localhost:44330/api/user', {
-
-        // // })
-        // .then(res => {
-        //     if(res.status === 200) window.location.reload();
-        // })
-        // .catch(_ => {
-        //     setErrorMessage('Įvyko nenumatyta klaida');
-        // })
-        window.location.reload();
+        axios.post('https://localhost:44330/api/post', {
+            Text: text,
+            PostDate: todaysDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => window.location.reload());
     }
 
     const handleOnUpdate = () => {
@@ -41,6 +37,14 @@ export default function PostForm({ onClose, onBack, postContent }) {
             setError('Įrašo tekstas nepasikeitė!');
             return;
         }
+
+        axios.put('https://localhost:44330/api/post', {
+            Id: postContent.id,
+            Text: text,
+            PostDate: postContent.PostDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => window.location.reload());
     }
 
     const getTodaysDate = () => {

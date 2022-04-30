@@ -46,6 +46,16 @@
                 editablePost: null,
                 editableEvent: null
             }
+        case 'TOGGLE_LOADING_SPINNER':
+            return {
+                ...state,
+                isLoadingSpinnerVisible: action.isLoadingSpinnerVisible
+            }
+        case 'TOGGLE_DELETE_MODAL':
+            return {
+                ...state,
+                isDeleteModalOpen: action.isDeleteModalOpen
+            }
         default:
             return state;
     }

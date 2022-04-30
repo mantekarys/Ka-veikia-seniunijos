@@ -12,7 +12,7 @@ import '../../Utils/_base.scss';
 import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 
-export default function EventForm({ onClose, onBack, eventContent}) {
+export default function EventForm({ onClose, onBack, eventContent, toggleSpinner}) {
     const [name, setName] = useState(eventContent?.name ? eventContent.name: "");
     const [place, setPlace] = useState(eventContent?.address ? eventContent.address: "");
     const [description, setDescription] = useState(eventContent?.description ? eventContent.description: "");
@@ -53,7 +53,7 @@ export default function EventForm({ onClose, onBack, eventContent}) {
 
             setCoords({
                 lat: position.data.data[0].latitude,
-                lng: position.data.data[0].longitude
+                lng: position.data.data[0].longtitude
             })
 
         } catch (error) {
@@ -70,29 +70,29 @@ export default function EventForm({ onClose, onBack, eventContent}) {
             Date: date,
             StartTime: startTime,
             EndTime: endTime,
-            Eldership_fk: eventContent.eldershipId,
+            EldershipFk: eventContent.eldershipId,
             Address: place,
             Latitude: coords.lat,
             Lonigtude: coords.lng,
             PostDate: eventContent.postDate
         })
-        .then(_ => window.location.reload())
+        .then(_ => toggleSpinner())
     }
 
     const postEvent = () => {
         axios.post('https://localhost:44330/api/event', {
             Name: name,
             Description: description,
-            Price: price,
+            Price: price ? price : 0,
             Date: date,
             StartTime: startTime,
             EndTime: endTime,
-            Eldership_fk: JSON.parse(sessionStorage['userData']).Id,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id,
             Address: place,
             Latitude: coords.lat,
             Lonigtude: coords.lng,
         })
-        .then(_ => window.location.reload())
+        .then(_ => toggleSpinner())
     }
 
     return (
@@ -182,5 +182,6 @@ EventForm.propTypes = {
         lat: PropTypes.number,
         lng: PropTypes.number,
         postDate: PropTypes.string
-    })
+    }),
+    toggleSpinner: PropTypes.func
 }

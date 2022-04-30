@@ -1,0 +1,25 @@
+@import '../Utils/mixins';
+@import '../Utils/variables';
+
+.modal {
+    &__container {
+        @include absCenter;
+        padding: 3rem 5rem;
+        border-radius: $default-form-border-radius;
+
+        &-header {
+            margin-top: 2rem;
+        }
+        
+        &-buttons {
+            margin-top: 4rem;
+            display: flex;
+            justify-content: end;
+            gap: 1rem;
+        }
+    }
+
+    &--delete {
+        background-color: $color-white;
+    }
+}

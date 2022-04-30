@@ -16,6 +16,8 @@ import EventPost from '../../Post/EventPost/EventPost';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
 import PropTypes from 'prop-types';
+import LoadingSpinner from '../../LoadingSpiner/LoadingSpinner';
+import DeleteModal from '../../Modals/Delete/DeleteModal';
 export default function EldershipFeedContent() {
     const {
         state,
@@ -25,7 +27,11 @@ export default function EldershipFeedContent() {
         toggleNewEventForm,
         toggleNewSurveyForm,
         setUserType,
-        resetEditableContent
+        resetEditableContent,
+        toggleLoadingSpinner,
+        toggleDeleteModal,
+        deleteEvent,
+        deletePost
     } = useContext(GlobalContext);
 
     const url = new URL(window.location.href);
@@ -51,10 +57,6 @@ export default function EldershipFeedContent() {
     }, []);
 
     useEffect(() => {
-        resetEditableContent();
-    }, [])
-
-    useEffect(() => {
         const fetchPosts = async () => {
             const postsData = await axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`);
             setPosts(() => [...posts, ...postsData.data]);
@@ -68,6 +70,14 @@ export default function EldershipFeedContent() {
                 setPosts([...postsResponse.data, ...eventsResponse.data]);
              }))
     }, []);
+
+    useEffect(() => {
+        if(state.isLoadingSpinnerVisible) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500)
+        }
+    }, [state.isLoadingSpinnerVisible])
 
     const getUserType = () => {
         if (sessionStorage['userData']) {
@@ -110,6 +120,7 @@ export default function EldershipFeedContent() {
     
     return (
         <div className='eldership__content'>
+            {state.isLoadingSpinnerVisible && <LoadingSpinner />}
             <div className='eldership__photo-container'>
                 <img
                     src={eldershipPhoto}
@@ -175,15 +186,19 @@ export default function EldershipFeedContent() {
             {state.isNewEventFormOpen &&
                 <Popup>
                     <EventForm
-                    onClose={() => {
-                        resetEditableContent();
-                        toggleNewEventForm();
-                    }}
-                    onBack={() => {
-                        toggleNewEventForm();
-                        togglePostSelectionForm();
-                    }}
-                    eventContent={state.editableEvent}
+                        onClose={() => {
+                            resetEditableContent();
+                            toggleNewEventForm();
+                        }}
+                        onBack={() => {
+                            toggleNewEventForm();
+                            togglePostSelectionForm();
+                        }}
+                        eventContent={state.editableEvent}
+                        toggleSpinner={() => {
+                            toggleNewPostForm();
+                            toggleLoadingSpinner();
+                        }}
                     />
                 </Popup>
             }
@@ -197,6 +212,15 @@ export default function EldershipFeedContent() {
                             togglePostSelectionForm();
                         }}
                         onPost={() => window.location.reload()}
+                    />
+                </Popup>
+            }
+
+            {state.isDeleteModalOpen && 
+                <Popup>
+                    <DeleteModal 
+                        onClose={toggleDeleteModal}
+                        onDelete={state.editableEvent ? deleteEvent : deletePost}
                     />
                 </Popup>
             }

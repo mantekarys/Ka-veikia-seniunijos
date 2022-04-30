@@ -9,7 +9,7 @@ import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function PostForm({ onClose, onBack, postContent }) {
+export default function PostForm({ onClose, onBack, postContent, toggleSpinner }) {
     const [text, setText] = useState(postContent?.text ? postContent.text : "");
     const [error, setError] = useState("");
 
@@ -29,7 +29,7 @@ export default function PostForm({ onClose, onBack, postContent }) {
             PostDate: todaysDate,
             EldershipFk: JSON.parse(sessionStorage['userData']).Id
         })
-        .then(_ => window.location.reload());
+        .then(_ => toggleSpinner());
     }
 
     const handleOnUpdate = () => {
@@ -44,7 +44,7 @@ export default function PostForm({ onClose, onBack, postContent }) {
             PostDate: postContent.PostDate,
             EldershipFk: JSON.parse(sessionStorage['userData']).Id
         })
-        .then(_ => window.location.reload());
+        .then(_ => toggleSpinner());
     }
 
     const getTodaysDate = () => {
@@ -90,5 +90,6 @@ PostForm.propTypes = {
     postContent: PropTypes.shape({
         text: PropTypes.string,
         id: PropTypes.number
-    })
+    }),
+    toggleSpinner: PropTypes.func
 }

@@ -14,7 +14,8 @@ export default function Post(props) {
         toggleNewPostForm,
         setEditablePostText,
         toggleNewEventForm,
-        setEditableEventContent
+        setEditableEventContent,
+        toggleDeleteModal
      } = useContext(GlobalContext);
     const [isOptionsOpen, setIsOptionOpen] = useState(false);
 
@@ -22,8 +23,9 @@ export default function Post(props) {
         props.postType === 'EVENT' ? getEventData() : getPostData();
     }
 
-    const handleOnPostDelete = () =>{
-
+    const handleOnPostDelete = () => {
+        props.postType === 'EVENT' ? setEditableEventContent({id: props.id}) : setEditablePostText({id: props.id});
+        toggleDeleteModal();
     }
 
     const getPostData = async () => {
@@ -64,8 +66,8 @@ export default function Post(props) {
     }
 
     useEffect(() => {
-        if(state.isNewPostFromOpen || state.isNewEventFormOpen) setIsOptionOpen(false)
-    }, [state.isNewPostFromOpen, state.isNewEventFormOpen])
+        if(state.isNewPostFromOpen || state.isNewEventFormOpen || state.isDeleteModalOpen) setIsOptionOpen(false)
+    }, [state.isNewPostFromOpen, state.isNewEventFormOpen, state.isDeleteModalOpen])
 
     const navigationListContent = [
         {

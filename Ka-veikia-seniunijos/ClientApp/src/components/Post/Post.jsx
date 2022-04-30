@@ -9,27 +9,65 @@ import { faEllipsis, faPen, faTrash } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 
 export default function Post(props) {
-    const { state, toggleNewPostForm, setEditablePostText } = useContext(GlobalContext);
+    const {
+        state, 
+        toggleNewPostForm,
+        setEditablePostText,
+        toggleNewEventForm,
+        setEditableEventContent,
+        toggleDeleteModal
+     } = useContext(GlobalContext);
     const [isOptionsOpen, setIsOptionOpen] = useState(false);
 
     const handleOnPostEdit = () => {
-        axios.get(`https://localhost:44330/api/post/${props.id}`)
-        .then(res => {
-            setEditablePostText({
-                text: res.data.Text,
-                id: res.data.Id
-            });
-            toggleNewPostForm();
-        });
+        props.postType === 'EVENT' ? getEventData() : getPostData();
     }
 
-    const handleOnPostDelete = () =>{
+    const handleOnPostDelete = () => {
+        props.postType === 'EVENT' ? setEditableEventContent({id: props.id}) : setEditablePostText({id: props.id});
+        toggleDeleteModal();
+    }
 
+    const getPostData = async () => {
+        try {
+            const postData = await axios.get(`https://localhost:44330/api/post/${props.id}`);
+            setEditablePostText({
+                text: postData.data.Text,
+                id: postData.data.Id,
+                postDate: postData.data.PostDate
+            });
+            toggleNewPostForm();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getEventData = async () => {
+        try {
+            const eventData = await axios.get(`https://localhost:44330/api/event/getEvent/${props.id}`);
+            setEditableEventContent({
+                id: eventData.data.Id,
+                name: eventData.data.Name,
+                description: eventData.data.Description,
+                price: eventData.data.Price,
+                date: eventData.data.Date,
+                startTime: eventData.data.StartTime,
+                endTime: eventData.data.EndTime,
+                eldershipId: eventData.data.EldershipFk,
+                address: eventData.data.Address,
+                lat: eventData.data.Latitude,
+                lng: eventData.data.Longtitude,
+                postDate: eventData.data.PostDate
+            });
+            toggleNewEventForm();
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     useEffect(() => {
-        if(state.isNewPostFromOpen) setIsOptionOpen(false)
-    }, [state.isNewPostFromOpen])
+        if(state.isNewPostFromOpen || state.isNewEventFormOpen || state.isDeleteModalOpen) setIsOptionOpen(false)
+    }, [state.isNewPostFromOpen, state.isNewEventFormOpen, state.isDeleteModalOpen])
 
     const navigationListContent = [
         {

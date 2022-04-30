@@ -1,4 +1,5 @@
-﻿import React, { createContext, useReducer } from "react";
+﻿import axios from "axios";
+import React, { createContext, useReducer } from "react";
 import EldershipReducer from './EldershipReducer';
 
 const initialState = {
@@ -7,7 +8,10 @@ const initialState = {
     isNewPostFromOpen: false,
     isNewEventFormOpen: false,
     isNewSurveyFormOpen: false,
-    editablePost: null
+    editablePost: null,
+    editableEvent: null,
+    isLoadingSpinnerVisible: false,
+    isDeleteModalOpen: false
 }
 
 export const GlobalContext = createContext(initialState);
@@ -45,6 +49,39 @@ export const GlobalProvider = ({ children }) => {
         dispatch({type: 'SET_POST_TEXT', postContent})
     }
 
+    const setEditableEventContent = (eventContent) => {
+        dispatch({type: 'SET_EDITABLE_EVENT_CONTENT', eventContent})
+    }
+
+    const resetEditableContent = () => {
+        dispatch({type: 'RESET_EDITABLE_CONTENT'})
+    }
+
+    const toggleLoadingSpinner = () => {
+        dispatch({type: 'TOGGLE_LOADING_SPINNER', isLoadingSpinnerVisible: !state.isLoadingSpinnerVisible})
+    }
+
+    const toggleDeleteModal = () => {
+        dispatch({type: 'TOGGLE_DELETE_MODAL', isDeleteModalOpen: !state.isDeleteModalOpen})
+
+    }
+
+    const deleteEvent = () => {
+        axios.delete(`https://localhost:44330/api/event/${state.editableEvent?.id}`)
+        .then(_ => {
+                toggleDeleteModal();
+                toggleLoadingSpinner()
+            });
+    }
+
+    const deletePost = () => {
+        axios.delete(`https://localhost:44330/api/post/${state.editablePost?.id}`)
+        .then(_ => {
+            toggleDeleteModal();
+            toggleLoadingSpinner()
+        });
+    }
+
     return (
         <GlobalContext.Provider value={{
             state: state,
@@ -54,7 +91,13 @@ export const GlobalProvider = ({ children }) => {
             toggleNewEventForm,
             toggleNewSurveyForm,
             setUserType,
-            setEditablePostText
+            setEditablePostText,
+            setEditableEventContent,
+            resetEditableContent,
+            toggleLoadingSpinner,
+            toggleDeleteModal,
+            deleteEvent,
+            deletePost
         }}>
             {children}
         </GlobalContext.Provider>

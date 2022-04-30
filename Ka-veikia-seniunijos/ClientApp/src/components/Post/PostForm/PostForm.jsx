@@ -9,7 +9,7 @@ import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function PostForm({ onClose, onBack, postContent }) {
+export default function PostForm({ onClose, onBack, postContent, toggleSpinner }) {
     const [text, setText] = useState(postContent?.text ? postContent.text : "");
     const [error, setError] = useState("");
 
@@ -24,16 +24,12 @@ export default function PostForm({ onClose, onBack, postContent }) {
             return;
         }
         const todaysDate = getTodaysDate();
-        // // axios.post('https://localhost:44330/api/user', {
-
-        // // })
-        // .then(res => {
-        //     if(res.status === 200) window.location.reload();
-        // })
-        // .catch(_ => {
-        //     setErrorMessage('Įvyko nenumatyta klaida');
-        // })
-        window.location.reload();
+        axios.post('https://localhost:44330/api/post', {
+            Text: text,
+            PostDate: todaysDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => toggleSpinner());
     }
 
     const handleOnUpdate = () => {
@@ -41,6 +37,14 @@ export default function PostForm({ onClose, onBack, postContent }) {
             setError('Įrašo tekstas nepasikeitė!');
             return;
         }
+
+        axios.put('https://localhost:44330/api/post', {
+            Id: postContent.id,
+            Text: text,
+            PostDate: postContent.PostDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => toggleSpinner());
     }
 
     const getTodaysDate = () => {
@@ -86,5 +90,6 @@ PostForm.propTypes = {
     postContent: PropTypes.shape({
         text: PropTypes.string,
         id: PropTypes.number
-    })
+    }),
+    toggleSpinner: PropTypes.func
 }

@@ -35,6 +35,27 @@
                 ...state,
                 editablePost: action.postContent
             }
+        case 'SET_EDITABLE_EVENT_CONTENT':
+            return {
+                ...state,
+                editableEvent: action.eventContent
+            }
+        case 'RESET_EDITABLE_CONTENT':
+            return {
+                ...state,
+                editablePost: null,
+                editableEvent: null
+            }
+        case 'TOGGLE_LOADING_SPINNER':
+            return {
+                ...state,
+                isLoadingSpinnerVisible: action.isLoadingSpinnerVisible
+            }
+        case 'TOGGLE_DELETE_MODAL':
+            return {
+                ...state,
+                isDeleteModalOpen: action.isDeleteModalOpen
+            }
         default:
             return state;
     }

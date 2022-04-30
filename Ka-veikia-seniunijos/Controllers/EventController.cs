@@ -8,6 +8,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.Interfaces;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -53,6 +54,18 @@ namespace Ka_veikia_seniunijos.Controllers
             string result = _eventService.GetAllPinsJson(free);
             JsonResult table = new JsonResult(JsonConvert.DeserializeObject(result));
             return table;
+        }
+
+        [HttpGet("getEvent/{id}")]
+        public Event GetEvent(int id)
+        {
+            var eventPost =  _databaseContext.Event.FirstOrDefault(e => e.Id == id);
+            if(eventPost == null)
+            {
+                return null;
+            }
+
+            return eventPost;
         }
 
         [HttpPost]

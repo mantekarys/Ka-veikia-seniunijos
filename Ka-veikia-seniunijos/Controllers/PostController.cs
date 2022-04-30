@@ -36,7 +36,7 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             if (!descending)
             {
-                posts.OrderBy(p => p.PostDate);
+                posts = posts.OrderBy(p => p.PostDate).ToList();
             }
             return new JsonResult(posts);//good
         }
@@ -68,9 +68,7 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Post post)
         {
-            Post dbPost = _databaseContext.Post.SingleOrDefault(p => p.Id == post.Id);
-            dbPost = post;
-            _databaseContext.Post.Update(dbPost);
+            _databaseContext.Post.Update(post);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {

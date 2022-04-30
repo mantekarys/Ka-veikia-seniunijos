@@ -10,7 +10,6 @@ namespace Ka_veikia_seniunijos.ModelsEF
     public partial class Post
     {
         public int Id { get; set; }
-        public string Topic { get; set; }
         public string Text { get; set; }
         public DateTime PostDate { get; set; }
         public int EldershipFk { get; set; }

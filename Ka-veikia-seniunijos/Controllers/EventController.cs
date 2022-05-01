@@ -1,13 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data;
 using Ka_veikia_seniunijos.ModelsEF;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using Ka_veikia_seniunijos.Interfaces;
 using System.Globalization;
+using System.Linq.Expressions;
+using System.Text;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -28,22 +32,28 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpGet("{eldership}")]
         public JsonResult Get(string eldership, [FromQuery] string[] options = null)
         {
-            eldership = eldership.ToLowerInvariant();
+            StringBuilder sql = new StringBuilder();
+            string[] acceptable = {
+                "price",
+                "price DESC",
+                "type",
+                "type DESC",
+                "date",
+                "date DESC",
+                "name",
+                "name DESC"
+            };
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
-            var events = _databaseContext
-                                    .Event.Where(e => e.EldershipFk == eldership_fk).ToList();
-            if (options.Contains("price"))
+            sql.AppendFormat("Select * FROM Event Where eldership_FK = {0} ", eldership_fk);
+            if (options.Count() > 0)
+                sql.Append("ORDER BY ");
+            foreach (var op in options)
             {
-                events.OrderBy(e => e.Price);
+                if (acceptable.Contains(op))
+                    sql.Append($"{op},");
             }
-            if (options.Contains("name"))
-            {
-                events.OrderBy(e => e.Name);
-            }
-            if (options.Contains("date"))
-            {
-                events.OrderBy(e => e.Date);
-            }
+            sql.Length--;
+            var events = _databaseContext.Event.FromSqlRaw(sql.ToString()).ToList();
             return new JsonResult(events);
         }
 

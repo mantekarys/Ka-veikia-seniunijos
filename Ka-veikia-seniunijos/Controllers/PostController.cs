@@ -34,13 +34,17 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             if (!descending)
             {
-                posts.OrderBy(p => p.PostDate);
+                posts = posts.OrderBy(p => p.PostDate).ToList();
             }
             return new JsonResult(posts);//good
         }
         [HttpPost]
         public int Post(Post post)
         {
+            if (post == null)
+            {
+                return 400;
+            }
             _databaseContext.Post.Add(post);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -53,9 +57,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Post post)
         {
-            Post dbPost = _databaseContext.Post.SingleOrDefault(p => p.Id == post.Id);
-            dbPost = post;
-            _databaseContext.Post.Update(dbPost);
+            if (post == null)
+            {
+                return 400;
+            }
+            _databaseContext.Post.Update(post);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
@@ -67,6 +73,10 @@ namespace Ka_veikia_seniunijos.Controllers
         public int Delete(int id)
         {
             Post dbPost = _databaseContext.Post.SingleOrDefault(p => p.Id == id);
+            if (dbPost == null)
+            {
+                return 400;
+            }
             _databaseContext.Post.Remove(dbPost);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

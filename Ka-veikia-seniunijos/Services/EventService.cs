@@ -33,6 +33,7 @@ namespace Ka_veikia_seniunijos.Services
                 }
             );
             DataTable table = new DataTable();
+            table.Columns.Add("Type", typeof(string)).SetOrdinal(0);
             table.Columns.Add("Name", typeof(string)).SetOrdinal(1);
             table.Columns.Add("Price", typeof(string)).SetOrdinal(2);
             table.Columns.Add("Latitude", typeof(float)).SetOrdinal(3);

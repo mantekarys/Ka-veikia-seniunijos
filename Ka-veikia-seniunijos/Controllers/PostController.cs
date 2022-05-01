@@ -26,7 +26,7 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpGet("GetDayPosts/{eldership}")]//netestuota su date
         public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
         {
-            eldership = eldership.ToLower();
+
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
             var posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk && (date == null || p.PostDate == date))
                                              .OrderByDescending(p => p.PostDate).ToList();
@@ -45,9 +45,9 @@ namespace Ka_veikia_seniunijos.Controllers
         public async Task<ActionResult<Post>> GetPost(int id)
         {
             var post = await _databaseContext.Post.FirstOrDefaultAsync(p => p.Id == id);
-            if(post == null)
+            if (post == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return post;
@@ -56,6 +56,10 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Post post)
         {
+            if (post == null)
+            {
+                return 400;
+            }
             _databaseContext.Post.Add(post);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -68,6 +72,10 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Post post)
         {
+            if (post == null)
+            {
+                return 400;
+            }
             _databaseContext.Post.Update(post);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -80,6 +88,10 @@ namespace Ka_veikia_seniunijos.Controllers
         public int Delete(int id)
         {
             Post dbPost = _databaseContext.Post.SingleOrDefault(p => p.Id == id);
+            if (dbPost == null)
+            {
+                return 400;
+            }
             _databaseContext.Post.Remove(dbPost);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

@@ -33,7 +33,6 @@ namespace Ka_veikia_seniunijos.Controllers
             if (events)
             {
                 string eventPins = _eventService.GetAllPinsJson(free);
-                Console.WriteLine(eventPins);
                 if (eventPins == "[]")
                 {
                 }

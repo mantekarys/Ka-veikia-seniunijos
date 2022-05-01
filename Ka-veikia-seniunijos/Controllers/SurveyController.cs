@@ -44,6 +44,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Survey survey)
         {
+
+            if (survey == null)
+            {
+                return 1062;
+            }
             _databaseContext.Survey.Add(survey);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -72,6 +77,10 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Survey survey)
         {
+            if (survey == null)
+            {
+                return 1062;
+            }
             _databaseContext.Survey.Update(survey);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

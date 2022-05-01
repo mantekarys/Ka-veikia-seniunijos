@@ -74,9 +74,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Eldership eldership)
         {
-
+            if (eldership == null)
+            {
+                return 1062;
+            }
             string passwordHashed = hashPassword(eldership.PasswordHashed);
-            //
             var elderships = _databaseContext.Eldership.Where(el => el.Municipality == eldership.Municipality).ToList();
 
             if (elderships.Count > 0)

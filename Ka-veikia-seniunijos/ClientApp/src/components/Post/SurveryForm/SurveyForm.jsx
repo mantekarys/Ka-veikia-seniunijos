@@ -6,9 +6,10 @@ import Input from '../../Form/Input';
 import NewPostButtons from '../NewPostButtons';
 import PropTypes from 'prop-types';
 import './_survey-form-style.scss';
+import axios from 'axios';
 
 
-export default function SurveyForm({onClose, onBack, onPost}) {
+export default function SurveyForm({onClose, onBack, toggleSpinner}) {
     const [name, setName] = useState('');
     const [questions, setQuestions] = useState({'questions':[]});
     const [errorMessage, setErrorMessage] = useState('');
@@ -24,10 +25,24 @@ export default function SurveyForm({onClose, onBack, onPost}) {
             return;
         }
 
-        onPost();
+        postSurvey();
+    }
+
+    const postSurvey = () => {
+        axios.post('https://localhost:44330/api/survey', {
+            name,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id,
+            Date: getTodaysDate(),
+            Question: [...questions.questions]
+        })
+        .then(_ => toggleSpinner());
+    }
+
+    const getTodaysDate = () => {
+        const today = new Date();
+        return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     }
     
-
     return (
         <div className='survey-form__container'>
             <NewPostHeader onClose={onClose} text='Nauja apklausa' />
@@ -43,12 +58,15 @@ export default function SurveyForm({onClose, onBack, onPost}) {
                 <div className='survey-form__questions'>
                     {questions.questions.map((question, index) => 
                         <>
-                            <p key={index} className='survey-form__question'>{`${index + 1}. ${question.questionName}`}</p>
+                            <p key={index} className='survey-form__question'>{`${index + 1}. ${question.Text}`}</p>
                         </>
                     )}
                 </div>
                 <QuestionSelect onAdd={(newQuestion) => setQuestions({
-                    'questions': [...questions.questions, newQuestion]
+                    'questions': [...questions.questions, {
+                        ...newQuestion,
+                        Number: questions.questions.length + 1
+                    }]
                 })}/>
 
                 {errorMessage && <Error text={errorMessage} />}
@@ -61,5 +79,5 @@ export default function SurveyForm({onClose, onBack, onPost}) {
 SurveyForm.propTypes = {
     onClose: PropTypes.func,
     onBack: PropTypes.func,
-    onPost: PropTypes.func
+    toggleSpinner: PropTypes.func
 }

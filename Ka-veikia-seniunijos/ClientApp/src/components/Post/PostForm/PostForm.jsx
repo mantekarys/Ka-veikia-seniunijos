@@ -41,7 +41,7 @@ export default function PostForm({ onClose, onBack, postContent, toggleSpinner }
         axios.put('https://localhost:44330/api/post', {
             Id: postContent.id,
             Text: text,
-            PostDate: postContent.PostDate,
+            PostDate: postContent.postDate,
             EldershipFk: JSON.parse(sessionStorage['userData']).Id
         })
         .then(_ => toggleSpinner());

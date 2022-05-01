@@ -15,11 +15,10 @@ export default function QuestionSelect({onAdd}) {
   });
 
   const [question, setQuestion] = useState({
-      questionName: '',
-      scale: 0,
+      Text: '',
+      Rating: 0,
+      Number: 0
   })
-
-
   
   const [isOptionsOpen, setIsOptionsOpne] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -33,13 +32,13 @@ export default function QuestionSelect({onAdd}) {
         if(e.target.name === 'rating') {
             setQuestion({
                 ...question,
-                'scale': 5
+                Rating: 5
             })
         }
     }
 
     const handleOnAdd = () => {
-        if(!question.questionName) {
+        if(!question.Text) {
             setIsError(true);
             setTimeout(() => setIsError(false), 400)
             return;
@@ -47,8 +46,8 @@ export default function QuestionSelect({onAdd}) {
 
             onAdd(question);
             setQuestion({
-                ...question,
-                questionName: ''
+                Text: '',
+                Rating: 0,
             })
     }
 
@@ -87,10 +86,10 @@ export default function QuestionSelect({onAdd}) {
                     styling={`survey-form__input survey-form__input--question ${isError ? 'survey-form__input--shake' : ''}`}
                     type='text'
                     placeholder='Klausimas'
-                    value={question.questionName}
+                    value={question.Text}
                     onChange={(e) => setQuestion({
                         ...question,
-                        'questionName': e.target.value
+                        Text: e.target.value,
                     })}
                 />
 
@@ -107,7 +106,7 @@ export default function QuestionSelect({onAdd}) {
                             }}
                             onChange={(value) => setQuestion({
                                 ...question,
-                                'scale': value
+                                Rating: value
                             })}
                         />
                     </div>

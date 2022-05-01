@@ -1,7 +1,7 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faCalendar, faClock, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
-
+import PropTypes from 'prop-types';
 
 export default function EventPost({event}) {
   return (
@@ -40,6 +40,18 @@ export default function EventPost({event}) {
         </div>
     </>
   )
+}
+
+EventPost.propTypes = {
+    event: PropTypes.shape({
+        Name: PropTypes.string,
+        Description: PropTypes.string,
+        Address: PropTypes.string,
+        Date: PropTypes.string,
+        StartTime: PropTypes.string,
+        EndTime: PropTypes.string,
+        Price: PropTypes.number
+    })
 }
 
 

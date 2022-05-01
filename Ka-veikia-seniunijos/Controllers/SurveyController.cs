@@ -23,10 +23,27 @@ namespace Ka_veikia_seniunijos.Controllers
         {
             _databaseContext = databaseContext;
         }
+        //Surveys by eldeship
+        [HttpGet("{eldership}")]
+        public JsonResult GetByEldership(string eldership)
+        {
+            var eldershipID = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            if (eldershipID == 0)
+            {
+                return new JsonResult(BadRequest());
+
+            }
+            var surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID).ToList();
+            if (surveys == null)
+            {
+                return new JsonResult("There is no surveys made by this eldership");
+            }
+            return new JsonResult(surveys);
+        }
 
         //Specific survey by ID
-        [HttpGet("{id}")]
-        public JsonResult Get(int id)
+        [HttpGet("{eldership}/{id}")]
+        public JsonResult GetById(int id)
         {
             var survey = _databaseContext.Survey.FirstOrDefault(s => s.Id == id);
             if (survey == null)
@@ -39,6 +56,41 @@ namespace Ka_veikia_seniunijos.Controllers
                 survey.Question.Add(q);
             }
             return new JsonResult(survey);
+        }
+        //Specific survey by ID
+        [HttpGet("{eldership}/{id}/detailed")]
+        public JsonResult GetByIdDetailed(int id)
+        {
+            var survey = _databaseContext.Survey.FirstOrDefault(s => s.Id == id);
+            if (survey == null)
+            {
+                return new JsonResult(BadRequest());
+            }
+            var questions = _databaseContext.Question.Where(q => q.ForeignSurvey == id).ToList();
+            foreach (Question q in questions)
+            {
+                var answers = _databaseContext.Answer.Where(a => a.FkQuestionId == q.Id).ToList();
+                foreach (var answer in answers)
+                {
+                    q.Answer.Add(answer);
+                }
+                survey.Question.Add(q);
+            }
+            return new JsonResult(survey);
+        }
+        [HttpPost("{survey}/{question}")]
+        public int PostAnswer(int question, Answer answer)
+        {
+            if (answer == null)
+            {
+                return 1062;
+            }
+            var dbQuestion = _databaseContext.Question.FirstOrDefault(q => q.Id == question);
+            dbQuestion.Answer.Add(answer);
+            var update = _databaseContext.SaveChanges();
+            if (update < 1)
+                return 1062;
+            return 200;
         }
 
         [HttpPost]
@@ -84,7 +136,7 @@ namespace Ka_veikia_seniunijos.Controllers
             _databaseContext.Survey.Update(survey);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
-            {
+            {   
                 return 1062;
             }
             foreach (var question in survey.Question)

@@ -19,6 +19,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
         {
         }
 
+        public virtual DbSet<Answer> Answer { get; set; }
         public virtual DbSet<Eldership> Eldership { get; set; }
         public virtual DbSet<Event> Event { get; set; }
         public virtual DbSet<Message> Message { get; set; }
@@ -38,6 +39,44 @@ namespace Ka_veikia_seniunijos.ModelsEF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Answer>(entity =>
+            {
+                entity.HasIndex(e => e.FkQuestionId)
+                    .HasName("fk_QuestionID");
+
+                entity.HasIndex(e => e.FkUserId)
+                    .HasName("fk_UserID");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasColumnType("int(5)");
+
+                entity.Property(e => e.FkQuestionId)
+                    .HasColumnName("fk_questionID")
+                    .HasColumnType("int(5)");
+
+                entity.Property(e => e.FkUserId)
+                    .HasColumnName("fk_userID")
+                    .HasColumnType("int(5)");
+
+                entity.Property(e => e.Text)
+                    .IsRequired()
+                    .HasColumnName("text");
+                entity.Property(e => e.Date)
+                    .IsRequired()
+                    .HasDefaultValueSql("CurrentTimestamp()");
+
+                entity.HasOne(d => d.FkQuestion)
+                    .WithMany(p => p.Answer)
+                    .HasForeignKey(d => d.FkQuestionId)
+                    .HasConstraintName("fk_QuestionID");
+
+                entity.HasOne(d => d.FkUser)
+                    .WithMany(p => p.Answer)
+                    .HasForeignKey(d => d.FkUserId)
+                    .HasConstraintName("fk_UserID");
+            });
+
             modelBuilder.Entity<Eldership>(entity =>
             {
                 entity.HasIndex(e => e.Email)
@@ -136,10 +175,6 @@ namespace Ka_veikia_seniunijos.ModelsEF
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
-
-                entity.Property(e => e.Date)
-                    .HasColumnName("date")
-                    .HasColumnType("date");
 
                 entity.Property(e => e.FkEldership)
                     .HasColumnName("fk_eldership")

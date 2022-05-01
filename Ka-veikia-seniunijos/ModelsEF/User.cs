@@ -11,6 +11,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
     {
         public User()
         {
+            Answer = new HashSet<Answer>();
             Message = new HashSet<Message>();
         }
 
@@ -21,6 +22,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
         public string Municipality { get; set; }
         public string PasswordHashed { get; set; }
 
+        public virtual ICollection<Answer> Answer { get; set; }
         public virtual ICollection<Message> Message { get; set; }
     }
 }

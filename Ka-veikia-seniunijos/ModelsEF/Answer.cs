@@ -7,20 +7,17 @@ using System.Collections.Generic;
 
 namespace Ka_veikia_seniunijos.ModelsEF
 {
-    public partial class Question
+    public partial class Answer
     {
-        public Question()
-        {
-            Answer = new HashSet<Answer>();
-        }
-
         public int Id { get; set; }
+        public int FkUserId { get; set; }
+        public int FkQuestionId { get; set; }
         public string Text { get; set; }
-        public int? Rating { get; set; }
-        public int Number { get; set; }
-        public int ForeignSurvey { get; set; }
 
-        public virtual Survey ForeignSurveyNavigation { get; set; }
-        public virtual ICollection<Answer> Answer { get; set; }
+        public DateTime Date { get; set; }
+
+
+        public virtual Question FkQuestion { get; set; }
+        public virtual User FkUser { get; set; }
     }
 }

@@ -10,7 +10,8 @@ export default function LeafletMap({ lat, lng, switchState, url, pins }) {
             <div className="map__header">
                 <h1 className="header__primary">Interaktyvus žemėlapis</h1>
                 <p className="paragraph--large">Žemėlapis, kuriame galite rasti visus seniūnijų renginius ir lankytinas vietas</p>
-
+            </div>
+            <div className='map__select'>
                 <Switch
                     color='primary'
                     shape='fill'

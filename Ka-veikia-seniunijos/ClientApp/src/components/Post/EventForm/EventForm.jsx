@@ -63,11 +63,11 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
 
     const updateEvent = () => {
         axios.put('https://localhost:44330/api/event', {
-            Id: eventContent.id,
+            id: eventContent.id,
             Name: name,
             Description: description,
-            Price: price,
-            Date: date,
+            Price: price ? price : 0,
+            Dete: date,
             StartTime: startTime,
             EndTime: endTime,
             EldershipFk: eventContent.eldershipId,

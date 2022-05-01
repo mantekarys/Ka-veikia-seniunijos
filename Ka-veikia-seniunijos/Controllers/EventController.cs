@@ -83,7 +83,7 @@ namespace Ka_veikia_seniunijos.Controllers
 
         [HttpPut]
         public int Put(Event ev)
-        {
+            {
             _databaseContext.Event.Update(ev);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

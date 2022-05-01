@@ -18,6 +18,7 @@ import '../../Utils/_base.scss';
 import PropTypes from 'prop-types';
 import LoadingSpinner from '../../LoadingSpiner/LoadingSpinner';
 import DeleteModal from '../../Modals/Delete/DeleteModal';
+import SurveyPost from '../../Post/SurveyPost/SurveyPost';
 export default function EldershipFeedContent() {
     const {
         state,
@@ -67,7 +68,7 @@ export default function EldershipFeedContent() {
         axios.all([axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`),
                    axios.get(`https://localhost:44330/api/event/${eldershipName}`)])
              .then(axios.spread((postsResponse, eventsResponse) => {
-                setPosts([...postsResponse.data, ...eventsResponse.data]);
+                setPosts([...postsResponse.data, ...eventsResponse.data].sort((a, b) => new Date(b.PostDate) - new Date(a.PostDate)));
              }))
     }, []);
 
@@ -179,6 +180,10 @@ export default function EldershipFeedContent() {
                             togglePostSelectionForm();
                         }}
                         postContent={state.editablePost}
+                        toggleSpinner={() => {
+                            toggleNewPostForm();
+                            toggleLoadingSpinner();
+                        }}
                     />
                 </Popup>
             }
@@ -196,7 +201,7 @@ export default function EldershipFeedContent() {
                         }}
                         eventContent={state.editableEvent}
                         toggleSpinner={() => {
-                            toggleNewPostForm();
+                            toggleNewEventForm();
                             toggleLoadingSpinner();
                         }}
                     />
@@ -211,7 +216,10 @@ export default function EldershipFeedContent() {
                             toggleNewSurveyForm();
                             togglePostSelectionForm();
                         }}
-                        onPost={() => window.location.reload()}
+                        toggleSpinner={() => {
+                            toggleNewSurveyForm();
+                            toggleLoadingSpinner();
+                        }}
                     />
                 </Popup>
             }
@@ -242,6 +250,7 @@ export default function EldershipFeedContent() {
                                 <EventPost event={post} /> :
                                 <p className='paragraph--post'>{post.Text}</p>
                             }
+                            {/* <SurveyPost /> */}
                         </Post>
                     );
                 })}

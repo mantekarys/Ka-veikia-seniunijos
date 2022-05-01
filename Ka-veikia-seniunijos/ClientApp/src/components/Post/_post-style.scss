@@ -90,6 +90,39 @@
                 font-size: 1.6rem;
             }
         }
+
+        &-question {
+            text-align: center;
+
+            &:not(:first-child) {
+                margin-top: 2rem;
+            }
+
+            &-name {
+                font-size: 2rem;
+                font-weight: bold;
+
+                @include respond(mobile) {
+                    font-size: 1.5rem;
+                }
+            }
+
+            &-input {
+                width: 70%;
+                padding: 1.5rem;
+                border: none;
+                outline: none;
+                font-size: 1.8rem;
+                border-bottom: 1px solid $color-black;
+
+                
+                @include respond(mobile) {
+                    width: 100%;
+                    padding: 1rem;
+                    font-size: 1.2rem;
+                }
+            }
+        }
     }
 }
 

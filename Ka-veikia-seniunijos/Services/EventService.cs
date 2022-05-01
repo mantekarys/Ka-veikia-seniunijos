@@ -23,7 +23,7 @@ namespace Ka_veikia_seniunijos.Services
 
         public string GetAllPinsJson(bool free = false)
         {
-            var events = _databaseContext.Event.Select(
+            var events = _databaseContext.Event.Where(p => (!free || p.Price == 0.00)).Select(
                 p => new
                 {
                     p.Name,

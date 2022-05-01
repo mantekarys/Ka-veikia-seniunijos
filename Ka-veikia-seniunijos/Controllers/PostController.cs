@@ -47,7 +47,7 @@ namespace Ka_veikia_seniunijos.Controllers
             var post = await _databaseContext.Post.FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             return post;

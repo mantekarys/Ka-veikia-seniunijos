@@ -37,8 +37,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(User user)
         {
+            if (user == null)
+            {
+                return 1062;
+            }
             int returnCode = 200;
-
             returnCode = user.PasswordHashed == null ?
                                     getUserProfileUpdateCommand(user) :
                                     getUserPasswordUpdateCommand(user);
@@ -48,15 +51,6 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserProfileUpdateCommand(User user)
         {
-            if (user == null)
-            {
-                return 1062;
-            }
-            // var dbUser = _databaseContext.User.FirstOrDefault(p => p.Id == user.Id);
-            // dbUser.FirstName = user.FirstName;
-            // dbUser.LastName = user.LastName;
-            // dbUser.Email = user.Email;
-            // dbUser.Municipality = user.Municipality;
             _databaseContext.User.Update(user);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -68,10 +62,6 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserPasswordUpdateCommand(User user)
         {
-            if (user == null)
-            {
-                return 1062;
-            }
             string hashedPassword = hashPassword(user.PasswordHashed);
             user.PasswordHashed = hashedPassword;
             _databaseContext.User.Update(user);

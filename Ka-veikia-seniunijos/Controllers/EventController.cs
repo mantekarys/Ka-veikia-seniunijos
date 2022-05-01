@@ -69,7 +69,7 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
         [HttpGet("getEvent/{id}")]
-        public Event GetEvent(int id)
+        public JsonResult GetEvent(int id)
         {
             var eventPost = _databaseContext.Event.FirstOrDefault(e => e.Id == id);
             if (eventPost == null)
@@ -77,7 +77,7 @@ namespace Ka_veikia_seniunijos.Controllers
                 return null;
             }
 
-            return eventPost;
+            return new JsonResult(eventPost);
         }
 
         [HttpPost]

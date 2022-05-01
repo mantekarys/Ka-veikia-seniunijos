@@ -48,12 +48,16 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserProfileUpdateCommand(User user)
         {
-            var dbUser = _databaseContext.User.FirstOrDefault(p => p.Id == user.Id);
-            dbUser.FirstName = user.FirstName;
-            dbUser.LastName = user.LastName;
-            dbUser.Email = user.Email;
-            dbUser.Municipality = user.Municipality;
-            _databaseContext.User.Update(dbUser);
+            if (user == null)
+            {
+                return 1062;
+            }
+            // var dbUser = _databaseContext.User.FirstOrDefault(p => p.Id == user.Id);
+            // dbUser.FirstName = user.FirstName;
+            // dbUser.LastName = user.LastName;
+            // dbUser.Email = user.Email;
+            // dbUser.Municipality = user.Municipality;
+            _databaseContext.User.Update(user);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
@@ -64,10 +68,13 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserPasswordUpdateCommand(User user)
         {
-            var dbUser = _databaseContext.User.FirstOrDefault(p => p.Id == user.Id);
+            if (user == null)
+            {
+                return 1062;
+            }
             string hashedPassword = hashPassword(user.PasswordHashed);
-            dbUser.PasswordHashed = hashedPassword;
-            _databaseContext.User.Update(dbUser);
+            user.PasswordHashed = hashedPassword;
+            _databaseContext.User.Update(user);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
@@ -128,8 +135,7 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public IActionResult Authenticate(AuthenticateRequest model)
         {
-            //var passwordHashed = hashPassword(model.Password);
-            //model.Password = passwordHashed;
+
             var response = _userService.Authenticate(model);
 
             if (response == null)

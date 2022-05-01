@@ -45,6 +45,8 @@ namespace Ka_veikia_seniunijos.Controllers
                 "name DESC"
             };
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            if (eldership_fk < 1)
+                return new JsonResult("Selected non-existing eldership");
             sql.AppendFormat("Select * FROM Event Where eldership_FK = {0} ", eldership_fk);
             if (options.Count() > 0)
                 sql.Append("ORDER BY ");
@@ -69,11 +71,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpGet("getEvent/{id}")]
         public Event GetEvent(int id)
         {
-            var eventPost =  _databaseContext.Event.FirstOrDefault(e => e.Id == id);
-            if(eventPost == null)
+            var eventPost = _databaseContext.Event.FirstOrDefault(e => e.Id == id);
+            if (eventPost == null)
             {
                 return null;
-            } 
+            }
 
             return eventPost;
         }
@@ -81,6 +83,10 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Event ev)
         {
+            if (ev == null)
+            {
+                return 1062;
+            }
             _databaseContext.Event.Add(ev);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
@@ -94,6 +100,10 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPut]
         public int Put(Event ev)
         {
+            if (ev == null)
+            {
+                return 1062;
+            }
             _databaseContext.Event.Update(ev);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

@@ -25,7 +25,11 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Message message)
         {
-            // message.Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            if (message == null)
+            {
+                return 1062;
+            }
+            message.Date = DateTime.Now;
             _databaseContext.Message.Add(message);
             _databaseContext.SaveChanges();
             return 200;//good

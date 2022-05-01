@@ -26,7 +26,7 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpGet("GetDayPosts/{eldership}")]//netestuota su date
         public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
         {
-            eldership = eldership.ToLower();
+
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
             var posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk && (date == null || p.PostDate == date))
                                              .OrderByDescending(p => p.PostDate).ToList();

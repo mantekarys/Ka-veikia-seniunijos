@@ -12,18 +12,24 @@ import '../../Utils/_base.scss';
 import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 
-export default function EventForm({ onClose, onBack, onPost}) {
-    const [name, setName] = useState("");
-    const [place, setPlace] = useState("");
-    const [description, setDescription] = useState("");
+export default function EventForm({ onClose, onBack, eventContent, toggleSpinner}) {
+    const [name, setName] = useState(eventContent?.name ? eventContent.name: "");
+    const [place, setPlace] = useState(eventContent?.address ? eventContent.address: "");
+    const [description, setDescription] = useState(eventContent?.description ? eventContent.description: "");
     const [date, setDate] = useState(() => {
         const today = new Date();
-        return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        return eventContent?.date ?
+            eventContent.date :
+            `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
     });
-    const [startTime, setStartTime] = useState('19:00');
-    const [endTime, setEndTime] = useState('19:30');
-    const [isFree, setIsFree] = useState(true);
-    const [price, setPrice] = useState('');
+    const [startTime, setStartTime] = useState(eventContent?.startTime ? eventContent.startTime :'19:00');
+    const [endTime, setEndTime] = useState(eventContent?.endTime ? eventContent.endTime : '19:30');
+    const [isFree, setIsFree] = useState(!eventContent?.price || eventContent?.price === 0 ? true: false);
+    const [price, setPrice] = useState(!eventContent?.price || eventContent?.price === 0 ? '' : eventContent.price);
+    const [coords, setCoords] = useState({
+        lat: eventContent?.lat ? eventContent.lat : null,
+        lng: eventContent?.lng ? eventContent.lng : null
+    })
     const [errorMessage, setErrorMessage] = useState('');
     const {REACT_APP_POSITION_STACK_API_KEY} = process.env;
 
@@ -34,6 +40,7 @@ export default function EventForm({ onClose, onBack, onPost}) {
         }
 
         fetchCoords();
+        eventContent ? updateEvent() : postEvent();
     }
 
     const fetchCoords = async () => {
@@ -44,12 +51,48 @@ export default function EventForm({ onClose, onBack, onPost}) {
                 return;
             }
 
-            // lat: position.data.data[0].latitude,
-            // lng: position.data.data[0].longitude
-            // onPost();
+            setCoords({
+                lat: position.data.data[0].latitude,
+                lng: position.data.data[0].longtitude
+            })
+
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const updateEvent = () => {
+        axios.put('https://localhost:44330/api/event', {
+            Id: eventContent.id,
+            Name: name,
+            Description: description,
+            Price: price,
+            Date: date,
+            StartTime: startTime,
+            EndTime: endTime,
+            EldershipFk: eventContent.eldershipId,
+            Address: place,
+            Latitude: coords.lat,
+            Lonigtude: coords.lng,
+            PostDate: eventContent.postDate
+        })
+        .then(_ => toggleSpinner())
+    }
+
+    const postEvent = () => {
+        axios.post('https://localhost:44330/api/event', {
+            Name: name,
+            Description: description,
+            Price: price ? price : 0,
+            Date: date,
+            StartTime: startTime,
+            EndTime: endTime,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id,
+            Address: place,
+            Latitude: coords.lat,
+            Lonigtude: coords.lng,
+        })
+        .then(_ => toggleSpinner())
     }
 
     return (
@@ -116,7 +159,7 @@ export default function EventForm({ onClose, onBack, onPost}) {
             {errorMessage && < Error text={errorMessage} />}
 
             <NewPostButtons
-                onBack={onBack}
+                onBack={eventContent ? null : onBack}
                 onSubmit={handleOnSubmit}
             />
         </form>
@@ -126,5 +169,19 @@ export default function EventForm({ onClose, onBack, onPost}) {
 EventForm.propTypes = {
     onClose: PropTypes.func,
     onBack: PropTypes.func,
-    onPost: PropTypes.func
+    eventContent: PropTypes.shape({
+        id: PropTypes.number,
+        name: PropTypes.string,
+        description: PropTypes.string,
+        price: PropTypes.number,
+        date: PropTypes.string,
+        startTime: PropTypes.string,
+        endTime: PropTypes.string,
+        eldershipId: PropTypes.number,
+        address: PropTypes.string,
+        lat: PropTypes.number,
+        lng: PropTypes.number,
+        postDate: PropTypes.string
+    }),
+    toggleSpinner: PropTypes.func
 }

@@ -8,6 +8,8 @@ using System.Linq;
 using Newtonsoft.Json;
 using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Interfaces;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -38,6 +40,19 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             return new JsonResult(posts);//good
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Post>> GetPost(int id)
+        {
+            var post = await _databaseContext.Post.FirstOrDefaultAsync(p => p.Id == id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return post;
+        }
+
         [HttpPost]
         public int Post(Post post)
         {

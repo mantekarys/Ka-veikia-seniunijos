@@ -45,7 +45,6 @@ namespace Ka_veikia_seniunijos.Controllers
         public int Post(Survey survey)
         {
             _databaseContext.Survey.Add(survey);
-            var lastSurvey = _databaseContext.Survey.Last();
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
@@ -53,19 +52,27 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             foreach (var question in survey.Question)
             {
-                question.ForeignSurvey = lastSurvey.Id;
-                _databaseContext.Question.Add(question);
+                question.ForeignSurvey = survey.Id;
             }
-            update = _databaseContext.SaveChanges();
+            _databaseContext.Question.AddRange(survey.Question);
+            try
+            {
+                update = _databaseContext.SaveChanges();
+            }
+            catch
+            {
+                if (update < 1)
+                {
+                    return -1;
+                }
+            }
             return 200;//good
         }
 
         [HttpPut]
         public int Put(Survey survey)
         {
-            var dbSurvey = _databaseContext.Survey.SingleOrDefault(s => s.Id == survey.Id);
-            dbSurvey = survey;
-            _databaseContext.Survey.Update(dbSurvey);
+            _databaseContext.Survey.Update(survey);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
@@ -73,7 +80,7 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             foreach (var question in survey.Question)
             {
-                question.ForeignSurvey = dbSurvey.Id;
+                question.ForeignSurvey = survey.Id;
                 _databaseContext.Question.Update(question);
             }
             update = _databaseContext.SaveChanges();

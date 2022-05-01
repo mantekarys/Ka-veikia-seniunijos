@@ -16,6 +16,8 @@ import EventPost from '../../Post/EventPost/EventPost';
 import './_eldership-style.scss';
 import '../../Utils/_base.scss';
 import PropTypes from 'prop-types';
+import LoadingSpinner from '../../LoadingSpiner/LoadingSpinner';
+import DeleteModal from '../../Modals/Delete/DeleteModal';
 export default function EldershipFeedContent() {
     const {
         state,
@@ -24,19 +26,29 @@ export default function EldershipFeedContent() {
         toggleNewPostForm,
         toggleNewEventForm,
         toggleNewSurveyForm,
-        setUserType
+        setUserType,
+        resetEditableContent,
+        toggleLoadingSpinner,
+        toggleDeleteModal,
+        deleteEvent,
+        deletePost
     } = useContext(GlobalContext);
 
     const url = new URL(window.location.href);
     const eldershipName = url.searchParams.get("eldership");
     const [posts, setPosts] = useState([]);
-    const { Name, isEldership } = JSON.parse(sessionStorage['userData']);
+    const [isAutohor, setIsAuthor] = useState(false);
 
     const USER_TYPES = {
         GUEST: 'GUEST',
         RESIDENT: 'RESIDENT',
         ELDERSHIP: 'EDLSERSHIP',
         ELDERSHIPS_ACCOUNT: 'ELDERSHIPS_ACCOUNT'
+    }
+
+    const POST_TYPES = {
+        POST: 'POST',
+        EVENT: 'EVENT'
     }
 
     useEffect(() => {
@@ -59,10 +71,24 @@ export default function EldershipFeedContent() {
              }))
     }, []);
 
+    useEffect(() => {
+        if(state.isLoadingSpinnerVisible) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500)
+        }
+    }, [state.isLoadingSpinnerVisible])
+
     const getUserType = () => {
         if (sessionStorage['userData']) {
-            if(isEldership) {
-               return Name === eldershipName ? USER_TYPES.ELDERSHIPS_ACCOUNT : USER_TYPES.ELDERSHIP;
+            const session = JSON.parse(sessionStorage['userData']);
+            if(session.isEldership) {
+                if(session.Name === eldershipName) {
+                    setIsAuthor(true);
+                    return USER_TYPES.ELDERSHIPS_ACCOUNT;
+                }
+
+               return USER_TYPES.ELDERSHIP;
             }
             return  USER_TYPES.RESIDENT;
         }
@@ -94,6 +120,7 @@ export default function EldershipFeedContent() {
     
     return (
         <div className='eldership__content'>
+            {state.isLoadingSpinnerVisible && <LoadingSpinner />}
             <div className='eldership__photo-container'>
                 <img
                     src={eldershipPhoto}
@@ -143,11 +170,15 @@ export default function EldershipFeedContent() {
             {state.isNewPostFromOpen &&
                 <Popup>
                     <PostForm
-                        onClose={toggleNewPostForm}
+                        onClose={() => {
+                            resetEditableContent();
+                            toggleNewPostForm();
+                        }}
                         onBack={() => {
                             toggleNewPostForm();
                             togglePostSelectionForm();
                         }}
+                        postContent={state.editablePost}
                     />
                 </Popup>
             }
@@ -155,12 +186,19 @@ export default function EldershipFeedContent() {
             {state.isNewEventFormOpen &&
                 <Popup>
                     <EventForm
-                    onClose={toggleNewEventForm}
-                    onBack={() => {
-                        toggleNewEventForm();
-                        togglePostSelectionForm();
-                    }}
-                    onPost={() => window.location.reload()}
+                        onClose={() => {
+                            resetEditableContent();
+                            toggleNewEventForm();
+                        }}
+                        onBack={() => {
+                            toggleNewEventForm();
+                            togglePostSelectionForm();
+                        }}
+                        eventContent={state.editableEvent}
+                        toggleSpinner={() => {
+                            toggleNewPostForm();
+                            toggleLoadingSpinner();
+                        }}
                     />
                 </Popup>
             }
@@ -178,6 +216,15 @@ export default function EldershipFeedContent() {
                 </Popup>
             }
 
+            {state.isDeleteModalOpen && 
+                <Popup>
+                    <DeleteModal 
+                        onClose={toggleDeleteModal}
+                        onDelete={state.editableEvent ? deleteEvent : deletePost}
+                    />
+                </Popup>
+            }
+
             <div className='eldership__feed'>
                 {posts.map((post, index) => {
                     return (
@@ -185,14 +232,16 @@ export default function EldershipFeedContent() {
                             eldershipName={eldershipName}
                             pictureSource={eldershipPhoto}
                             content={post.text}
-                            date={post.postDate.slice(0, post.postDate.indexOf('T'))}
+                            date={post.PostDate.slice(0, post.PostDate.indexOf('T'))}
                             key={index}
+                            isAutohor={isAutohor}
+                            id={post.Id}
+                            postType={post.hasOwnProperty('Name') ? POST_TYPES.EVENT : POST_TYPES.POST}
                         >
-                            {post.hasOwnProperty('name') ? 
+                            {post.hasOwnProperty('Name') ? 
                                 <EventPost event={post} /> :
-                                <p className='paragraph--post'>{post.text}</p>
+                                <p className='paragraph--post'>{post.Text}</p>
                             }
-
                         </Post>
                     );
                 })}

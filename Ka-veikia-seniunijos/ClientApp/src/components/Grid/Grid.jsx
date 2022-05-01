@@ -6,7 +6,7 @@ export default function Grid({ elderships }) {
     return (
         <div className='grid u-margin-top-medium' id='grid'>
             {elderships.map((eldership, key) => {
-                return <GridElement text={eldership.name} key={key} />
+                return <GridElement text={eldership.Name} key={key} />
             })}
         </div>
     );

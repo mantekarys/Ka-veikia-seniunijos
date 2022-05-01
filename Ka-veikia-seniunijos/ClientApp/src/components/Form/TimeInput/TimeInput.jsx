@@ -36,18 +36,6 @@ export default function TimeInput({
     return (
         <div className='time__container'>
             <div className='time__container-input'>
-                <label className='time__container-label'>Renginio pabaiga</label>
-
-                <TimePicker
-                    defaultValue={moment(endTime, FORMATS.TIME)}
-                    format={FORMATS.TIME}
-                    showNow={false}
-                    onChange={(value) => onEndTimeChange(moment(value).format(FORMATS.TIME))}
-                    style={timeInputStyle}
-                />
-            </div>
-
-            <div className='time__container-input'>
                 <label className='time__container-label'>Renginio pradžia</label>
 
                 <TimePicker
@@ -55,6 +43,18 @@ export default function TimeInput({
                     format={FORMATS.TIME}
                     showNow={false}
                     onChange={(value) => onStartTimeChange(moment(value).format(FORMATS.TIME))}
+                    style={timeInputStyle}
+                />
+            </div>
+
+            <div className='time__container-input'>
+                <label className='time__container-label'>Renginio pabaiga</label>
+
+                <TimePicker
+                    defaultValue={moment(endTime, FORMATS.TIME)}
+                    format={FORMATS.TIME}
+                    showNow={false}
+                    onChange={(value) => onEndTimeChange(moment(value).format(FORMATS.TIME))}
                     style={timeInputStyle}
                 />
             </div>

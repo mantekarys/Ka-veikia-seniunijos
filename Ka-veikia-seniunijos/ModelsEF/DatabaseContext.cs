@@ -255,11 +255,6 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .IsRequired()
                     .HasColumnName("text");
 
-                entity.Property(e => e.Topic)
-                    .IsRequired()
-                    .HasColumnName("topic")
-                    .HasMaxLength(30);
-
                 entity.HasOne(d => d.EldershipFkNavigation)
                     .WithMany(p => p.Post)
                     .HasForeignKey(d => d.EldershipFk)

@@ -53,26 +53,29 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 messages = _databaseContext.Message.Where(m => m.FkEldership == id && m.SenderType == "eldership").ToList();
             }
+            else if (isUser && type == "all")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkUser == id).ToList();
+            }
+            else if (!isUser && type == "all")
+            {
+                messages = _databaseContext.Message.Where(m => m.FkEldership == id).ToList();
+            }
             else
             {
                 return new JsonResult(BadRequest());
             }
             foreach (var mes in messages)
             {
-                if (mes.Reply != null || ((type == "received" || type == "sent") && !ids.Contains((int)mes.Reply)))
+                if (mes.Reply == null || ((type == "received" || type == "sent") && !ids.Contains((int)mes.Reply)))
                 {
                     ids.Add(mes.Id);
                 }
 
             }
-            // while (rdr.Read())
-            // {
-            //     bool flag = true;
-            //     if (rdr[8] is System.DBNull || ((type == "received" || type == "sent") && !ids.Contains((int)rdr[8]))) ids.Add((int)rdr[0]);
-            // }
             foreach (var i in ids)
             {
-                var replies = _databaseContext.Message.Where(m => m.Reply == i || m.Id == i).ToList();
+                var replies = _databaseContext.Message.Where(m => m.Id == i || m.Reply == i).ToList();
                 repliesAll.Add(replies);
             }
             return new JsonResult(repliesAll);

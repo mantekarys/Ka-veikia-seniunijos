@@ -9,8 +9,8 @@ import '../../Button/_button.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function PostForm({ onClose, onBack }) {
-    const [text, setText] = useState("");
+export default function PostForm({ onClose, onBack, postContent, toggleSpinner }) {
+    const [text, setText] = useState(postContent?.text ? postContent.text : "");
     const [error, setError] = useState("");
 
     const handleOnSubmit = () => {
@@ -18,17 +18,33 @@ export default function PostForm({ onClose, onBack }) {
             setError('Įrašo tekstas neagli būti tuščias!');
             return;
         }
-        const todaysDate = getTodaysDate();
-        // // axios.post('https://localhost:44330/api/user', {
 
-        // // })
-        // .then(res => {
-        //     if(res.status === 200) window.location.reload();
-        // })
-        // .catch(_ => {
-        //     setErrorMessage('Įvyko nenumatyta klaida');
-        // })
-        window.location.reload();
+        if(text && postContent?.text) {
+            handleOnUpdate();
+            return;
+        }
+        const todaysDate = getTodaysDate();
+        axios.post('https://localhost:44330/api/post', {
+            Text: text,
+            PostDate: todaysDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => toggleSpinner());
+    }
+
+    const handleOnUpdate = () => {
+        if(text === postContent.text) {
+            setError('Įrašo tekstas nepasikeitė!');
+            return;
+        }
+
+        axios.put('https://localhost:44330/api/post', {
+            Id: postContent.id,
+            Text: text,
+            PostDate: postContent.PostDate,
+            EldershipFk: JSON.parse(sessionStorage['userData']).Id
+        })
+        .then(_ => toggleSpinner());
     }
 
     const getTodaysDate = () => {
@@ -50,13 +66,16 @@ export default function PostForm({ onClose, onBack }) {
             {error && <Error text={error} />}
 
             <div className='post-form__buttons'>
+                {!postContent?.text &&
+                    <Button
+                        text='Atgal'
+                        styling='btn btn--post-small'
+                        onClick={onBack}
+                    />
+                }
+
                 <Button
-                    text='Atgal'
-                    styling='btn btn--post-small'
-                    onClick={onBack}
-                />
-                <Button
-                    text='Skelbti'
+                    text={postContent?.text ? 'Atnaujinti' : 'Skelbti'}
                     styling='btn btn--post-small'
                     onClick={handleOnSubmit}
                 />
@@ -68,4 +87,9 @@ export default function PostForm({ onClose, onBack }) {
 PostForm.propTypes = {
     onClose: PropTypes.func,
     onBack: PropTypes.func,
+    postContent: PropTypes.shape({
+        text: PropTypes.string,
+        id: PropTypes.number
+    }),
+    toggleSpinner: PropTypes.func
 }

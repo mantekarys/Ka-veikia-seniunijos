@@ -35,7 +35,7 @@ namespace Ka_veikia_seniunijos.Controllers
             return 200;//good
         }
 
-        [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received - sent - all
+        [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received * sent * all (all returns replies but received and sent dont)
         public JsonResult GetAll(int id, bool isUser, string type)
         {
             List<Message> messages = new List<Message>();
@@ -44,18 +44,22 @@ namespace Ka_veikia_seniunijos.Controllers
             if (isUser && type == "received")
             {
                 messages = _databaseContext.Message.Where(m => m.FkUser == id && m.ReceiverType == "user").ToList();
+                return new JsonResult(messages);
             }
             else if (isUser && type == "sent")
             {
                 messages = _databaseContext.Message.Where(m => m.FkUser == id && m.SenderType == "user").ToList();
+                return new JsonResult(messages);
             }
             else if (!isUser && type == "received")
             {
                 messages = _databaseContext.Message.Where(m => m.FkEldership == id && m.ReceiverType == "eldership").ToList();
+                return new JsonResult(messages);
             }
-            else if (isUser && type == "sent")
+            else if (!isUser && type == "sent")
             {
                 messages = _databaseContext.Message.Where(m => m.FkEldership == id && m.SenderType == "eldership").ToList();
+                return new JsonResult(messages);
             }
             else if (isUser && type == "all")
             {
@@ -71,11 +75,10 @@ namespace Ka_veikia_seniunijos.Controllers
             }
             foreach (var mes in messages)
             {
-                if (mes.Reply == null || ((type == "received" || type == "sent") && !ids.Contains((int)mes.Reply)))
+                if (mes.Reply == null)// || ((type == "received" || type == "sent") && !ids.Contains((int)mes.Reply))
                 {
                     ids.Add(mes.Id);
                 }
-
             }
             foreach (var i in ids)
             {

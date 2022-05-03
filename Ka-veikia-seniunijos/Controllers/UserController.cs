@@ -51,7 +51,17 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserProfileUpdateCommand(User user)
         {
-            _databaseContext.User.Update(user);
+            var dbUser = _databaseContext.User.FirstOrDefault(u => u.Id == user.Id);
+            if (dbUser == null)
+            {
+                //Not found user by id
+                return 1062;
+            }
+            dbUser.FirstName = user.FirstName;
+            dbUser.LastName = user.LastName;
+            dbUser.Email = user.Email;
+            dbUser.Municipality = user.Municipality;
+            _databaseContext.User.Update(dbUser);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
             {

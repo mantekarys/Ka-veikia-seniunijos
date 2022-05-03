@@ -16,6 +16,8 @@ import axios from 'axios';
 
 export default function UserProfile({ onUpdate }) {
     const sessionData = JSON.parse(sessionStorage['userData']);
+    // const [id,setId] = useState(sessionData.Id);
+    const id = sessionData.Id;
     const [name, setName] = useState(sessionData.FirstName);
     const [surname, setSurname] = useState(sessionData.LastName);
     const [email, setEmail] = useState(sessionData.Email);
@@ -27,7 +29,8 @@ export default function UserProfile({ onUpdate }) {
         const fetchData = async () => {
             try {
                 const result = await axios.get('https://localhost:44330/api/eldership');
-                const elderships = result.data.map(eldership => eldership.municipality);
+                const elderships = result.data.map(eldership => eldership.Municipality);
+                console.log(result);
                 setElderships(elderships);
             } catch(error) {
                 console.error(error);
@@ -53,6 +56,7 @@ export default function UserProfile({ onUpdate }) {
 
     const handleOnSubmit = () => {
         axios.put('https://localhost:44330/api/user', {
+            'Id': id,
             'FirstName': name,
             'LastName': surname,
             'Email': email,

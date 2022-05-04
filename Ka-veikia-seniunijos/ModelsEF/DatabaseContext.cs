@@ -338,7 +338,7 @@ namespace Ka_veikia_seniunijos.ModelsEF
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Date)
+                entity.Property(e => e.PostDate)
                     .HasColumnName("date")
                     .HasColumnType("date");
 

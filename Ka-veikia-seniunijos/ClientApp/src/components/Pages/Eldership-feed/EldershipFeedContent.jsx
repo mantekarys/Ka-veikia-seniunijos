@@ -43,7 +43,7 @@ export default function EldershipFeedContent() {
     const USER_TYPES = {
         GUEST: 'GUEST',
         RESIDENT: 'RESIDENT',
-        ELDERSHIP: 'EDLSERSHIP',
+        ELDERSHIP: 'ELDERSHIP',
         ELDERSHIPS_ACCOUNT: 'ELDERSHIPS_ACCOUNT'
     }
 

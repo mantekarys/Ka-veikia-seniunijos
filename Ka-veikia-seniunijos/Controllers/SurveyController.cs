@@ -38,6 +38,14 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 return new JsonResult("There is no surveys made by this eldership");
             }
+            foreach (var survey in surveys)
+            {
+                var questions = _databaseContext.Question.Where(q => q.ForeignSurvey == survey.Id).ToList();
+                foreach (var q in questions)
+                {
+                    survey.Question.Add(q);
+                }
+            }
             return new JsonResult(surveys);
         }
 
@@ -136,7 +144,7 @@ namespace Ka_veikia_seniunijos.Controllers
             _databaseContext.Survey.Update(survey);
             var update = _databaseContext.SaveChanges();
             if (update < 1)
-            {   
+            {
                 return 1062;
             }
             foreach (var question in survey.Question)

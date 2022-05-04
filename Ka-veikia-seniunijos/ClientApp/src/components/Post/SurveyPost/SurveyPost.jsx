@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { Radio } from 'pretty-checkbox-react';
 import PropTypes from 'prop-types';
 import Input from '../../Form/Input';
+import Button from '../../Button/Button';
 
 export default function SurveyPost({survey}) {
     const [activeRadio, setActiveRadio] = useState(4);
@@ -27,6 +28,7 @@ export default function SurveyPost({survey}) {
                             style={{ fontSize: '15px' }}
                             checked={index === activeRadio}
                             key={index}
+                            onChange={() => setActiveRadio(index)}
                         >
                             {x}
                         </Radio>
@@ -46,6 +48,9 @@ export default function SurveyPost({survey}) {
                             {question.Rating === 0 ? renderOpenQuestionInput() : renderRadioButtons(question.Rating)}
                         </div>
                     )})}
+            </div>
+            <div className='survey__button'>
+                <Button text='Atsakyti' styling='btn btn--post-small'/>
             </div>
         </>
     )

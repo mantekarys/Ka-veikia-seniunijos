@@ -58,17 +58,11 @@ export default function EldershipFeedContent() {
     }, []);
 
     useEffect(() => {
-        const fetchPosts = async () => {
-            const postsData = await axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`);
-            setPosts(() => [...posts, ...postsData.data]);
-        }
-
-        fetchPosts();
-
         axios.all([axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`),
-                   axios.get(`https://localhost:44330/api/event/${eldershipName}`)])
-             .then(axios.spread((postsResponse, eventsResponse) => {
-                setPosts([...postsResponse.data, ...eventsResponse.data].sort((a, b) => new Date(b.PostDate) - new Date(a.PostDate)));
+                   axios.get(`https://localhost:44330/api/event/${eldershipName}`),
+                    axios.get(`https://localhost:44330/api/survey/${eldershipName}`)])
+             .then(axios.spread((postsResponse, eventsResponse, surveyResponse) => {
+                setPosts([...postsResponse.data, ...eventsResponse.data, ...surveyResponse.data].sort((a, b) => new Date(b.PostDate) - new Date(a.PostDate)));
              }))
     }, []);
 
@@ -117,6 +111,22 @@ export default function EldershipFeedContent() {
                 );
             }
         }
+    }
+
+    const renderCurrentPost = (post) => {
+        if(post?.Question) {
+            return (
+                <SurveyPost survey={post}/>
+            );
+        } else if (post?.Name) {
+            return (
+                <EventPost event={post} />
+            );
+        }
+
+        return (
+            <p className='paragraph--post'>{post.Text}</p>
+        );
     }
     
     return (
@@ -246,11 +256,7 @@ export default function EldershipFeedContent() {
                             id={post.Id}
                             postType={post.hasOwnProperty('Name') ? POST_TYPES.EVENT : POST_TYPES.POST}
                         >
-                            {post.hasOwnProperty('Name') ? 
-                                <EventPost event={post} /> :
-                                <p className='paragraph--post'>{post.Text}</p>
-                            }
-                            {/* <SurveyPost /> */}
+                            {renderCurrentPost(post)}
                         </Post>
                     );
                 })}

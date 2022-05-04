@@ -11,11 +11,13 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-export default function MessageForm({ onClose }) {
+export default function MessageForm({ onClose, eldershipName }) {
     const [messageTopic, setMessageTopic] = useState('');
     const [message, setMessage] = useState('');
     const [isFormInvalid, setIsFormInvalid] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isSubmited, setIsSubmited] = useState(false);
+    const sessionData = JSON.parse(sessionStorage['userData']);
 
     const handleOnSubmit = () => {
         if (!message) {
@@ -23,13 +25,24 @@ export default function MessageForm({ onClose }) {
             setIsFormInvalid(true);
         }
 
-        // axios.post('https://localhost:44330/api/message', {
-
-        // })
-        // .then(resp => {
-
-        // })
-        // .catch
+        axios.get(`https://localhost:44330/api/eldership/getEldership/${eldershipName}`)
+        .then(response => {
+            return axios.post('https://localhost:44330/api/message', {
+                sender: sessionData.FirstName ? sessionData.FirstName : sessionData.Name,
+                senderType: 'user',
+                receiver: eldershipName,
+                receiverType: 'eldership',
+                topic: messageTopic,
+                text: message,
+                FkUser: sessionData.Id,
+                FkEldership: response.data.Id
+            })
+        })
+        .then(_ => {
+            setIsSubmited(true);
+            setMessage('');
+            setMessageTopic('');
+        }).catch(error => console.error(error));
     }
 
     return (
@@ -55,7 +68,7 @@ export default function MessageForm({ onClose }) {
                 />
 
                 {isFormInvalid && <Error text={errorMessage} />}
-
+                {isSubmited && <p className='message-form__success-message'>Pranešimas buvo sėkmingai išsiųstas</p>}
                 <div className='login__button-wrapper'>
                     <Button
                         text='Siųsti'
@@ -70,5 +83,6 @@ export default function MessageForm({ onClose }) {
 }
 
 MessageForm.prototype = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    eldershipName: PropTypes.string
 }

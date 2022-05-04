@@ -34,6 +34,18 @@ namespace Ka_veikia_seniunijos.Controllers
             return new JsonResult(eldership);
         }
 
+        [HttpGet("getEldership/{eldershipName}")]
+        public Eldership GetEldership(string eldershipName)
+        {
+            var eldership = _databaseContext.Eldership.FirstOrDefault(e => e.Name == eldershipName);
+            if(eldership == null)
+            {
+                return null;
+            }
+
+            return eldership;
+        }
+
         [HttpGet]
         public JsonResult GetAll()
         {

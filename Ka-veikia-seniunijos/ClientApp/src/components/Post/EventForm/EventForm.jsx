@@ -20,7 +20,7 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
         const today = new Date();
         return eventContent?.date ?
             eventContent.date :
-            `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+            today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();;
     });
     const [startTime, setStartTime] = useState(eventContent?.startTime ? eventContent.startTime :'19:00');
     const [endTime, setEndTime] = useState(eventContent?.endTime ? eventContent.endTime : '19:30');
@@ -33,32 +33,37 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
     const [errorMessage, setErrorMessage] = useState('');
     const {REACT_APP_POSITION_STACK_API_KEY} = process.env;
 
-    const handleOnSubmit = () => {
+    const handleOnSubmit = async () => {
         if (!name || !place) {
             setErrorMessage('Renginio pavadinimas ir vieta yra privalomi!');
             return;
         }
 
-        fetchCoords();
+        await fetchCoords();
         eventContent ? updateEvent() : postEvent();
     }
 
     const fetchCoords = async () => {
         try {
-            const position = await axios.get(`http://api.positionstack.com/v1/forward?access_key=${REACT_APP_POSITION_STACK_API_KEY}&query=${place}`);
+
+            // const position = await axios.get(`http://api.positionstack.com/v1/forward?access_key=${REACT_APP_POSITION_STACK_API_KEY}&query=${place}`);
+            //Temporary fix
+            const position = await axios.get(`http://api.positionstack.com/v1/forward?access_key=8a2d55dfcb204056ffd8c2706ee83b8f&query=${place}`);
             if(!position.data.data.length) {
                 setErrorMessage('Netinkama renginio vieta');
                 return;
             }
-
-            setCoords({
-                lat: position.data.data[0].latitude,
-                lng: position.data.data[0].longtitude
-            })
-
+            coords.lat = position.data.data[0].latitude;
+            coords.lng = position.data.data[0].longitude;
+            //THIS DONT DO SHIT
+            // setCoords({
+            //     lat: position.data.data[0].latitude,
+            //     lng: position.data.data[0].longitude
+            // })
         } catch (error) {
             console.log(error)
         }
+        
     }
 
     const updateEvent = () => {
@@ -67,20 +72,31 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
             Name: name,
             Description: description,
             Price: price ? price : 0,
-            Dete: date,
+            Date: date,
             StartTime: startTime,
             EndTime: endTime,
             EldershipFk: eventContent.eldershipId,
             Address: place,
             Latitude: coords.lat,
-            Lonigtude: coords.lng,
+            Longtitude: coords.lng,
             PostDate: eventContent.postDate
         })
         .then(_ => toggleSpinner())
     }
 
     const postEvent = () => {
-        axios.post('https://localhost:44330/api/event', {
+        console.log(name);
+        console.log(description);
+        console.log(price);
+        console.log(date);
+        console.log(startTime);
+        console.log(endTime);
+        console.log(JSON.parse(sessionStorage['userData']).Id);
+        console.log(place);
+        console.log(coords.lat);
+        console.log(coords.lng);
+
+        axios.post('https://localhost:44330/api/Event', {
             Name: name,
             Description: description,
             Price: price ? price : 0,
@@ -90,7 +106,7 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
             EldershipFk: JSON.parse(sessionStorage['userData']).Id,
             Address: place,
             Latitude: coords.lat,
-            Lonigtude: coords.lng,
+            Longtitude: coords.lng,
         })
         .then(_ => toggleSpinner())
     }

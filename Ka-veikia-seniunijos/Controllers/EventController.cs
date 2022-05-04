@@ -83,16 +83,19 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(Event ev)
         {
+            Console.WriteLine("Hello");
             if (ev == null)
             {
                 return 1062;
             }
             _databaseContext.Event.Add(ev);
             var update = _databaseContext.SaveChanges();
+            Console.WriteLine("Hello here");
             if (update < 1)
             {
                 return 1062;
             }
+            Console.WriteLine("LIES");
             return 200;//good
 
         }

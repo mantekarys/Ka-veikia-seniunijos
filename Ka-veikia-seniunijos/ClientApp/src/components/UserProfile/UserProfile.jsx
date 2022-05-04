@@ -24,8 +24,6 @@ export default function UserProfile({ onUpdate }) {
     const [eldership, setEldership] = useState(sessionData.Municipality);
     const [elderships, setElderships] = useState([]);
     const [isEditEnabled, setIsEditEnabled] = useState(false);
-	const [id, setId] = useState(sessionData.Id);
-
     useEffect(() => {
         const fetchData = async () => {
             try {

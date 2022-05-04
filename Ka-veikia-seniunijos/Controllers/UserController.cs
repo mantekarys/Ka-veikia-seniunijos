@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Linq;
 using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ka_veikia_seniunijos.Controllers
 {
@@ -51,6 +52,9 @@ namespace Ka_veikia_seniunijos.Controllers
 
         private int getUserProfileUpdateCommand(User user)
         {
+            _databaseContext.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            var userOld = _databaseContext.User.FirstOrDefault(p => p.Id == user.Id);
+            user.PasswordHashed = userOld.PasswordHashed;
             _databaseContext.User.Update(user);
             var update = _databaseContext.SaveChanges();
             if (update < 1)

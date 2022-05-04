@@ -144,7 +144,7 @@ export default function EldershipFeedContent() {
 
             {state.isMessageFormOpen &&
                 <Popup>
-                    <MessageForm onClose={toggleMessageForm}/>
+                    <MessageForm onClose={toggleMessageForm} eldershipName={eldershipName}/>
                 </Popup>
             }
 

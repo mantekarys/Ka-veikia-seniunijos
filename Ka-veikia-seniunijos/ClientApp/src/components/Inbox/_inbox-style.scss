@@ -7,12 +7,16 @@
         width: 80%;
         height: 80vh;
         box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+        background-color: #f4f6f8;
     }
 
     &__tabs {
         width: 100%;
-        height: 10%;
+        position: relative;
         background-color: $color-white;
+        color: $color-dark-green;
+        font-weight: bold;
+        cursor: pointer;
 
         &-name {
             display: inline-block;
@@ -21,8 +25,33 @@
             padding: 2rem;
             cursor: pointer;
 
-            &--active {
-                border-bottom: 1px solid $color-black;
+            @include respond(mobile) {
+                font-size: 1.5rem;
+                padding: 1rem;
+            }
+        }
+
+        &-border {
+            position: absolute;
+            border-top: 2px solid $color-dark-green;
+            width: 16rem;
+            transition: left .5s ease-in-out;
+            margin: 0;
+
+            @include respond(mobile) {
+                width: 13rem;
+            }
+
+            &--sent {
+                left: 19rem;
+
+                @include respond(mobile) {
+                    left: 13rem;
+                }
+            }
+
+            &--received {
+                left: 0;
             }
         }
     }
@@ -32,6 +61,7 @@
         height: 90%;
         border-radius: $default-form-border-radius;
         overflow-y: scroll;
+        padding: 1rem;
 
         &::-webkit-scrollbar {
             width: .5rem;
@@ -54,6 +84,8 @@
             justify-content: space-around;
             transition: all .2s;
             cursor: pointer;
+            background-color: $color-white;
+            border-radius: 1rem;
 
             &:hover {
                 background-color: rgba($color-black, .1);
@@ -63,8 +95,12 @@
                 background-color: rgba($color-black, .1);
             }
 
+            &:not(:first-child) {
+                margin-top: 1rem;
+            }
+
             & > span {
-                font-size: 2rem;
+                font-size: 2.5rem;
                 display: inline-block;
             }
         }
@@ -79,4 +115,19 @@
     &-topic {
         flex-grow: 1;
     }
+}
+
+.inbox-error-message {
+    @include absCenter;
+    font-size: 3rem;
+    font-weight: bold;
+    color: $color-dark-green;
+
+    &-icon {
+        margin-left: 1rem;
+    }
+}
+
+.loading-spinner {
+    @include contentSpinner;
 }

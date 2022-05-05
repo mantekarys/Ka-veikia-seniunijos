@@ -39,6 +39,7 @@ export default function EldershipFeedContent() {
     const eldershipName = url.searchParams.get("eldership");
     const [posts, setPosts] = useState([]);
     const [isAutohor, setIsAuthor] = useState(false);
+    const [isContentLoading, setIsContentLoading] = useState(false);
 
     const USER_TYPES = {
         GUEST: 'GUEST',
@@ -58,10 +59,12 @@ export default function EldershipFeedContent() {
     }, []);
 
     useEffect(() => {
+        setIsContentLoading(true);
         axios.all([axios.get(`https://localhost:44330/api/post/GetDayPosts/${eldershipName}`),
                    axios.get(`https://localhost:44330/api/event/${eldershipName}`),
                     axios.get(`https://localhost:44330/api/survey/${eldershipName}`)])
              .then(axios.spread((postsResponse, eventsResponse, surveyResponse) => {
+                 setIsContentLoading(false);
                 setPosts([...postsResponse.data, ...eventsResponse.data, ...surveyResponse.data].sort((a, b) => new Date(b.PostDate) - new Date(a.PostDate)));
              }))
     }, []);
@@ -131,6 +134,7 @@ export default function EldershipFeedContent() {
     
     return (
         <div className='eldership__content'>
+            {isContentLoading && <div className='loading-spinner' /> }
             {state.isLoadingSpinnerVisible && <LoadingSpinner />}
             <div className='eldership__photo-container'>
                 <img

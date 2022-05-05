@@ -37,8 +37,12 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpGet("{id}")]//isuser - true if user false if eldership /
         public JsonResult Get(int id)
         {
-            var messages = _databaseContext.Message.Where(m => m.Id == id || m.Reply == id);
-            return new JsonResult(messages);
+            var message = _databaseContext.Message.FirstOrDefault(m => m.Id == id);
+            if (message.Reply != null){
+                var messages = _databaseContext.Message.Where(m => m.Id == message.Reply || m.Reply == message.Reply);//FirstOrDefault
+                return new JsonResult(messages);
+            }
+            return new JsonResult(message);
         }
 
         [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received * sent * all (all returns replies but received and sent dont)

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Input from '../../Form/Input';
 import Button from '../../Button/Button';
 import { Radio } from 'pretty-checkbox-react';
@@ -19,7 +19,7 @@ export default function QuestionSelect({onAdd}) {
       Rating: 0,
       Number: 0
   })
-  
+
   const [isOptionsOpen, setIsOptionsOpne] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -44,11 +44,11 @@ export default function QuestionSelect({onAdd}) {
             return;
         }
 
-            onAdd(question);
-            setQuestion({
-                Text: '',
-                Rating: 0,
-            })
+        onAdd(checked.open ? {...question, Rating: 0} : question);
+        setQuestion({
+            Text: '',
+            rating: 5
+        })
     }
 
   return (

@@ -32,7 +32,7 @@ export default function SurveyForm({onClose, onBack, toggleSpinner}) {
         axios.post('https://localhost:44330/api/survey', {
             name,
             EldershipFk: JSON.parse(sessionStorage['userData']).Id,
-            Date: getTodaysDate(),
+            PostDate: getTodaysDate(),
             Question: [...questions.questions]
         })
         .then(_ => toggleSpinner());

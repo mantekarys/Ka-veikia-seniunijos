@@ -4,21 +4,22 @@ import Button from '../Button/Button';
 import Popup from '../Popup/Popup';
 import Error from '../Error/Error';
 import FormFooter from '../Form/Footer/FormFooter';
+import LoadingSpinner from '../LoadingSpiner/LoadingSpinner';
 import PropTypes from 'prop-types';
 import '../style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { faXmark, faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 export default function Login({ onClose, onLoginRedirect }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
+    const [isSpinnerVisible, setIsSpinnerVisible] = useState(false);
 
     const handleOnSubmit = async () => {
         if (fieldsAreEmpty()) return;
-
+        setIsSpinnerVisible(true);
         axios.post('https://localhost:44330/api/user/auth', {
                 'email': email,
                 'password': password
@@ -34,6 +35,7 @@ export default function Login({ onClose, onLoginRedirect }) {
             })
             .catch(err => {
                 const {message} = err.response.data;
+                setIsSpinnerVisible(false);
                 setErrorMessage(message);
             })
     }
@@ -49,10 +51,11 @@ export default function Login({ onClose, onLoginRedirect }) {
     return (
         <Popup>
             <div className='login__container'>
+                {isSpinnerVisible && <LoadingSpinner />}
                 <FontAwesomeIcon className='form__icon' icon={faXmark} onClick={onClose} />
                 <h2 className='header__secondary u-text-center'>Prisijungimas</h2>
 
-                <form className='login__content'>
+                <form className='login__content' method='post' onSubmit={handleOnSubmit}>
                     <div className="login__input-wrapper">
                         <span>
                             <FontAwesomeIcon className='form__placeholder-icon' icon={faEnvelope} />

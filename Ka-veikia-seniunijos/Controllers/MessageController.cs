@@ -34,6 +34,12 @@ namespace Ka_veikia_seniunijos.Controllers
             _databaseContext.SaveChanges();
             return 200;//good
         }
+        [HttpGet("{id}")]//isuser - true if user false if eldership /
+        public JsonResult Get(int id)
+        {
+            var messages = _databaseContext.Message.Where(m => m.Id == id || m.Reply == id);
+            return new JsonResult(messages);
+        }
 
         [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received * sent * all (all returns replies but received and sent dont)
         public JsonResult GetAll(int id, bool isUser, string type)

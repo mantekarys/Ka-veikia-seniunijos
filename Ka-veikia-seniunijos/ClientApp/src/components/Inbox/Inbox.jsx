@@ -52,7 +52,7 @@ export default function Inbox() {
         await axios.get(`https://localhost:44330/api/message/${id}`)
         .then(response => {
             setIsLoading(false);
-            setMessageContent(Array.isArray(response.data) ? response.data : [response.data]);
+            setMessageContent(response.data);
             setIsMessageContentOpen(true);
         })
         .catch(err => console.error(err))
@@ -88,7 +88,7 @@ export default function Inbox() {
                 <hr className={`inbox__tabs-border ${activeTab === 'received' ? 'inbox__tabs-border--received' : 'inbox__tabs-border--sent'}`}/>
             </div>
             {isMessageContentOpen ? 
-                <MessageContent onBack={() => setIsMessageContentOpen(false)} message={messageContent[0]} activeTab={activeTab}/> :
+                <MessageContent onBack={() => setIsMessageContentOpen(false)} message={messageContent} activeTab={activeTab}/> :
                 <div className='inbox__content'>
                     {((activeTab === 'received' && !receivedMessages.length) || (activeTab === 'sent' && !sentMessages.length)) && !isLoading &&
                     <div className='inbox__content-no-results'>

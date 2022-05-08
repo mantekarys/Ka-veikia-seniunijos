@@ -84,7 +84,7 @@ export default function MessageContent({ message, onBack, activeTab }) {
                 </p>
             </div>
 
-            {activeTab === 'received' && ((isEldership && messageContent.Sender !== Name) || (messageContent.Sender !== FirstName)) &&
+            {activeTab === 'received' && ((isEldership && messageContent.Sender !== Name) || (FirstName && messageContent.Sender !== FirstName)) &&
                 <div className='message-input-wrapper'>
                     <TextArea 
                         placeholder='Žinutės tekstas'
@@ -107,10 +107,9 @@ export default function MessageContent({ message, onBack, activeTab }) {
 
     const renderMessagesContent = () => (
         <>
-            <MessageTeaser messageContent={message} getDate={getDate} getTime={getTime}/>
-            {message.InverseReplyNavigation.map((messageReply, index) => (
+            {message.map((messageReply, index) => (
                 <>
-                    {index + 1 === message.InverseReplyNavigation.length ? 
+                    {index + 1 === message.length ? 
                         renderLastMessage(messageReply) :
                         <MessageTeaser messageContent={messageReply} getDate={getDate} getTime={getTime}/>
                     }
@@ -126,13 +125,13 @@ export default function MessageContent({ message, onBack, activeTab }) {
             <div className='message-header'>
                 <div className='message-header__date'>
                     <FontAwesomeIcon icon={faArrowLeft} className='icon-arrow' onClick={onBack} />
-                    <span>{getDate(message.Date)} {getTime(message.Date)}</span>
+                    <span>{getDate(message[0].Date)} {getTime(message[0].Date)}</span>
                 </div>
-                <h2 className='header__secondary'>{message.Topic}</h2> 
+                <h2 className='header__secondary'>{message[0].Topic}</h2> 
             </div>
             <div className='messages-container'>
-                {!message.InverseReplyNavigation.length ?
-                    renderLastMessage(message) :
+                {message.length === 1 ?
+                    renderLastMessage(message[0]) :
                     renderMessagesContent()
                 }
             </div>
@@ -143,7 +142,7 @@ export default function MessageContent({ message, onBack, activeTab }) {
 
 MessageContent.propTypes = {
     onBack: PropTypes.func,
-    message: PropTypes.shape({
+    message: PropTypes.arrayOf(PropTypes.shape({
         Date: PropTypes.string,
         Id: PropTypes.number,
         sender: PropTypes.string,
@@ -155,6 +154,6 @@ MessageContent.propTypes = {
         FkUser: PropTypes.number,
         FkEldership: PropTypes.number,
         reply: PropTypes.number
-    }),
+    })),
     activeTab: PropTypes.string
 }

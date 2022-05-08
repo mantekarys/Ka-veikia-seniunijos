@@ -23,7 +23,7 @@ export default function NavigationList({ content, side }) {
                     </li>  
                );
             })}
-        </ul>
+        </ul>   
     );
 }
 

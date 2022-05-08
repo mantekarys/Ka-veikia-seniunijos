@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
 import './_leaflet-map-style.scss';
 import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
 import { Switch } from 'pretty-checkbox-react';

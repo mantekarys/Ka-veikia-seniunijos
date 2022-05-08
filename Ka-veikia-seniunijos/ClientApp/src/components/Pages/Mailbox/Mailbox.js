@@ -2,7 +2,6 @@
 import HomeHeader from '../../Header/HomeHeader';
 import UserHeader from '../../Header/UserHeader';
 import Inbox from '../../Inbox/Inbox';
-import Footer from '../../Footer/Footer';
 
 function Mailbox() {
     return (

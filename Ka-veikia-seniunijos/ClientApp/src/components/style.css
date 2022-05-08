@@ -148,6 +148,16 @@ body {
   100% {
     transform: rotate(360deg); } }
 
+@keyframes shake {
+  0% {
+    margin-left: 0rem; }
+  25% {
+    margin-left: 1rem; }
+  75% {
+    margin-left: -1rem; }
+  100% {
+    margin-left: 0rem; } }
+
 .login__container {
   position: absolute;
   top: 50%;
@@ -159,7 +169,7 @@ body {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   z-index: 200;
   border-radius: 1rem;
-  height: 70%; }
+  height: 80vh; }
   @media (max-width: 75em) {
     .login__container {
       width: 50%; } }
@@ -403,11 +413,19 @@ body {
   padding: 1.5rem 1rem;
   font-size: 1.7rem;
   width: 20rem; }
+  .btn--post-question {
+    display: block;
+    width: 10rem;
+    margin: 2rem auto;
+    padding: 1rem 1rem;
+    font-size: 1.5rem;
+    background-color: #000000; }
   .btn--post-small {
     background-color: #000000;
     padding: 1rem 1rem;
     font-size: 1.8rem;
-    width: 12rem; }
+    width: 12rem;
+    cursor: pointer; }
     @media (max-width: 37.5em) {
       .btn--post-small {
         font-size: 1.4rem;
@@ -541,7 +559,8 @@ body {
         position: relative; }
     .header__user-icon {
       font-weight: bold;
-      font-size: 2rem; }
+      font-size: 2rem;
+      cursor: pointer; }
       .header__user-icon:hover {
         color: grey; }
     .header__user-name {
@@ -596,6 +615,16 @@ body {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+
+@keyframes shake {
+  0% {
+    margin-left: 0rem; }
+  25% {
+    margin-left: 1rem; }
+  75% {
+    margin-left: -1rem; }
+  100% {
+    margin-left: 0rem; } }
 
 .sidebar {
   position: fixed;

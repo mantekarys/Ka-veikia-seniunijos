@@ -26,12 +26,11 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
     const [endTime, setEndTime] = useState(eventContent?.endTime ? eventContent.endTime : '19:30');
     const [isFree, setIsFree] = useState(!eventContent?.price || eventContent?.price === 0 ? true: false);
     const [price, setPrice] = useState(!eventContent?.price || eventContent?.price === 0 ? '' : eventContent.price);
-    const [coords, setCoords] = useState({
+    const coords = {
         lat: eventContent?.lat ? eventContent.lat : null,
         lng: eventContent?.lng ? eventContent.lng : null
-    })
+    }
     const [errorMessage, setErrorMessage] = useState('');
-    const {REACT_APP_POSITION_STACK_API_KEY} = process.env;
 
     const handleOnSubmit = async () => {
         if (!name || !place) {
@@ -55,11 +54,6 @@ export default function EventForm({ onClose, onBack, eventContent, toggleSpinner
             }
             coords.lat = position.data.data[0].latitude;
             coords.lng = position.data.data[0].longitude;
-            //THIS DONT DO SHIT
-            // setCoords({
-            //     lat: position.data.data[0].latitude,
-            //     lng: position.data.data[0].longitude
-            // })
         } catch (error) {
             console.log(error)
         }

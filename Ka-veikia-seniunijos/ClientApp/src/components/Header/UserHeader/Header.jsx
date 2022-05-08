@@ -29,7 +29,9 @@ export default function Header() {
     }
 
     const handleOnMessageClick = () => {
-        window.location.href = `http://localhost:3000/mailbox?name=${FirstName}.${LastName}`;
+        window.location.href = isEldership ? 
+        `http://localhost:3000/mailbox?name=${Name}` :
+        `http://localhost:3000/mailbox?name=${FirstName}.${LastName}`;
     }
 
     const handleOnMapClick = () => {

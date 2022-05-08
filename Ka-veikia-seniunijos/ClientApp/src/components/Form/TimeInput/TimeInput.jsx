@@ -1,4 +1,4 @@
-﻿import React, { useLayoutEffect } from 'react';
+﻿import React from 'react';
 import { TimePicker, DatePicker } from 'antd';
 import moment from 'moment';
 import './_time-input-style.scss';
@@ -27,11 +27,9 @@ export default function TimeInput({
 
 
     const parseDate = (date) => {
-        const newDate = moment(newDate, FORMATS.DATE).toDate();
+        const newDate = moment(date, FORMATS.DATE).toDate();
         return `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`;
     }
-
-
 
     return (
         <div className='time__container'>

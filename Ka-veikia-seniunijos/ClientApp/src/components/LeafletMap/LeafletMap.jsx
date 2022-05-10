@@ -4,6 +4,12 @@ import { MapContainer, Marker, TileLayer, Popup } from 'react-leaflet';
 import { Switch } from 'pretty-checkbox-react';
 import PropTypes from 'prop-types';
 
+
+import MarkerClusterGroup from 'react-leaflet-markercluster';
+
+import "./styles.scss";
+
+
 export default function LeafletMap({ lat, lng, switchState, url, pins }) {
     return (
         <div className="map__container">
@@ -56,17 +62,19 @@ export default function LeafletMap({ lat, lng, switchState, url, pins }) {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <>
-                {pins.map((pin, index) => {
-                    return (
-                        <Marker position={[pin.Latitude, pin.Longtitude]} key={index}>
-                            <Popup>
-                                {pin.Type === 'event' ? 'Renginys' : 'Lankytina vieta'}
-                                <br />
-                                <b>{pin.Name}</b>
-                            </Popup>
-                        </Marker>
-                    );
-                })}
+                <MarkerClusterGroup>
+                    {pins.map((pin, index) => {
+                        return (
+                            <Marker position={[pin.Latitude, pin.Longtitude]} key={index}>
+                                <Popup>
+                                    {pin.Type === 'event' ? 'Renginys' : 'Lankytina vieta'}
+                                    <br />
+                                    <b>{pin.Name}</b>
+                                </Popup>
+                            </Marker>
+                        );
+                    })}
+                </MarkerClusterGroup>
                 </>
             </MapContainer>
         </div>

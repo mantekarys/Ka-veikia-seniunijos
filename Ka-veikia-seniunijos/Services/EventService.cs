@@ -26,10 +26,12 @@ namespace Ka_veikia_seniunijos.Services
             var events = _databaseContext.Event.Where(p => (!free || p.Price == 0)).Select(
                 p => new
                 {
+                    p.Id,
                     p.Name,
                     p.Latitude,
                     p.Longtitude,
-                    p.Price
+                    p.Price,
+                    p.Description
                 }
             );
             DataTable table = new DataTable();
@@ -38,6 +40,8 @@ namespace Ka_veikia_seniunijos.Services
             table.Columns.Add("Price", typeof(float)).SetOrdinal(2);
             table.Columns.Add("Latitude", typeof(float)).SetOrdinal(3);
             table.Columns.Add("Longtitude", typeof(float)).SetOrdinal(4);
+            table.Columns.Add("Id", typeof(int)).SetOrdinal(5);
+            table.Columns.Add("Description", typeof(string)).SetOrdinal(6);
             foreach (var element in events)
             {
                 DataRow row;
@@ -47,6 +51,8 @@ namespace Ka_veikia_seniunijos.Services
                 row["Price"] = element.Price;
                 row["Latitude"] = element.Latitude;
                 row["Longtitude"] = element.Longtitude;
+                row["Id"] = element.Id;
+                row["Description"] = element.Description;
                 table.Rows.Add(row);
             }
 

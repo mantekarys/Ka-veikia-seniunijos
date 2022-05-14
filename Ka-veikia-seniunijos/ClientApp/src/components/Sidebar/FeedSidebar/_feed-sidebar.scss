@@ -43,6 +43,10 @@
 .options {
     margin-top: 5rem;
 
+    &--anonymous {
+        margin-top: 0;
+    }
+
     &__list {
         &-item {
             cursor: pointer;

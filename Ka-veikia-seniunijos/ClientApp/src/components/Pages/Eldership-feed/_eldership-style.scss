@@ -1,99 +1,84 @@
 ﻿@import '../../Utils/variables';
 @import '../../Utils/mixins';
 
+.eldership-feed {
+    display: flex;
+
+    @media (min-width: 768px) {
+        margin-top: 3rem;    
+    }
+
+    @media (min-width: 1024px) {
+        margin-top: 5rem;
+    }
+}
+
 .eldership {
     &__content {
-        width: 80%;
         min-height: 200rem;
-        margin: 15rem auto;
         padding-bottom: 3rem;
-        border-radius: 1rem;
-        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+        width: 100%;
 
-        @include respond(mobile) {
-            width: 90%;
-        }   
-
-        @include respond(mobile) {
-            margin-top: 5rem;
+        @media (min-width: 1024px) {
+            width: 70%;
         }
     }
 
-    &__photo {
-        background-size: cover;
-        max-width: 100%;
-        margin-top: -6.5rem;
-        z-index: 10;
-
-        @include respond(tab-port) {
-            margin-top: -5rem;
-        }
-
-        @include respond(mobile) {
-            margin-top: -4rem;
-        }
-
-        &-container {
-            width: 13rem;
-            height: 13rem;
-            margin: 0 auto;
-
-            @include respond(tab-port) {
-                width: 10rem;
-                height: 10rem;
-            }
-
-            @include respond(mobile) {
-                width: 8rem;
-                height: 8rem;
-            }
-        }
-    }
-
-    &__header {
-        font-weight: bold;
-        display: inline-block;
-
-        &--content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-
-            & > h1 {
-                @include respond(tab-port) {
-                    font-size: 3.8rem;
-                    width: 100%;
-                    text-align: center;
-                }
-
-                @include respond(mobile) {
-                    font-size: 3rem;
-                }
-            }
-        }
-
-        &--buttons {
-            display: flex;
-            align-items: center;
-            justify-content: start;
-            gap: 2rem;
-
-            & > a {
-                @include respond(tab-port) {
-                    font-size: 1.5rem;
-                    padding: 1rem 1.3rem;
-                    border-radius: 50%;
-                    margin-top: 1rem;
-                }
-
-                @include respond(mobile) {
-                    font-size: 1.2rem;
-                }
-            }
+    &__feed {
+        @media (min-width: 1024px) {
+            position: relative;
         }
     }
 }
 
 .loading-spinner {
     @include contentSpinner;
+    top: 55% !important;
+    left: 43% !important; 
+
+    @media (min-width: 768px) {
+        top: 80% !important;
+        left: 45% !important; 
+    }
+
+    @media (min-width: 1024px) {
+        top: initial;
+        left: initial;
+    }
+}
+
+.cover-wrapper {
+    height: 40rem;
+
+    & > img {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+
+        @media (min-width: 1024px) {
+            border-radius: 1rem;
+        }
+    }
+}
+
+.header-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2rem;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        padding: 0 2rem;
+    }
+
+    @media (min-width: 1024px) {
+        padding: 0;
+    }
+}
+
+.buttons-wrapper {
+    display: flex;
+    gap: 2rem;
 }

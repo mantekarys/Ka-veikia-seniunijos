@@ -134,19 +134,14 @@ export default function EldershipFeedContent() {
     
     return (
         <div className='eldership__content'>
-            {isContentLoading && <div className='loading-spinner' /> }
             {state.isLoadingSpinnerVisible && <LoadingSpinner />}
-            <div className='eldership__photo-container'>
-                <img
-                    src={eldershipPhoto}
-                    alt={'Vilnius'}
-                    className='eldership__photo' />
+            <div className='cover-wrapper'>
+                <img src={require(`../../../images/Vilnius-cover.png`)} alt='cover'/>
             </div>
 
-            <div className='eldership__header--content'>
-                <h1 className='header__primary eldership__header'>{eldershipName}</h1>
-
-                <div className='eldership__header--buttons'>
+            <div className='header-container'>
+                <h1 className='header__primary'>{eldershipName}</h1>
+                <div className='buttons-wrapper'>
                     {renderVisibleButton()}
                     <Button
                         text={<FontAwesomeIcon icon={faMap} />}
@@ -248,6 +243,7 @@ export default function EldershipFeedContent() {
             }
 
             <div className='eldership__feed'>
+                {isContentLoading && <div className='loading-spinner' /> }
                 {posts.map((post, index) => {
                     return (
                         <Post

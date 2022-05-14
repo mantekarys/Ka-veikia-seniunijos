@@ -47,7 +47,10 @@
         justify-content: end;
         width: 80%;
         margin: 0 auto;
-        padding-top: 3rem;
+
+        @media (min-width: 768px) {
+            padding-top: 3rem;
+        }
 
         &-info {
             display: flex;

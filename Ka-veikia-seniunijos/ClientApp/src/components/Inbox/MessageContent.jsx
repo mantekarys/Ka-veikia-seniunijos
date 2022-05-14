@@ -49,12 +49,12 @@ export default function MessageContent({ message, onBack, activeTab }) {
         }
 
         axios.post('https://localhost:44330/api/message', {
-            sender: isEldership ? Name : FirstName,
-            senderType: isEldership ? 'eldership' : 'user',
-            receiver: isEldership ? message.Sender : message.Receiver,
-            receiverType: isEldership ? 'user' : 'eldership',
-            topic: message.Topic,
-            text: messageText,
+            Sender: isEldership ? Name : FirstName,
+            SenderType: isEldership ? 'eldership' : 'user',
+            Receiver: isEldership ? message.Sender : message.Receiver,
+            ReceiverType: isEldership ? 'user' : 'eldership',
+            Topic: message.Topic,
+            Text: messageText,
             FkUser: message.FkUser,
             FkEldership: message.FkEldership,
             Reply: message.Id
@@ -118,8 +118,6 @@ export default function MessageContent({ message, onBack, activeTab }) {
         </>
     )
 
-    console.log(message)
-    
     return (
         <div className='message-content'>
             <div className='message-header'>

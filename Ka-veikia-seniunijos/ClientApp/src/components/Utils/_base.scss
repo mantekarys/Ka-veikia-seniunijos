@@ -1,4 +1,7 @@
-﻿*, *::after, *::before {
+﻿@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import './variables';
+
+*, *::after, *::before {
     margin: 0;
     padding: 0;
     box-sizing: inherit;
@@ -8,6 +11,10 @@ p, h1, h2, h3, h4, h5 {
     margin: 0;
 }
 
+li {
+    list-style-type: none;
+}
+
 html {
     font-size: 62.5%;
     scroll-behavior: smooth;
@@ -15,5 +22,5 @@ html {
 
 body {
     box-sizing: border-box;
-    font-family: 'League Spartan', sans-serif;
+    font-family: 'Lato', sons-serif;;
 }

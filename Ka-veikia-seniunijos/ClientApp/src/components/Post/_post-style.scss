@@ -3,20 +3,14 @@
 
 .post {
     &__container {
-        width: 60%;
         padding: 4rem 4rem;
         margin: 0 auto;
-        box-shadow: rgba($color-black, 0.05) 0px 6px 24px 0px, rgba($color-black, 0.08) 0px 0px 0px 1.5px;
+        box-shadow: $default-box-shadow;
         border-radius: $default-form-border-radius;
-        margin-top: 10rem;
+        margin-top: 4rem;
 
-        @include respond(tab-land) {
-            width: 80%;
-        }
-
-        @include respond(mobile) {
-            margin-top: 5rem;
-            padding: 2rem 2rem;
+        @media (min-width: 1024px) {            
+            width: 100%;
         }
     }
 
@@ -76,6 +70,7 @@
         &-event {
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
 
             &--description {
                 margin-left: 1rem;

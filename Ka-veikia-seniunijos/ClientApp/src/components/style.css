@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 *, *::after, *::before {
   margin: 0;
   padding: 0;
@@ -6,13 +7,16 @@
 p, h1, h2, h3, h4, h5 {
   margin: 0; }
 
+li {
+  list-style-type: none; }
+
 html {
   font-size: 62.5%;
   scroll-behavior: smooth; }
 
 body {
   box-sizing: border-box;
-  font-family: 'League Spartan', sans-serif; }
+  font-family: 'Lato', sons-serif; }
 
 .header__primary {
   font-size: 4.5rem; }
@@ -549,8 +553,10 @@ body {
     display: flex;
     justify-content: end;
     width: 80%;
-    margin: 0 auto;
-    padding-top: 3rem; }
+    margin: 0 auto; }
+    @media (min-width: 768px) {
+      .header__user {
+        padding-top: 3rem; } }
     .header__user-info {
       display: flex;
       align-items: center; }

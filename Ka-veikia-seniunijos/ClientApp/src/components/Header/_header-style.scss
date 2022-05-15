@@ -2,22 +2,17 @@
 @import '../Utils/variables';
 
 .header {
-    padding-top: 2rem;
+    background-color: rgba($color-black, .8);
+    display: flex;
+    height: 8rem;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
 
-    &__button-wrapper {
-        display: flex;
-        float: right;
-        margin-right: 5rem;
-        gap: 2rem;
-
-        @include respond(mobile) {
-            display: none;
-        }
-
-        @include respond(tab-port) {
-            width: 40%;
-            margin-right: 2rem;
-        }
+    &--hidden {
+        display: none;
     }
 
     &__icon {
@@ -84,6 +79,24 @@
             width: 4rem;
             border-radius: 50%;
             object-fit: cover;
+        }
+    }
+}
+
+.button-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-right: 4rem;
+
+    &__button {
+        color: $color-white;
+        border-bottom: 1px solid $color-white;
+        font-size: 1.8rem;
+        padding: 1rem;
+
+        &:hover {
+            color: $color-white;
         }
     }
 }

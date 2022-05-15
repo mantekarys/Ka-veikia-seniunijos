@@ -1,12 +1,11 @@
 ﻿@import '../../Utils/_mixins.scss';
-
-body {
-}
+@import '../../Utils/variables';
+@import '../../Utils/animations';
 
 .home {
     &__content {
-        margin: 10rem auto 5rem;
-        width: 80%;
+        // margin: 10rem auto 5rem;
+        // width: 80%;
 
         @include respond(mobile) {
             margin-top: 0;
@@ -17,5 +16,111 @@ body {
         height: 65rem;
         width: 100%;
         margin-bottom: 10rem;
+    }
+}
+
+.cover-container {
+    min-height: 801px;
+    background-size: cover;
+    position: relative;
+    transition: opacity .3s ease-in;
+
+    &--1 {
+        background-image: linear-gradient(0deg, rgba(20,24,36,0.2), rgba(20,24,36,0.2)),
+        url('../images/cover.jpg');
+        animation: coverFadeIn 1s ease-in;
+    }
+
+    &--2 {
+        background-image: linear-gradient(0deg, rgba(20,24,36,0.2), rgba(20,24,36,0.2)),
+        url('../images/event-cover.jpg');
+        animation: coverFadeIn 1s ease-in;
+    }
+
+    &--3 {
+        background-image: linear-gradient(0deg, rgba(20,24,36,0.2), rgba(20,24,36,0.2)),
+        url('../images/places-cover.jpg');
+    }
+
+    &--hidden {
+        opacity: 0;
+    }
+
+}
+
+.highlighted {
+    position: absolute;
+    top: 20%;
+
+    &--left {
+        left: 10%;
+    }
+
+    &--right {
+        left: 10%;
+
+        @media (min-width: 768px) {
+            right: 10%;
+        }
+    }
+
+    &__text {
+        color: $color-white;
+        font-size: 5rem;
+        font-weight: 400;
+        font-family: Ubuntu, sans-serif;
+
+        @media (min-width: 768px) {
+            font-size: 6rem;
+        }
+    }
+}
+
+.cover-buttons {
+    display: flex;
+    position: absolute;
+    gap: 3rem;
+    top: 45%;
+
+    &--left {
+        left: 10%;
+    }
+
+    &--right {
+        left: 10%;
+
+        @media (min-width: 768px) {
+            right: 10%;
+        }
+    }
+
+    &__link {
+        color: $color-white;
+        font-family: Ubuntu, sans-serif;
+        font-weight: 400;
+        font-size: 2.5rem;
+        transition: transform .1s ease-in;
+
+        @media (min-width: 768px) {
+            font-size: 3rem;
+        }
+
+        &:hover {
+            color: $color-white;
+            transform: scale(1.1);
+        }
+
+        & > svg {
+            margin-left: 1rem;
+        }
+    }
+}
+
+.elderships {
+    padding: 4rem 0;
+
+    & > h1 {
+        font-weight: 400;
+        font-family: Ubuntu, sans-serif;
     }
 }

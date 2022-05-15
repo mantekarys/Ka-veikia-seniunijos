@@ -9,6 +9,7 @@ export default function FeedSidebar() {
     let LastName = null;
     let Name = null;
     let isEldership = null;
+    const isAnonymous = localStorage.getItem('UserData') === null;
 
     useEffect(() => {
         if(localStorage.getItem('UserData')) {
@@ -21,7 +22,7 @@ export default function FeedSidebar() {
 
     return (
         <div className='feed-sidebar'>
-            {isEldership !== null &&
+            {!isAnonymous &&
                 <div className='name-wrapper'>
                     <img 
                         src={isEldership ? require(`../../../images/${Name}.png`) : DefaultPicture}
@@ -42,12 +43,15 @@ export default function FeedSidebar() {
                             Namai
                         </a>
                     </li>
-                    <li className='options__list-item' onClick={() => window.location.href = isEldership ? `/mailbox?name=${Name}` : `/mailbox?name=${FirstName}.${LastName}`}>
-                        <a className='options__list-item-link'>
-                            <FontAwesomeIcon icon={faEnvelope}/>
-                            Žinutės
-                        </a>
-                    </li>
+                    {!isAnonymous && 
+                        <li className='options__list-item' onClick={() => window.location.href = isEldership ? `/mailbox?name=${Name}` : `/mailbox?name=${FirstName}.${LastName}`}>
+                            <a className='options__list-item-link'>
+                                <FontAwesomeIcon icon={faEnvelope}/>
+                                Žinutės
+                            </a>
+                        </li>
+                    }
+
                     <li className={`options__list-item ${!isEldership && 'options__list-item--active'}`} onClick={() => window.location.reload()}>
                         <a className='options__list-item-link'>
                             <FontAwesomeIcon icon={faNewspaper}/>
@@ -60,15 +64,17 @@ export default function FeedSidebar() {
                             Renginiai
                         </a>
                     </li>
-                    <li 
+                    {!isAnonymous && 
+                        <li 
                         className={`options__list-item ${isEldership && 'options__list-item--active'}`}
                         onClick={() => window.location.href = isEldership ? `/eldership?eldership=${Name}` : `/profile?name=${FirstName}.${LastName}`}
-                    >
-                        <a className='options__list-item-link'>
-                            <FontAwesomeIcon icon={faUser}/>
-                            Profilis
-                        </a>
-                    </li>
+                        >  
+                            <a className='options__list-item-link'>
+                                <FontAwesomeIcon icon={faUser}/>
+                                Profilis
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>

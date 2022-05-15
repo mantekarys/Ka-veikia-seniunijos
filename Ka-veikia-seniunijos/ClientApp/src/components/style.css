@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;1,300&display=swap");
 *, *::after, *::before {
   margin: 0;
   padding: 0;
@@ -117,6 +118,14 @@ body {
     opacity: 1;
     transform: translateX(0); } }
 
+@keyframes moveFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(0); }
+  100% {
+    opacity: 1;
+    transform: translateY(0%); } }
+
 @keyframes moveInBottom {
   0% {
     opacity: 0;
@@ -144,6 +153,12 @@ body {
     opacity: 1; }
   100% {
     transform: scale(1);
+    opacity: 1; } }
+
+@keyframes coverFadeIn {
+  0% {
+    opacity: 0; }
+  100% {
     opacity: 1; } }
 
 @keyframes spin {
@@ -519,19 +534,16 @@ body {
   color: #fff; }
 
 .header {
-  padding-top: 2rem; }
-  .header__button-wrapper {
-    display: flex;
-    float: right;
-    margin-right: 5rem;
-    gap: 2rem; }
-    @media (max-width: 37.5em) {
-      .header__button-wrapper {
-        display: none; } }
-    @media (max-width: 56.25em) {
-      .header__button-wrapper {
-        width: 40%;
-        margin-right: 2rem; } }
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  height: 8rem;
+  justify-content: flex-end;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  z-index: 1; }
+  .header--hidden {
+    display: none; }
   .header__icon-wrapper {
     display: inline-block;
     margin-left: 3rem;
@@ -579,6 +591,19 @@ body {
       border-radius: 50%;
       object-fit: cover; }
 
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-right: 4rem; }
+  .button-wrapper__button {
+    color: #ffffff;
+    border-bottom: 1px solid #ffffff;
+    font-size: 1.8rem;
+    padding: 1rem; }
+    .button-wrapper__button:hover {
+      color: #ffffff; }
+
 @keyframes moveInLeft {
   0% {
     opacity: 0;
@@ -586,6 +611,14 @@ body {
   100% {
     opacity: 1;
     transform: translateX(0); } }
+
+@keyframes moveFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(0); }
+  100% {
+    opacity: 1;
+    transform: translateY(0%); } }
 
 @keyframes moveInBottom {
   0% {
@@ -614,6 +647,12 @@ body {
     opacity: 1; }
   100% {
     transform: scale(1);
+    opacity: 1; } }
+
+@keyframes coverFadeIn {
+  0% {
+    opacity: 0; }
+  100% {
     opacity: 1; } }
 
 @keyframes spin {
@@ -705,6 +744,9 @@ body {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%); }
+        .grid__element--footer-wrapper > h3 {
+          font-weight: 400;
+          font-family: Ubuntu, sans-serif; }
   .grid__img {
     max-width: 100%;
     max-height: 100%;
@@ -760,17 +802,149 @@ body {
     .arrow-icon__container--left {
       left: 3%; }
 
-.home__content {
-  margin: 10rem auto 5rem;
-  width: 80%; }
-  @media (max-width: 37.5em) {
-    .home__content {
-      margin-top: 0; } }
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-40%); }
+  100% {
+    opacity: 1;
+    transform: translateX(0); } }
+
+@keyframes moveFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(0); }
+  100% {
+    opacity: 1;
+    transform: translateY(0%); } }
+
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(40%); }
+  100% {
+    opacity: 1;
+    transform: translateY(0); } }
+
+@keyframes moveBackLeft {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%); }
+  100% {
+    opacity: 0;
+    transform: translate(-100%, -50%); } }
+
+@keyframes fadeIn {
+  0% {
+    transform: scale(0);
+    opacity: 0.0; }
+  60% {
+    transform: scale(1.05); }
+  80% {
+    transform: scale(0.95);
+    opacity: 1; }
+  100% {
+    transform: scale(1);
+    opacity: 1; } }
+
+@keyframes coverFadeIn {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes shake {
+  0% {
+    margin-left: 0rem; }
+  25% {
+    margin-left: 1rem; }
+  75% {
+    margin-left: -1rem; }
+  100% {
+    margin-left: 0rem; } }
+
+@media (max-width: 37.5em) {
+  .home__content {
+    margin-top: 0; } }
 
 .home__slider-section {
   height: 65rem;
   width: 100%;
   margin-bottom: 10rem; }
+
+.cover-container {
+  min-height: 801px;
+  background-size: cover;
+  position: relative;
+  transition: opacity .3s ease-in; }
+  .cover-container--1 {
+    background-image: linear-gradient(0deg, rgba(20, 24, 36, 0.2), rgba(20, 24, 36, 0.2)), url("../images/cover.jpg");
+    animation: coverFadeIn 1s ease-in; }
+  .cover-container--2 {
+    background-image: linear-gradient(0deg, rgba(20, 24, 36, 0.2), rgba(20, 24, 36, 0.2)), url("../images/event-cover.jpg");
+    animation: coverFadeIn 1s ease-in; }
+  .cover-container--3 {
+    background-image: linear-gradient(0deg, rgba(20, 24, 36, 0.2), rgba(20, 24, 36, 0.2)), url("../images/places-cover.jpg"); }
+  .cover-container--hidden {
+    opacity: 0; }
+
+.highlighted {
+  position: absolute;
+  top: 20%; }
+  .highlighted--left {
+    left: 10%; }
+  .highlighted--right {
+    left: 10%; }
+    @media (min-width: 768px) {
+      .highlighted--right {
+        right: 10%; } }
+  .highlighted__text {
+    color: #ffffff;
+    font-size: 5rem;
+    font-weight: 400;
+    font-family: Ubuntu, sans-serif; }
+    @media (min-width: 768px) {
+      .highlighted__text {
+        font-size: 6rem; } }
+
+.cover-buttons {
+  display: flex;
+  position: absolute;
+  gap: 3rem;
+  top: 45%; }
+  .cover-buttons--left {
+    left: 10%; }
+  .cover-buttons--right {
+    left: 10%; }
+    @media (min-width: 768px) {
+      .cover-buttons--right {
+        right: 10%; } }
+  .cover-buttons__link {
+    color: #ffffff;
+    font-family: Ubuntu, sans-serif;
+    font-weight: 400;
+    font-size: 2.5rem;
+    transition: transform .1s ease-in; }
+    @media (min-width: 768px) {
+      .cover-buttons__link {
+        font-size: 3rem; } }
+    .cover-buttons__link:hover {
+      color: #ffffff;
+      transform: scale(1.1); }
+    .cover-buttons__link > svg {
+      margin-left: 1rem; }
+
+.elderships {
+  padding: 4rem 0; }
+  .elderships > h1 {
+    font-weight: 400;
+    font-family: Ubuntu, sans-serif; }
 
 .user-profile__container {
   position: absolute;

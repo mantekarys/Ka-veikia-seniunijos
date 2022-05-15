@@ -1,4 +1,4 @@
-﻿import React, { useContext } from 'react';
+﻿import React, { useEffect, useContext, useState } from 'react';
 import Button from '../../Button/Button';
 import Login from '../../Login/Login';
 import Signup from '../../Signup/Signup';
@@ -14,6 +14,18 @@ export default function Header() {
         toggleSignupPopup,
         toggleSidebar
     } = useContext(GlobalContext);
+
+    const [isAtTop, setIsAtTop] = useState(true);
+
+    useEffect(() => {
+      window.onscroll = () => {
+          if(window.pageYOffset === 0) setIsAtTop(true)
+          else setIsAtTop(false);
+      }
+      
+      return () => (window.onscroll = null);
+    }, [])
+    
 
     const handleOnLoginRedirect = () => {
         toggleLoginPopup();
@@ -47,37 +59,34 @@ export default function Header() {
     }
     
     return (
-        <header className='header'>
+        <header className={`header ${isAtTop && 'header--hidden'}`}>
             {state.isSidebarOpen && <Sidebar onClose={toggleSidebar} content={getSidebarContent()}/>}
-
-            <BarIcon wrapperStyling='header__icon-wrapper' onClick={toggleSidebar} />
-
-            <div className='header__button-wrapper'>
+            <div className='button-wrapper'>
                 <Button
                     text='Prisijungti'
-                    styling='btn btn--header'
+                    styling='button-wrapper__button'
                     onClick={toggleLoginPopup}
                 />
 
                 <Button
                     text='Registruotis'
-                    styling='btn btn--header'
+                    styling='button-wrapper__button'
                     onClick={toggleSignupPopup}
                 />
-            </div>
 
-            {state.isLoginOpen &&
-                <Login
-                    onClose={toggleLoginPopup}
-                    onLoginRedirect={handleOnLoginRedirect}
-                />
-            }
-            {state.isSignupOpen &&
-                <Signup
-                    onClose={toggleSignupPopup}
-                    onSignupRedirect={handleSignupRedirect}
-                />
-            }
+                {state.isLoginOpen &&
+                    <Login
+                        onClose={toggleLoginPopup}
+                        onLoginRedirect={handleOnLoginRedirect}
+                    />
+                }
+                {state.isSignupOpen &&
+                    <Signup
+                        onClose={toggleSignupPopup}
+                        onSignupRedirect={handleSignupRedirect}
+                    />
+                }
+            </div>
         </header>
     );
 }

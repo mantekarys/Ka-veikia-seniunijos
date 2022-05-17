@@ -9,6 +9,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using Ka_veikia_seniunijos.Interfaces;
+using Ka_veikia_seniunijos.DataTransferObjects;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Text;
@@ -31,7 +32,7 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
         [HttpGet("{eldership}")]
-        public JsonResult Get(string eldership, [FromQuery] string[] options = null)
+        public JsonResult Get(string eldership, [FromQuery] DateFilter filter, [FromQuery] string[] options = null)
         {
             StringBuilder sql = new StringBuilder();
             string[] acceptable = {
@@ -48,6 +49,7 @@ namespace Ka_veikia_seniunijos.Controllers
             if (eldership_fk < 1)
                 return new JsonResult("Selected non-existing eldership");
             sql.AppendFormat("Select * FROM Event Where eldership_FK = {0} ", eldership_fk);
+            sql.AppendFormat("AND postDate >= '{0}' AND postDate <= '{1}' ", filter.DateFrom, filter.DateTo);
             if (options.Count() > 0)
                 sql.Append("ORDER BY ");
             foreach (var op in options)

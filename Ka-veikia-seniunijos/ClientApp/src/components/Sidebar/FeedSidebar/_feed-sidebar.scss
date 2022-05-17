@@ -1,0 +1,80 @@
+@import '../../Utils/variables';
+
+.feed-sidebar {
+    display: none;
+
+    @media (min-width: 1024px) {
+        display: block;
+        padding: 0 1.5rem;
+        width: 25%;
+    }
+
+    @media (min-width: 1440px) {
+        padding: 0 2rem;
+    }
+
+    &  > div {
+        box-shadow: $default-box-shadow;
+        border-radius: 1rem;
+    }
+}
+
+.name-wrapper {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+
+    @media (min-width: 1440px) {
+        padding: 2rem;
+    }
+
+    &__image {
+        width: 5rem;
+    }
+
+    &__name {
+        color: $name-blue-dark;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+}
+
+.options {
+    margin-top: 5rem;
+
+    &--anonymous {
+        margin-top: 0;
+    }
+
+    &__list {
+        &-item {
+            cursor: pointer;
+            padding: 2rem;
+            transition: color .2s ease-in-out;
+            border-left: 3px solid transparent;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $color-background-grey;
+            }
+
+            &--active,
+            &:hover  {
+                border-left-color: $name-blue;
+                & > a {
+                    color: $name-blue;
+                }
+            }
+
+            &-link {
+                color: $name-grey;
+                font-size: 1.8rem;
+                font-weight: bold;
+
+                & > svg {
+                    margin-right: 2rem;
+                }
+            }
+        }
+    }
+}

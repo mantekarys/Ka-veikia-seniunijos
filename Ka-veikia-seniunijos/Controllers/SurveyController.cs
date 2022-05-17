@@ -110,7 +110,7 @@ namespace Ka_veikia_seniunijos.Controllers
                 return 1062;
             }
             _databaseContext.Survey.Add(survey);
-            var update = _databaseContext.SaveChanges();
+                    var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
                 return 1062;

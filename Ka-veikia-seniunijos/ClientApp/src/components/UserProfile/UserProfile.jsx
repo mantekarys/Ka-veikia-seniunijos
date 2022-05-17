@@ -60,7 +60,6 @@ export default function UserProfile({ onUpdate }) {
             'LastName': surname,
             'Email': email,
             'Municipality': eldership,
-			'Id': id
         })
         .then(res => {
             if(res.status === 200) {

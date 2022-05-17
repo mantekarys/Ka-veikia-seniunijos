@@ -39,10 +39,16 @@ namespace Ka_veikia_seniunijos.Controllers
         {
             var message = _databaseContext.Message.FirstOrDefault(m => m.Id == id);
             if (message.Reply != null){
-                var messages = _databaseContext.Message.Where(m => m.Id == message.Reply || m.Reply == message.Reply);//FirstOrDefault
+                var messages = _databaseContext.Message.Where(m => m.Id == message.Reply || m.Reply == message.Reply).ToList();//FirstOrDefault
+                foreach (var m in messages)
+                {
+                    m.ReplyNavigation = null;
+                    m.InverseReplyNavigation = null;
+                }
                 return new JsonResult(messages);
             }
-            return new JsonResult(message);
+            Message[] ret = { message };
+            return new JsonResult(ret);
         }
 
         [HttpGet("{id}/{isUser}/{type}")]//isuser - true if user false if eldership /type - received * sent * all (all returns replies but received and sent dont)
@@ -93,7 +99,13 @@ namespace Ka_veikia_seniunijos.Controllers
             foreach (var i in ids)
             {
                 var replies = _databaseContext.Message.Where(m => m.Id == i || m.Reply == i).ToList();
+                foreach (var r in replies)
+                {
+                    r.ReplyNavigation = null;
+                    r.InverseReplyNavigation = null;
+                }
                 repliesAll.Add(replies);
+
             }
             return new JsonResult(repliesAll);
         }

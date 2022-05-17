@@ -73,25 +73,31 @@ namespace Ka_veikia_seniunijos.Services
             var places = _databaseContext.Place.Select(
                 p => new
                 {
+                    p.Id,
                     p.Name,
                     p.Latitude,
-                    p.Longtitude
+                    p.Longtitude,
+                    p.Description
                 }
             );
             // rdr.Close();
+            table.Columns.Add("Id", typeof(int)).SetOrdinal(0);
             table.Columns.Add("Name", typeof(string)).SetOrdinal(1);
             table.Columns.Add("Price", typeof(string)).SetOrdinal(2);
             table.Columns.Add("Latitude", typeof(float)).SetOrdinal(3);
             table.Columns.Add("Longtitude", typeof(float)).SetOrdinal(4);
+            table.Columns.Add("Description", typeof(string)).SetOrdinal(5);
             foreach (var place in places)
             {
                 DataRow row;
                 row = table.NewRow();
+                row["Id"] = place.Id;
                 row["Type"] = "place";
                 row["Name"] = place.Name;
                 row["Price"] = "Free";
                 row["Latitude"] = place.Latitude;
                 row["Longtitude"] = place.Longtitude;
+                row["Description"] = place.Description;
                 table.Rows.Add(row);
             }
             // connection.Close();

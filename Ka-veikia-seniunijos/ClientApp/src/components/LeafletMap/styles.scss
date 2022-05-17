@@ -1,0 +1,9 @@
+// NOTE: styles are included via {<link />} tag at {index.html}
+
+ @import "~react-leaflet-markercluster/dist/styles.min.css";
+
+.markercluster-map {
+    height: 90vh;
+  }
+
+  

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Input from '../../Form/Input';
 import Button from '../../Button/Button';
 import { Radio } from 'pretty-checkbox-react';

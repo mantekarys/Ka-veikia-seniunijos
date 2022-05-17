@@ -25,7 +25,7 @@ namespace Ka_veikia_seniunijos.Controllers
         }
         //Surveys by eldeship
         [HttpGet("{eldership}")]
-        public JsonResult GetByEldership(string eldership)
+        public JsonResult GetByEldership(string eldership, DateTime? date = null)
         {
             var eldershipID = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
             if (eldershipID == 0)
@@ -33,7 +33,7 @@ namespace Ka_veikia_seniunijos.Controllers
                 return new JsonResult(BadRequest());
 
             }
-            var surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID).ToList();
+            var surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID && (date == null || s.PostDate == date)).ToList();
             if (surveys == null)
             {
                 return new JsonResult("There is no surveys made by this eldership");

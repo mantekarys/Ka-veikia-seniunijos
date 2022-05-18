@@ -19,7 +19,7 @@
     "oidc-client": "^1.9.0",
     "pretty-checkbox-react": "^3.2.0",
     "react": "^16.14.0",
-    "react-bootstrap": "^2.3.1",
+    "react-bootstrap": "^2.4.0",
     "react-dom": "^16.14.0",
     "react-leaflet": "3.1.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",

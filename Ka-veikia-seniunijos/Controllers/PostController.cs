@@ -5,7 +5,9 @@ using System;
 using System.Data;
 using System.Text;
 using System.Linq;
+using System.Collections.Generic;
 using Newtonsoft.Json;
+using Ka_veikia_seniunijos.DataTransferObjects;
 using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Interfaces;
 using System.Threading.Tasks;
@@ -24,13 +26,23 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
         [HttpGet("GetDayPosts/{eldership}")]//netestuota su date
-        public JsonResult GetDayPosts(string eldership, DateTime? date = null, bool descending = true)
+        public JsonResult GetDayPosts(string eldership, [FromQuery] DateFilter filter, DateTime? date = null, bool descending = true)
         {
-
+            DateTime from = DateTime.Parse(filter.DateFrom);
+            DateTime to = DateTime.Parse(filter.DateTo);
             var eldership_fk = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
-            var posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk && (date == null || p.PostDate == date))
-                                             .OrderByDescending(p => p.PostDate).ToList();
-            if (posts == null)
+            List<Post> posts = new List<Post>();
+            if (date != null)
+            {
+                posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk && p.PostDate == date)
+                                                 .OrderByDescending(p => p.PostDate).ToList();
+            }
+            else
+            {
+                posts = _databaseContext.Post.Where(p => p.EldershipFk == eldership_fk && p.PostDate >= from && p.PostDate <= to)
+                                                 .OrderByDescending(p => p.PostDate).ToList();
+            }
+            if (posts.Count() == 0)
             {
                 return new JsonResult("Empty posts by " + eldership);
             }

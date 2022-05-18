@@ -161,6 +161,7 @@ namespace Ka_veikia_seniunijos.Services
 
             var pbkdf2 = new Rfc2898DeriveBytes(providedPassword, salt, 100000);
             byte[] hash = pbkdf2.GetBytes(20);
+            System.Console.WriteLine(hash);
             for (int i = 0; i < 20; i++)
                 if (hashBytes[i + 16] != hash[i])
                     return false;

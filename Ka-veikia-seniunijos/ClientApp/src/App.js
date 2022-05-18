@@ -5,6 +5,7 @@ import Eldership from './components/Pages/Eldership-feed/Eldership';
 import Profile from './components/Pages/Profile/Profile';
 import Mailbox from './components/Pages/Mailbox/Mailbox';
 import Map from './components/Pages/Map/Map';
+import Administrative from './components/Pages/Administrative/Administrative.js';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -17,6 +18,7 @@ export default class App extends Component {
               <Route exact path='/eldership' component={Eldership} />
               <Route exact path='/mailbox' component={Mailbox} />
               <Route exact path='/map' component={Map} />
+              <Route exact path='/admin/eldership' component={Administrative}/>
               {/* <Route exact path='/about' component={About} /> */}
         </>
     );

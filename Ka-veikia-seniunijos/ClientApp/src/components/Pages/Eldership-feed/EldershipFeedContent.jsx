@@ -20,6 +20,7 @@ import LoadingSpinner from "../../LoadingSpiner/LoadingSpinner";
 import DeleteModal from "../../Modals/Delete/DeleteModal";
 import SurveyPost from "../../Post/SurveyPost/SurveyPost";
 import { DatePicker } from "antd";
+import { Switch } from "pretty-checkbox-react";
 export default function EldershipFeedContent() {
   const {
     state,
@@ -42,6 +43,9 @@ export default function EldershipFeedContent() {
   const [isAutohor, setIsAuthor] = useState(false);
   const [isContentLoading, setIsContentLoading] = useState(false);
   const [dateFilter, setDateFilter] = useState(null);
+  const [postToggle, setPostToggle] = useState(true);
+  const [eventToggle, setEventToggle] = useState(true);
+  const [surveyToggle, setSurveyToggle] = useState(true);
 
   const USER_TYPES = {
     GUEST: "GUEST",
@@ -78,7 +82,6 @@ export default function EldershipFeedContent() {
       return;
     }
     setIsContentLoading(true);
-    console.log(dateFilter.dateFrom);
     axios
       .all([
         axios.get(
@@ -109,7 +112,10 @@ export default function EldershipFeedContent() {
           if (
             typeof surveyResponse.data !== "string" &&
             typeof postsResponse.data !== "string" &&
-            typeof eventsResponse.data !== "string"
+            typeof eventsResponse.data !== "string" &&
+            surveyToggle &&
+            postToggle &&
+            eventToggle
           ) {
             setPosts(
               [
@@ -120,7 +126,9 @@ export default function EldershipFeedContent() {
             );
           } else if (
             typeof postsResponse.data !== "string" &&
-            typeof eventsResponse.data !== "string"
+            typeof eventsResponse.data !== "string" &&
+            postToggle &&
+            eventToggle
           ) {
             setPosts(
               [...postsResponse.data, ...eventsResponse.data].sort(
@@ -129,7 +137,9 @@ export default function EldershipFeedContent() {
             );
           } else if (
             typeof surveyResponse.data !== "string" &&
-            typeof eventsResponse.data !== "string"
+            typeof eventsResponse.data !== "string" &&
+            surveyToggle &&
+            eventToggle
           ) {
             setPosts(
               [...surveyResponse.data, ...eventsResponse.data].sort(
@@ -138,28 +148,30 @@ export default function EldershipFeedContent() {
             );
           } else if (
             typeof surveyResponse.data !== "string" &&
-            typeof postsResponse.data !== "string"
+            typeof postsResponse.data !== "string" &&
+            surveyToggle &&
+            postToggle
           ) {
             setPosts(
               [...surveyResponse.data, ...postsResponse.data].sort(
                 (a, b) => new Date(b.PostDate) - new Date(a.PostDate)
               )
             );
-          } else if (typeof surveyResponse.data !== "string") {
+          } else if (typeof surveyResponse.data !== "string" && surveyToggle) {
             setPosts(
-              ...surveyResponse.data.sort(
+              surveyResponse.data.sort(
                 (a, b) => new Date(b.PostDate) - new Date(a.PostDate)
               )
             );
-          } else if (typeof postsResponse.data !== "string") {
+          } else if (typeof postsResponse.data !== "string" && postToggle) {
             setPosts(
-              ...postsResponse.data.sort(
+              postsResponse.data.sort(
                 (a, b) => new Date(b.PostDate) - new Date(a.PostDate)
               )
             );
-          } else if (typeof eventsResponse.data !== "string") {
+          } else if (typeof eventsResponse.data !== "string" && eventToggle) {
             setPosts(
-              ...eventsResponse.data.sort(
+              eventsResponse.data.sort(
                 (a, b) => new Date(b.PostDate) - new Date(a.PostDate)
               )
             );
@@ -167,7 +179,7 @@ export default function EldershipFeedContent() {
           // To do what if everything is empty
         })
       );
-  }, [dateFilter]);
+  }, [dateFilter, eventToggle, surveyToggle, postToggle]);
 
   useEffect(() => {
     if (state.isLoadingSpinnerVisible) {
@@ -215,9 +227,7 @@ export default function EldershipFeedContent() {
       }
     }
   };
-  const handleFilterChange = (dateFrom, dateTo) => {
-    setDateFilter({ dateFrom: dateFrom, dateTo: dateTo });
-  };
+
   const renderCurrentPost = (post) => {
     if (post?.Question) {
       return <SurveyPost survey={post} />;
@@ -262,6 +272,35 @@ export default function EldershipFeedContent() {
             }
           />
         </p>
+        <div className="map__select">
+          <Switch
+            color="primary"
+            shape="fill"
+            style={{ fontSize: "15px" }}
+            onChange={(e) => setEventToggle((prev) => !prev)}
+            checked={eventToggle}
+          >
+            <b>Renginiai</b>
+          </Switch>
+          <Switch
+            color="primary"
+            shape="fill"
+            style={{ fontSize: "15px" }}
+            onChange={(e) => setPostToggle((prev) => !prev)}
+            checked={postToggle}
+          >
+            <b>Įrašai</b>
+          </Switch>
+          <Switch
+            color="primary"
+            shape="fill"
+            style={{ fontSize: "15px" }}
+            onChange={(e) => setSurveyToggle((prev) => !prev)}
+            checked={surveyToggle}
+          >
+            <b>Apklausos</b>
+          </Switch>
+        </div>
         <div className="buttons-wrapper">
           {renderVisibleButton()}
           <Button
@@ -372,7 +411,7 @@ export default function EldershipFeedContent() {
       <div className="eldership__feed">
         {isContentLoading && <div className="loading-spinner" />}
         {posts
-          .filter((post) => posts !== undefined || !post.match(/There */))
+          // .filter((post) => posts !== undefined || !post.match(/There */))
           .map((post, index) => {
             return (
               <Post

@@ -97,6 +97,7 @@ namespace Ka_veikia_seniunijos.Controllers
             {
                 return 1062;
             }
+            eldership.PasswordHashed = passwordHashed;
             _databaseContext.Eldership.Add(eldership);
             _databaseContext.SaveChanges();
             return 200;//good
@@ -105,9 +106,9 @@ namespace Ka_veikia_seniunijos.Controllers
         private string hashPassword(string password)
         {
             //password hashing
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
+            byte[] salt = new byte[16];
+            new RNGCryptoServiceProvider().GetBytes(salt);   
+            var pbkdf2 = new Rfc2898DeriveBytes(password,salt,100000);
             var hash = pbkdf2.GetBytes(20);
             byte[] hashBytes = new byte[36];
             Array.Copy(salt, 0, hashBytes, 0, 16);

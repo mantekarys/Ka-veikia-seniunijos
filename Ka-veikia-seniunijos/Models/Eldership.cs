@@ -6,7 +6,7 @@
 
         public string Name { get; set; }
         public string Municipality { get; set; }//Savivaldybė
-        public string Password { get; set; }
+        public string PasswordHashed { get; set; }
         public int Id { get; set; }
     }
 }

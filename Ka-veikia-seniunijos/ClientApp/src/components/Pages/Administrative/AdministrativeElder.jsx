@@ -13,31 +13,37 @@ const AdministrativeElder = () => {
 
   const handleOnSubmit = () => {
     if (!inputsAreValid() || !isPasswordValid()) return;
-    console.log(name);
-    console.log(email);
-    console.log(municipality);
-    console.log(password);
-    axios
-      .post("https://localhost:44330/api/eldership", {
-        Name: name,
-        Email: email,
-        Municipality: municipality,
-        Password: password,
-      })
-      .then((res) => {
-        if (res.status === 200)
-          setErrorMessage("Seniūnija buvo sėkmingai užregistruota");
-      })
-      .catch((_) => {
-        setErrorMessage("Įvyko nenumatyta klaida");
-      });
+    else {
+      axios
+        .post("https://localhost:44330/api/eldership", {
+          Name: name,
+          Email: email,
+          Municipality: municipality,
+          PasswordHashed: password,
+        })
+        .then((res) => {
+          if (res.status === 200)
+            setErrorMessage("Seniūnija buvo sėkmingai užregistruota");
+        })
+        .catch((_) => {
+          setErrorMessage("Įvyko nenumatyta klaida");
+        });
+    }
   };
-  const inputsAreValid = () => {
+  const inputsAreValid = async () => {
     if (!name || !email || !password || !passwordRepeat) {
       setErrorMessage("Visi laukai yra būtini");
       return false;
     }
-
+    await axios
+      .get("https://localhost:44330/api/eldership/getEldership/" + name)
+      .then((res) => {
+        console.log(res);
+        if (res.data.Name !== null || res !== null) {
+          setErrorMessage("Jau yra įvesta tokia seniūnija");
+          return false;
+        }
+      });
     return true;
   };
 
@@ -122,5 +128,4 @@ const AdministrativeElder = () => {
     </>
   );
 };
-
 export default AdministrativeElder;

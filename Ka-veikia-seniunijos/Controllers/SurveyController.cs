@@ -37,7 +37,6 @@ namespace Ka_veikia_seniunijos.Controllers
                 return new JsonResult(BadRequest());
 
             }
-            Console.WriteLine(eldershipID);
 
             if (date != null)
             {

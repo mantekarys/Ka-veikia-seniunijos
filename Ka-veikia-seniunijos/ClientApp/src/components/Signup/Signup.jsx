@@ -25,9 +25,7 @@ export default function Signup({ onClose, onSignupRedirect }) {
     const fetchData = async () => {
       try {
         const result = await axios.get("https://localhost:44330/api/eldership");
-        const elderships = result.data.map(
-          (eldership) => eldership.Municipality
-        );
+        const elderships = result.data.map((eldership) => eldership.Name);
         setElderships(elderships);
       } catch (error) {
         console.error(error);
@@ -46,12 +44,12 @@ export default function Signup({ onClose, onSignupRedirect }) {
     if (!inputsAreValid() || !isPasswordValid()) return;
 
     axios
-      .post("https://localhost:44330/api/user", {
+      .post("https://localhost:44330/api/user ", {
         FirstName: name,
         LastName: surname,
         Email: email,
         Municipality: area,
-        Password: password,
+        PasswordHashed: password,
       })
       .then((res) => {
         if (res.status === 200)

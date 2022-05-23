@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 import axios from "axios";
+import Error from "../Error/Error";
 
 // Add change photo funcionality
 // Add error message
@@ -24,6 +25,8 @@ export default function UserProfile({ onUpdate }) {
   const [eldership, setEldership] = useState(sessionData.Municipality);
   const [elderships, setElderships] = useState([]);
   const [isEditEnabled, setIsEditEnabled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +57,17 @@ export default function UserProfile({ onUpdate }) {
     setIsEditEnabled(true);
   };
 
+  const inputsAreValid = () => {
+    if (!name || !surname || !email || !eldership) {
+      setErrorMessage("Visi laukai yra būtini");
+      return false;
+    }
+    setErrorMessage("");
+    return true;
+  };
+
   const handleOnSubmit = () => {
+    if (!inputsAreValid()) return;
     axios
       .put("https://localhost:44330/api/user", {
         Id: id,
@@ -168,6 +181,7 @@ export default function UserProfile({ onUpdate }) {
               />
             </div>
           </div>
+          {errorMessage && <Error text={errorMessage} />}
 
           {isEditEnabled && (
             <div className="user-profile__button-wrapper">

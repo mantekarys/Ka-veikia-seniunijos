@@ -65,7 +65,6 @@ export default function Signup({ onClose, onSignupRedirect }) {
       setErrorMessage("Visi laukai yra būtini");
       return false;
     }
-
     return true;
   };
 

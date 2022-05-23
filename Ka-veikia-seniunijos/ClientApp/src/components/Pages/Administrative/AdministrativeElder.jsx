@@ -11,10 +11,11 @@ const AdministrativeElder = () => {
   const [passwordRepeat, setPasswordRepeat] = useState();
   const [errorMessage, setErrorMessage] = useState();
 
-  const handleOnSubmit = () => {
-    if (!inputsAreValid() || !isPasswordValid()) return;
-    else {
-      axios
+  const handleOnSubmit = async () => {
+    const valid = await inputsAreValid()
+    console.log(valid)
+    if (!valid || !isPasswordValid()) return;
+    axios
         .post("https://localhost:44330/api/eldership", {
           Name: name,
           Email: email,
@@ -28,23 +29,23 @@ const AdministrativeElder = () => {
         .catch((_) => {
           setErrorMessage("Įvyko nenumatyta klaida");
         });
-    }
   };
   const inputsAreValid = async () => {
     if (!name || !email || !password || !passwordRepeat) {
       setErrorMessage("Visi laukai yra būtini");
       return false;
     }
+    var flag=true
     await axios
       .get("https://localhost:44330/api/eldership/getEldership/" + name)
       .then((res) => {
         console.log(res);
         if (res.data.Name !== null || res !== null) {
           setErrorMessage("Jau yra įvesta tokia seniūnija");
-          return false;
+          flag =  false;
         }
       });
-    return true;
+    return flag;
   };
 
   const isPasswordValid = () => {

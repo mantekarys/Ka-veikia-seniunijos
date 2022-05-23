@@ -21,6 +21,8 @@ import DeleteModal from "../../Modals/Delete/DeleteModal";
 import SurveyPost from "../../Post/SurveyPost/SurveyPost";
 import { DatePicker } from "antd";
 import { Switch } from "pretty-checkbox-react";
+import Error from "../../Error/Error";
+
 export default function EldershipFeedContent() {
   const {
     state,
@@ -46,7 +48,7 @@ export default function EldershipFeedContent() {
   const [postToggle, setPostToggle] = useState(true);
   const [eventToggle, setEventToggle] = useState(true);
   const [surveyToggle, setSurveyToggle] = useState(true);
-
+  const [errorMessage, setErrorMessage] = useState("");
   const USER_TYPES = {
     GUEST: "GUEST",
     RESIDENT: "RESIDENT",
@@ -238,6 +240,7 @@ export default function EldershipFeedContent() {
     return <p className="paragraph--post">{post.Text}</p>;
   };
 
+  // setPosts([])
   return (
     <div className="eldership__content">
       {state.isLoadingSpinnerVisible && <LoadingSpinner />}
@@ -251,11 +254,33 @@ export default function EldershipFeedContent() {
           Data nuo{" "}
           <DatePicker
             format={"YYYY-MM-DD"}
-            onChange={(event) =>
-              setDateFilter((prev) => ({
-                ...prev,
-                dateFrom: event._d.toISOString().split("T")[0],
-              }))
+            onChange={(event) => {
+              var selectedDate = new Date();
+                if(event != null){
+                  selectedDate=event._d;
+                  setDateFilter((prev) => ({
+                    ...prev,
+                    dateFrom: event._d.toISOString().split("T")[0],
+                  }))
+                }
+                else{
+                  const minusYear = new Date();
+                  minusYear.setFullYear(minusYear.getFullYear() - 1);
+                  const minusYearISO = minusYear.toISOString().split("T")[0];
+                  selectedDate = minusYear;
+                  setDateFilter((prev) => ({
+                    ...prev,
+                    dateFrom: minusYearISO,
+                  }))
+                }
+                if(selectedDate > new Date(dateFilter.dateTo)){
+                  setErrorMessage("Nuo data tūrėtų būti mažesnė nei iki data")
+                }
+                else{
+                  setErrorMessage("")
+                }
+
+                }
             }
           />
         </p>
@@ -264,14 +289,34 @@ export default function EldershipFeedContent() {
           Data iki{" "}
           <DatePicker
             ormat={"YYYY-MM-DD"}
-            onChange={(event) =>
-              setDateFilter((prev) => ({
-                ...prev,
-                dateTo: event._d.toISOString().split("T")[0],
-              }))
-            }
+            onChange={(event) => {
+              var selectedDate = new Date();
+              if(event != null){
+                selectedDate=event._d;
+                setDateFilter((prev) => ({
+                  ...prev,
+                  dateTo: event._d.toISOString().split("T")[0],
+                }))
+              }
+              else{
+                const date = new Date();
+                const currYear = date.toISOString().split("T")[0];
+                setDateFilter((prev) => ({
+                  ...prev,
+                  dateTo: currYear,
+                }))
+              }
+              if(selectedDate < new Date(dateFilter.dateFrom)){
+                setErrorMessage("Nuo data tūrėtų būti mažesnė nei iki data")
+              }
+              else{
+                setErrorMessage("")
+              }
+              }
+          }
           />
         </p>
+        {errorMessage && <Error text={errorMessage} />}
         <div className="map__select">
           <Switch
             color="primary"
@@ -410,8 +455,7 @@ export default function EldershipFeedContent() {
 
       <div className="eldership__feed">
         {isContentLoading && <div className="loading-spinner" />}
-        {posts
-          // .filter((post) => posts !== undefined || !post.match(/There */))
+        {(eventToggle || surveyToggle || postToggle) ? (posts
           .map((post, index) => {
             return (
               <Post
@@ -431,7 +475,14 @@ export default function EldershipFeedContent() {
                 {renderCurrentPost(post)}
               </Post>
             );
-          })}
+          })):
+          <div className='inbox__content-no-results' style={{ paddingTop: "150px", color:"red"}}>
+            <span className='inbox-error-message' style={{color:"red"}}>
+              Nėra seniūnijos įrašų
+            </span>
+          </div>
+          
+        }
       </div>
     </div>
   );

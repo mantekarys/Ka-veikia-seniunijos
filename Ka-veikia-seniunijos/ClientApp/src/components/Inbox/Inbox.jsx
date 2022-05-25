@@ -69,7 +69,7 @@ export default function Inbox() {
             ))}
         </>
     );    
-
+                console.log(renderMessages(sentMessages))
     return (
         <div className="inbox__container">
             <div className="inbox__tabs">
@@ -90,7 +90,7 @@ export default function Inbox() {
             {isMessageContentOpen ? 
                 <MessageContent onBack={() => setIsMessageContentOpen(false)} message={messageContent} activeTab={activeTab}/> :
                 <div className='inbox__content'>
-                    {((activeTab === 'received' && !receivedMessages.length) || (activeTab === 'sent' && !sentMessages.length)) && !isLoading &&
+                    {!!(((activeTab === 'received' && !receivedMessages.length) || (activeTab === 'sent' && !sentMessages.length)) && !isLoading) &&
                     <div className='inbox__content-no-results'>
                         <span className='inbox-error-message'>
                             {`Jūs neturite ${activeTab === 'received' && !receivedMessages.length ? 'gautų' : 'išsiųstų'} pranešimų`}
@@ -98,7 +98,7 @@ export default function Inbox() {
                         </span>
                     </div>}
                     {isLoading && <div className='loading-spinner' /> }
-                    {((activeTab === 'received' && receivedMessages.length) || (activeTab === 'sent' && sentMessages.length)) && !isLoading &&
+                    {!!(((activeTab === 'received' && receivedMessages.length) || (activeTab === 'sent' && sentMessages.length)) && !isLoading) &&
                         <>
                             {activeTab === 'received' ? renderMessages(receivedMessages) : renderMessages(sentMessages)}
                         </>

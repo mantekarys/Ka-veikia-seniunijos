@@ -82,9 +82,12 @@ export default function Signup({ onClose, onSignupRedirect }) {
     return true;
   };
 
+  const divStyle = {
+    overflow:"auto"
+}
   return (
     <Popup>
-      <div className="login__container login__container--signup">
+      <div className="login__container login__container--signup signup_div"  style={divStyle}>
         <FontAwesomeIcon
           className="form__icon"
           icon={faXmark}
@@ -163,12 +166,14 @@ export default function Signup({ onClose, onSignupRedirect }) {
 
           {errorMessage && <Error text={errorMessage} />}
         </form>
-
-        <FormFooter
+        <br/>
+        <FormFooter className="align-self-end"
           paragraphText="Turite paskyrą?"
           textButtonMessage="Prisijungti"
           onClick={onSignupRedirect}
         />
+
+
       </div>
     </Popup>
   );

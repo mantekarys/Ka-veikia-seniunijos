@@ -51,6 +51,7 @@ export default function Inbox() {
         setIsLoading(true);
         await axios.get(`https://localhost:44330/api/message/${id}`)
         .then(response => {
+            console.log(response)
             setIsLoading(false);
             setMessageContent(response.data);
             setIsMessageContentOpen(true);
@@ -69,7 +70,6 @@ export default function Inbox() {
             ))}
         </>
     );    
-                console.log(renderMessages(sentMessages))
     return (
         <div className="inbox__container">
             <div className="inbox__tabs">

@@ -5,6 +5,7 @@ import Signup from '../../Signup/Signup';
 import Sidebar from '../../Sidebar/Sidebar';
 import { GlobalContext } from '../Context/HeaderState';
 import BarIcon from '../../Icons/BarIcon/BarIcon';
+import { useLocation } from 'react-router-dom';
 import '../../style.css';
 
 export default function Header() {
@@ -16,6 +17,7 @@ export default function Header() {
     } = useContext(GlobalContext);
 
     const [isAtTop, setIsAtTop] = useState(true);
+    const location = useLocation();
 
     useEffect(() => {
       window.onscroll = () => {
@@ -59,18 +61,27 @@ export default function Header() {
     }
     
     return (
-        <header className={`header ${isAtTop && 'header--hidden'}`}>
+        <header className={location.pathname === '/home' || location.pathname === '/' ?
+            `header ${isAtTop && 'header--hidden'}` :
+            'header header--feed'
+        }>
             {state.isSidebarOpen && <Sidebar onClose={toggleSidebar} content={getSidebarContent()}/>}
             <div className='button-wrapper'>
                 <Button
                     text='Prisijungti'
-                    styling='button-wrapper__button'
+                    styling={
+                        `button-wrapper__button 
+                        ${location.pathname !== '/home' && location.pathname !== '/'  && 'button-wrapper__button--feed'}`
+                    }
                     onClick={toggleLoginPopup}
                 />
 
                 <Button
                     text='Registruotis'
-                    styling='button-wrapper__button'
+                    styling={
+                        `button-wrapper__button 
+                        ${location.pathname !== '/home' && location.pathname !== '/'  && 'button-wrapper__button--feed'}`
+                    }
                     onClick={toggleSignupPopup}
                 />
 

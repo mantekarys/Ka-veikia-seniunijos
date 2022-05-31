@@ -15,6 +15,11 @@
         display: none;
     }
 
+    &--feed {
+        position: relative;
+        background-color: $color-white;
+    }
+
     &__icon {
         &-wrapper {
             display: inline-block;
@@ -97,6 +102,15 @@
 
         &:hover {
             color: $color-white;
+        }
+
+        &--feed {
+            color: $color-black;
+            border-bottom: 1px solid $color-black;
+
+            &:hover {
+                color: $color-black;
+            }
         }
     }
 }

@@ -553,6 +553,9 @@ body {
   z-index: 1; }
   .header--hidden {
     display: none; }
+  .header--feed {
+    position: relative;
+    background-color: #ffffff; }
   .header__icon-wrapper {
     display: inline-block;
     margin-left: 3rem;
@@ -612,6 +615,11 @@ body {
     padding: 1rem; }
     .button-wrapper__button:hover {
       color: #ffffff; }
+    .button-wrapper__button--feed {
+      color: #000000;
+      border-bottom: 1px solid #000000; }
+      .button-wrapper__button--feed:hover {
+        color: #000000; }
 
 @keyframes moveInLeft {
   0% {

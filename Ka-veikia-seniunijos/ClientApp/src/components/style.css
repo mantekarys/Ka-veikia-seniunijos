@@ -205,16 +205,6 @@ body {
   width: 80%;
   margin: 10rem auto 0; }
 
-  .signup_div{
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: space-between;
-}
-
 .login__input-wrapper {
   margin: 0 auto;
   margin-top: 3rem;
@@ -231,6 +221,15 @@ body {
 .signup__content {
   width: 80%;
   margin: 2rem auto 0; }
+
+.signup__main {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 150px;
+  flex-direction: column;
+  background-color: red; }
 
 .slider {
   width: 100%;
@@ -319,11 +318,12 @@ body {
   color: #c7c7cd; }
 
 .form__footer {
-  flex-direction: column;
-  display: flex;
-  align-content: center;
-  align-items: center;
- }
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%); }
+  .form__footer-text-button-wrapper {
+    text-align: center; }
 
 .image {
   width: 100%;
@@ -554,8 +554,7 @@ body {
   .header--hidden {
     display: none; }
   .header--feed {
-    position: relative;
-    background-color: #ffffff; }
+    position: relative; }
   .header__icon-wrapper {
     display: inline-block;
     margin-left: 3rem;

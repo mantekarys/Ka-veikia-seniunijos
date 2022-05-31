@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Button from '../../Button/Button';
 import Login from '../../Login/Login';
 import Signup from '../../Signup/Signup';
@@ -9,35 +9,25 @@ import { useLocation } from 'react-router-dom';
 import '../../style.css';
 
 export default function Header() {
-    const {
-        state,
-        toggleLoginPopup,
-        toggleSignupPopup,
-        toggleSidebar
-    } = useContext(GlobalContext);
+  const { state, toggleLoginPopup, toggleSignupPopup, toggleSidebar } =
+    useContext(GlobalContext);
 
     const [isAtTop, setIsAtTop] = useState(true);
     const location = useLocation();
 
-    useEffect(() => {
-      window.onscroll = () => {
-          if(window.pageYOffset === 0) setIsAtTop(true)
-          else setIsAtTop(false);
-      }
-      
-      return () => (window.onscroll = null);
-    }, [])
-    
+  useEffect(() => {
+    window.onscroll = () => {
+      if (window.pageYOffset === 0) setIsAtTop(true);
+      else setIsAtTop(false);
+    };
 
-    const handleOnLoginRedirect = () => {
-        toggleLoginPopup();
-        toggleSignupPopup();
-    }
+    return () => (window.onscroll = null);
+  }, []);
 
-    const handleSignupRedirect = () => {
-        toggleSignupPopup();
-        toggleLoginPopup();
-    }
+  const handleOnLoginRedirect = () => {
+    toggleLoginPopup();
+    toggleSignupPopup();
+  };
 
     const getSidebarContent = () => {
         return [
@@ -85,19 +75,37 @@ export default function Header() {
                     onClick={toggleSignupPopup}
                 />
 
-                {state.isLoginOpen &&
-                    <Login
-                        onClose={toggleLoginPopup}
-                        onLoginRedirect={handleOnLoginRedirect}
-                    />
-                }
-                {state.isSignupOpen &&
-                    <Signup
-                        onClose={toggleSignupPopup}
-                        onSignupRedirect={handleSignupRedirect}
-                    />
-                }
-            </div>
-        </header>
-    );
+  return (
+    <header className={`header ${isAtTop && "header--hidden"}`}>
+      {state.isSidebarOpen && (
+        <Sidebar onClose={toggleSidebar} content={getSidebarContent()} />
+      )}
+      <div className="button-wrapper">
+        <Button
+          text="Prisijungti"
+          styling="button-wrapper__button"
+          onClick={toggleLoginPopup}
+        />
+
+        <Button
+          text="Registruotis"
+          styling="button-wrapper__button"
+          onClick={toggleSignupPopup}
+        />
+
+        {state.isLoginOpen && (
+          <Login
+            onClose={toggleLoginPopup}
+            onLoginRedirect={handleOnLoginRedirect}
+          />
+        )}
+        {state.isSignupOpen && (
+          <Signup
+            onClose={toggleSignupPopup}
+            onSignupRedirect={handleSignupRedirect}
+          />
+        )}
+      </div>
+    </header>
+  );
 }

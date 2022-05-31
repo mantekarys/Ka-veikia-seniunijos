@@ -125,6 +125,8 @@ namespace Ka_veikia_seniunijos.Controllers
         [HttpPost]
         public int Post(User user)
         {
+            string hashedPassword = hashPassword(user.PasswordHashed);
+            user.PasswordHashed = hashedPassword;
             if (user == null)
             {
                 return 1062;

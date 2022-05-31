@@ -7,10 +7,16 @@ import PropTypes from 'prop-types';
 
 import MarkerClusterGroup from 'react-leaflet-markercluster';
 
+import {PinInfo} from './PinInfo';
+import {useState, useEffect } from 'react';
 import "./styles.scss";
 
-
 export default function LeafletMap({ lat, lng, switchState, url, pins }) {
+
+    const [infoShow, setInfoShow] = useState(false);
+    const [description, setDescription] = useState("");
+    const [type, setType] = useState("");
+    const [name, setName] = useState("");
     return (
         <div className="map__container">
             <div className="map__header">
@@ -55,17 +61,25 @@ export default function LeafletMap({ lat, lng, switchState, url, pins }) {
                     <b>Nemokami renginiai</b>
                 </Switch>
             </div>
-
-            <MapContainer center={[lat, lng]} zoom={13}>
+            <PinInfo show={infoShow}
+                    onHide={()=>setInfoShow(false)}
+                    description={description}
+                    type={type}
+                    name={name}/>
+            <MapContainer center={[lat, lng]} zoom={8}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <>
+                
                 <MarkerClusterGroup>
                     {pins.map((pin, index) => {
                         return (
-                            <Marker position={[pin.Latitude, pin.Longtitude]} key={index}>
+                            <Marker marker-options-id= {pin}  position={[pin.Latitude, pin.Longtitude]} key={index} 
+                            eventHandlers={{ click: (e)=>{var z=e.target.options["marker-options-id"];
+                            console.log(z);setDescription(z.Description);setType(z.Type === 'event' ? 'Renginys' : 'Lankytina vieta');
+                            setName(z.Name);setInfoShow(true)}}}>
                                 <Popup>
                                     {pin.Type === 'event' ? 'Renginys' : 'Lankytina vieta'}
                                     <br />

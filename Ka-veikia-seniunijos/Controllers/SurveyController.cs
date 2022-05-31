@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
+using Ka_veikia_seniunijos.DataTransferObjects;
 using System.Data;
 using System.Text;
 using System.Linq;
@@ -25,18 +26,29 @@ namespace Ka_veikia_seniunijos.Controllers
         }
         //Surveys by eldeship
         [HttpGet("{eldership}")]
-        public JsonResult GetByEldership(string eldership)
+        public JsonResult GetByEldership(string eldership, [FromQuery] DateFilter filter, DateTime? date = null)
         {
+            DateTime from = DateTime.Parse(filter.DateFrom);
+            DateTime to = DateTime.Parse(filter.DateTo);
             var eldershipID = _databaseContext.Eldership.Where(e => e.Name == eldership).Select(e => e.Id).SingleOrDefault();
+            List<Survey> surveys = new List<Survey>();
             if (eldershipID == 0)
             {
                 return new JsonResult(BadRequest());
 
             }
-            var surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID).ToList();
-            if (surveys == null)
+
+            if (date != null)
             {
-                return new JsonResult("There is no surveys made by this eldership");
+                surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID && s.PostDate == date).ToList();
+            }
+            else
+            {
+                surveys = _databaseContext.Survey.Where(s => s.EldershipFk == eldershipID && s.PostDate >= from && s.PostDate <= to).ToList();
+            }
+            if (surveys.Count() == 0)
+            {
+                return new JsonResult("There is no surveys made by this eldership in a year's time");
             }
             foreach (var survey in surveys)
             {
@@ -110,7 +122,7 @@ namespace Ka_veikia_seniunijos.Controllers
                 return 1062;
             }
             _databaseContext.Survey.Add(survey);
-                    var update = _databaseContext.SaveChanges();
+            var update = _databaseContext.SaveChanges();
             if (update < 1)
             {
                 return 1062;

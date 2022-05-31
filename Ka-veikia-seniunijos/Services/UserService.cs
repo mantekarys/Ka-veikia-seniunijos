@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Configuration;
 using System.Text;
 using System.Security.Cryptography;
-using Ka_veikia_seniunijos.Models;
+using Ka_veikia_seniunijos.ModelsEF;
 using Ka_veikia_seniunijos.Helpers;
 using Ka_veikia_seniunijos.DataTransferObjects;
 using Ka_veikia_seniunijos.Interfaces;
@@ -43,7 +43,7 @@ namespace Ka_veikia_seniunijos.Services
                 user.LastName = rdr.GetString("lastName");
                 user.Email = rdr.GetString("email");
                 user.Municipality = rdr.GetString("municipality");
-                user.Password = rdr.GetString("passwordHashed");
+                user.PasswordHashed = rdr.GetString("passwordHashed");
                 _users.Add(user);
             }
             rdr.Close();
@@ -67,7 +67,7 @@ namespace Ka_veikia_seniunijos.Services
             if (user.Email == null)
             {
                 Eldership eldership = GetEldership(model.Email);
-                if (eldership.Email != null && passwordMatches(model.Password, eldership.Password))
+                if (eldership.Email != null && passwordMatches(model.Password, eldership.PasswordHashed))
                 {
                     token = generateJwtToken(eldership.Id);
                     authenticateResponse = new AuthenticateResponse(eldership.Id, null, null, eldership.Email, eldership.Name,
@@ -78,7 +78,7 @@ namespace Ka_veikia_seniunijos.Services
             }
             else
             {
-                if (passwordMatches(model.Password, user.Password))
+                if (passwordMatches(model.Password, user.PasswordHashed))
                 {
                     token = generateJwtToken(user.Id);
                     authenticateResponse = new AuthenticateResponse(user.Id, user.FirstName, user.LastName,
@@ -131,7 +131,7 @@ namespace Ka_veikia_seniunijos.Services
                 user.LastName = reader.GetString("lastName");
                 user.Email = reader.GetString("email");
                 user.Municipality = reader.GetString("municipality");
-                user.Password = reader.GetString("passwordHashed");
+                user.PasswordHashed = reader.GetString("passwordHashed");
             }
 
             return user;
@@ -146,7 +146,7 @@ namespace Ka_veikia_seniunijos.Services
                 eldership.Email = reader.GetString("email");
                 eldership.Municipality = reader.GetString("municipality");
                 eldership.Name = reader.GetString("name");
-                eldership.Password = reader.GetString("passwordHashed");
+                eldership.PasswordHashed = reader.GetString("passwordHashed");
             }
 
             return eldership;

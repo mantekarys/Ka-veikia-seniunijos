@@ -47,7 +47,7 @@ export default function MessageContent({ message, onBack, activeTab }) {
             setErrorMessage('Žinutė negali būti tuščia!');
             return;
         }
-
+        message=message[0]
         axios.post('https://localhost:44330/api/message', {
             Sender: isEldership ? Name : FirstName,
             SenderType: isEldership ? 'eldership' : 'user',

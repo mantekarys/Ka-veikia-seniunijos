@@ -38,7 +38,7 @@ namespace Ka_veikia_seniunijos.Controllers
         public Eldership GetEldership(string eldershipName)
         {
             var eldership = _databaseContext.Eldership.FirstOrDefault(e => e.Name == eldershipName);
-            if(eldership == null)
+            if (eldership == null)
             {
                 return null;
             }
@@ -84,19 +84,20 @@ namespace Ka_veikia_seniunijos.Controllers
         }
 
         [HttpPost]
-        public int Post(Eldership eldership)
+        public int Post([FromBody] Eldership eldership)
         {
             if (eldership == null)
             {
                 return 1062;
             }
             string passwordHashed = hashPassword(eldership.PasswordHashed);
-            var elderships = _databaseContext.Eldership.Where(el => el.Municipality == eldership.Municipality).ToList();
+            var elderships = _databaseContext.Eldership.Where(el => el.Email == eldership.Email).ToList();
 
             if (elderships.Count > 0)
             {
                 return 1062;
             }
+            eldership.PasswordHashed = passwordHashed;
             _databaseContext.Eldership.Add(eldership);
             _databaseContext.SaveChanges();
             return 200;//good
@@ -105,10 +106,10 @@ namespace Ka_veikia_seniunijos.Controllers
         private string hashPassword(string password)
         {
             //password hashing
-            byte[] salt;
-            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
-            var pbkdf2 = new Rfc2898DeriveBytes(password, salt, 100000);
-            byte[] hash = pbkdf2.GetBytes(20);
+            byte[] salt = new byte[16];
+            new RNGCryptoServiceProvider().GetBytes(salt);   
+            var pbkdf2 = new Rfc2898DeriveBytes(password,salt,100000);
+            var hash = pbkdf2.GetBytes(20);
             byte[] hashBytes = new byte[36];
             Array.Copy(salt, 0, hashBytes, 0, 16);
             Array.Copy(hash, 0, hashBytes, 16, 20);

@@ -1,26 +1,47 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
-import Home from './components/Pages/Home/Home';
-import Eldership from './components/Pages/Eldership-feed/Eldership';
-import Profile from './components/Pages/Profile/Profile';
-import Mailbox from './components/Pages/Mailbox/Mailbox';
-import Map from './components/Pages/Map/Map';
-import Administrative from './components/Pages/Administrative/Administrative.js';
+import React, { Component } from "react";
+import { Route } from "react-router";
+import { Redirect } from "react-router-dom";
+import Home from "./components/Pages/Home/Home";
+import Eldership from "./components/Pages/Eldership-feed/Eldership";
+import Profile from "./components/Pages/Profile/Profile";
+import Mailbox from "./components/Pages/Mailbox/Mailbox";
+import Map from "./components/Pages/Map/Map";
+import Administrative from "./components/Pages/Administrative/Administrative.js";
+import About from "./components/Pages/About/About";
+import isAuthorized from "./utils/isAuthorized";
+import Problem from "./components/Pages/Problem/Problem";
 
+function getToken() {
+  const tokenString = sessionStorage.getItem("userData");
+  const userToken = JSON.parse(tokenString);
+  console.log(userToken);
+  return userToken;
+}
 export default class App extends Component {
   static displayName = App.name;
-
-  render () {
-      return (
-        <>
-              <Route exact path='/:path(|home)' component={Home} />
-              <Route exact path='/profile' component={Profile} />
-              <Route exact path='/eldership' component={Eldership} />
-              <Route exact path='/mailbox' component={Mailbox} />
-              <Route exact path='/map' component={Map} />
-              <Route exact path='/admin/eldership' component={Administrative}/>
-              {/* <Route exact path='/about' component={About} /> */}
-        </>
+  render() {
+    const data = getToken();
+    return (
+      <>
+        <Route exact path="/:path(|home)" component={Home} />
+        <Route exact path="/map" component={Map} />
+        <Route exact path="/mailbox" component={Mailbox} />
+        <Route exact path="/eldership" component={Eldership} />
+        <Route exact path="/problem" component={Problem} />
+        <Route exact path="/profile" component={Profile}/>
+        <Route exact path="/about" component={About} />
+        <Route
+          exact
+          path="/admin/eldership"
+          render={() => {
+            return isAuthorized(data) ? (
+              <Route exact path="/admin/eldership" component={Administrative} />
+              ) : (
+              <Redirect to="/home" />
+            );
+          }}
+        />
+      </>
     );
   }
 }

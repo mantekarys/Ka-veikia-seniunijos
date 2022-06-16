@@ -8,4 +8,13 @@
         width: 80%;
         margin: 2rem auto 0;
     }
+    &__main{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        height: 150px;
+        flex-direction: column;
+        background-color: red;
+    }
 }

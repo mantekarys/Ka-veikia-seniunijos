@@ -1,0 +1,3 @@
+[submodule "path_to_submodule"]
+  path = mantekarys/Ka-veikia-seniunijos
+  url = git://github.com/patrikas7/Ka-veikia-seniunijos/tree/master/Ka-veikia-seniunijos
